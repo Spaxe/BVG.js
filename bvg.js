@@ -99,22 +99,14 @@ define([], function () {
       * Get/set the `data` object in a BVG. There are four ways to use this
       * function.
       *
-      * Return `data` bound to the BVG.
+      * **`bvg.data()`**: Return `data` bound to the BVG.
       *
-      * ### `bvg.data(property)`
+      * **`bvg.data(property)`**: Return `data[property]` from the BVG.
       *
-      * Return `data[property]` from the BVG.
+      * **`bvg.data(objectToUpdate)`**: Update `data` with `objectToUpdate`,
+      * adding and replacing any properties. Return `bvg` object reference.
       *
-      * ### `bvg.data(objectToUpdate)`
-      *
-      * Update `data` with `objectToUpdate`, adding and replacing any properties.
-      *
-      * Return `bvg` object reference.
-      *
-      * ### `bvg.data(property, newValue)`
-      *
-      * Update `property` with `newValue`.
-      *
+      * **`bvg.data(property, newValue)`**: Update `property` with `newValue`.
       * Return `bvg` object reference.
       */
     bvg.data = function () {
