@@ -19,6 +19,25 @@ define([], function () {
   };
   var BVGIDCounter = 0;
 
+  /** ## API Documentation */
+
+  /** ### BVG(svg, data, bind)
+    * Create a Bindable Vector Graphic with `svg` element. This BVG depends on
+    * `data` for its attributes and the callback function `bind` on how those
+    * attributes are presented.
+    *
+    *  - `svg`   : Either a `String` for the SVG `tagName` or [`DOM SVGElement`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element)
+    *  - `data`  : Object with arbitrary data to your desire
+    *  - `bind`  : Callback function to handle when `data` is updated. The
+    *              function has signature `bind(bvg, change)`, where
+    *    - `bvg`    : BVG object reference
+    *    - `change` : Object regarding what changed. It has 3 or 4 properties.
+    *      - `change.type`    : `add`, `update`, or `delete`
+    *      - `change.name`    : Property name that was changed
+    *      - `change.object`  : Object reference to `data
+    *      - `change.oldValue`: Value before it changed. Only present when
+    *                           `change.type` is `update` or `delete`.
+    */
   var BVG = function (svg, data, bind) {
     if (typeof svg === 'string')
       svg = document.createElementNS('http://www.w3.org/2000/svg', svg);
@@ -29,6 +48,7 @@ define([], function () {
     bvg.isBVG = true;
     bvg.bind = bind;
     BVG.addFactoryMethods(bvg);
+    BVG.addUtilityMethods(bvg, data, bind);
 
     Object.observe(data, function(changes) {
       changes.forEach(function (change) {
@@ -49,6 +69,21 @@ define([], function () {
       }
     }
 
+    return bvg;
+  };
+
+  BVG.create = function (htmlElement) {
+    if (typeof htmlElement === 'string')
+      htmlElement = document.querySelector(htmlElement);
+    if (!(htmlElement instanceof HTMLElement))
+      throw new TypeError('htmlElement (' + htmlElement + ') was not found.');
+
+    var svg = BVG.svg('http://www.w3.org/1999/xlink', 1.1, '100%', '100%');
+    htmlElement.appendChild(svg);
+    return svg;
+  };
+
+  BVG.addUtilityMethods = function (bvg, data, bind) {
     bvg.data = function () {
       if (arguments.length === 0) {
         return data;
@@ -68,19 +103,6 @@ define([], function () {
         return bvg;
       }
     };
-
-    return bvg;
-  };
-
-  BVG.create = function (htmlElement) {
-    if (typeof htmlElement === 'string')
-      htmlElement = document.querySelector(htmlElement);
-    if (!(htmlElement instanceof HTMLElement))
-      throw new TypeError('htmlElement (' + htmlElement + ') was not found.');
-
-    var svg = BVG.svg('http://www.w3.org/1999/xlink', 1.1, '100%', '100%');
-    htmlElement.appendChild(svg);
-    return svg;
   };
 
   /** ### BVG.factory(svg, attrs)
@@ -130,6 +152,7 @@ define([], function () {
   BVG.addFactoryMethods(BVG);
 
   BVG.bindEqual = function (svg, change) {
+    console.log(change);
     if (change.type === 'add' || change.type === 'update') {
       svg.setAttribute(change.name, change.object[change.name]);
     } else if (change.type === 'remove') {
