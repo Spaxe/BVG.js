@@ -17,14 +17,19 @@ import os
 import sys
 
 def extract_c(source):
-  regex = re.compile('/\*\*(.*)\*/', re.DOTALL | re.UNICODE | re.MULTILINE)
-  docs = regex.search(source)
+  regex = re.compile('/\*\*(.*?)\*/', re.DOTALL | re.UNICODE | re.MULTILINE)
+  docs = regex.findall(source)
   if docs:
-    return docs.groups()
+    return docs
   raise RuntimeError('No comments were found with /** ... */ styles.')
 
 def cleanup(docs):
-  return '\n'.join(m.lstrip(' *').strip() for doc in docs for m in doc.split('\n') )
+  output = ''
+  for doc in docs:
+    for m in doc.split('\n'):
+      output += re.sub(r'\s*\*\s*', '', m, count=1).strip() + '\n'
+    output += '\n'
+  return output
 
 if '__main__' in __name__:
   markdown = None
