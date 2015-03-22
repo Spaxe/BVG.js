@@ -17,6 +17,8 @@ Create a Bindable Vector Graphic with `svg` element. This BVG depends on
 `data` for its attributes and the callback function `bind` on how those
 attributes are presented.
 
+Returns the BVG object created.
+
  - `svg`   : Either a `String` for the SVG `tagName` or [`DOM SVGElement`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element)
  - `data`  : Object with arbitrary data to your desire
  - `bind`  : Callback function to handle when `data` is updated. The
@@ -26,6 +28,11 @@ attributes are presented.
     
 
 ### `BVG.create(htmlElement)`
+Create a BVG container inside `htmlElement`.
 
+Return the BVG container object.
+
+ - `htmlElement`  : Either a [CSS Selector](https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Getting_Started/Selectors)
+                    or any [HTMLElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement).
     
 
