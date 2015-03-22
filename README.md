@@ -9,8 +9,6 @@ logic, and [SVG.js](http://svgjs.com/) provides only low-level SVG drawing.
 Bindable Vector Graphics offers SVG elements that change as the data change,
 and gives you all the tools to control their look.
 
-Author: Xavier Ho <contact@xavierho.com>
-
 
 ### BVG.factory(svg, attrs)
 

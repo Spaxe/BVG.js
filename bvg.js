@@ -78,10 +78,7 @@ define([], function () {
     if (!(htmlElement instanceof HTMLElement))
       throw new TypeError('htmlElement (' + htmlElement + ') was not found.');
 
-    var svg = BVG.svg('http://www.w3.org/1999/xlink',
-                      1.1,
-                      '100%',
-                      '100%');
+    var svg = BVG.svg('http://www.w3.org/1999/xlink', 1.1, '100%', '100%');
     htmlElement.appendChild(svg);
     return svg;
   };
