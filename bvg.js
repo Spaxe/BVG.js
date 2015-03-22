@@ -29,14 +29,9 @@ define([], function () {
     *  - `svg`   : Either a `String` for the SVG `tagName` or [`DOM SVGElement`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element)
     *  - `data`  : Object with arbitrary data to your desire
     *  - `bind`  : Callback function to handle when `data` is updated. The
-    *              function has signature `bind(bvg, change)`, where
-    *    - `bvg`    : BVG object reference
-    *    - `change` : Object regarding what changed. It has 3 or 4 properties.
-    *      - `change.type`    : `add`, `update`, or `delete`
-    *      - `change.name`    : Property name that was changed
-    *      - `change.object`  : Object reference to `data
-    *      - `change.oldValue`: Value before it changed. Only present when
-    *                           `change.type` is `update` or `delete`.
+    *              function has signature `bind(bvg, change)`, where `bvg` is
+    *              the BVG object reference, and `change` tells what is changed.
+    *              For more information, see [`Object.observe()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/observe#Parameters).
     */
   var BVG = function (svg, data, bind) {
     if (typeof svg === 'string')
