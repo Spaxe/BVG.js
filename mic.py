@@ -17,7 +17,7 @@ import os
 import sys
 
 def extract_c(source):
-  regex = re.compile('/\*\*(.*?)\*/', re.DOTALL | re.UNICODE | re.MULTILINE)
+  regex = re.compile('/\*\*\s*(.*?)\*/', re.DOTALL | re.UNICODE | re.MULTILINE)
   docs = regex.findall(source)
   if docs:
     return docs

@@ -1,4 +1,4 @@
- # BVG - Bindable Vector Graphics
+# BVG - Bindable Vector Graphics
 **Real-time data-driven visualisation for the web.**
 
 Examples to come.
@@ -10,9 +10,9 @@ Bindable Vector Graphics offers SVG elements that change as the data change,
 and gives you all the tools to control their look.
   
 
- ## API Documentation 
+## API Documentation 
 
- ### BVG(svg, data, bind)
+### BVG(svg, data, bind)
 Create a Bindable Vector Graphic with `svg` element. This BVG depends on
 `data` for its attributes and the callback function `bind` on how those
 attributes are presented.
@@ -30,7 +30,7 @@ attributes are presented.
                           `change.type` is `update` or `delete`.
     
 
- ### BVG.factory(svg, attrs)
+### BVG.factory(svg, attrs)
 
 Populate the library with functions to create a BVG.
 
