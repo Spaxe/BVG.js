@@ -21,7 +21,7 @@ define([], function () {
 
   /** ## API Documentation */
 
-  /** ### BVG(svg, data, bind)
+  /** ### `BVG(svg, data, bind)`
     * Create a Bindable Vector Graphic with `svg` element. This BVG depends on
     * `data` for its attributes and the callback function `bind` on how those
     * attributes are presented.
@@ -67,6 +67,9 @@ define([], function () {
     return bvg;
   };
 
+  /** ### `BVG.create(htmlElement)`
+    *
+    */
   BVG.create = function (htmlElement) {
     if (typeof htmlElement === 'string')
       htmlElement = document.querySelector(htmlElement);
@@ -100,7 +103,9 @@ define([], function () {
     };
   };
 
-  /** ### BVG.factory(svg, attrs)
+  /* Internal methods */
+
+  /*  BVG.factory(svg, attrs)
     *
     * Populate the library with functions to create a BVG.
     *

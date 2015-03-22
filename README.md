@@ -12,7 +12,7 @@ and gives you all the tools to control their look.
 
 ## API Documentation 
 
-### BVG(svg, data, bind)
+### `BVG(svg, data, bind)`
 Create a Bindable Vector Graphic with `svg` element. This BVG depends on
 `data` for its attributes and the callback function `bind` on how those
 attributes are presented.
@@ -25,11 +25,7 @@ attributes are presented.
              For more information, see [`Object.observe()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/observe#Parameters).
     
 
-### BVG.factory(svg, attrs)
+### `BVG.create(htmlElement)`
 
-Populate the library with functions to create a BVG.
-
-This allows name checking for functions since calling an undefined
-function would fail.
     
 
