@@ -12,6 +12,7 @@
   */
 define([], function () {
 
+  // Factory methods
   var svgElements = {
     svg: ['xmlns:xlink', 'version', 'width', 'height'],
     g: ['transform'],
@@ -19,7 +20,7 @@ define([], function () {
   };
   var BVGIDCounter = 0;
 
-  /** ## API Documentation */
+  /** ## Module Functions */
 
   /** ### `BVG(svg, data, bind)`
     * Create a Bindable Vector Graphic with `svg` element. This BVG depends on
@@ -28,7 +29,7 @@ define([], function () {
     *
     * Returns the BVG object created.
     *
-    *  - `svg`   : Either a `String` for the SVG `tagName` or [`DOM SVGElement`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element)
+    *  - `svg`   : Either a `String` for the SVG `tagName` or any DOM [`SVGElement`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element)
     *  - `data`  : Object with arbitrary data to your desire
     *  - `bind`  : Callback function to handle when `data` is updated. The
     *              function has signature `bind(bvg, change)`, where `bvg` is
@@ -88,7 +89,31 @@ define([], function () {
     return svg;
   };
 
+  /** ## The BVG Object
+    * BVGs are SVGs with extra superpowers. In addition to all the [SVG methods](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model#SVG_interfaces),
+    * BVG has the following:
+    */
   BVG.addUtilityMethods = function (bvg, data, bind) {
+
+    /** ### `bvg.data()`
+      * ### `bvg.data(property)`
+      * ### `bvg.data(objectToUpdate)`
+      * ### `bvg.data(property, newValue)`
+      * Get/set the `data` object in a BVG. There are four ways to use this
+      * function.
+      *
+      * Return `bvg` object reference itself.
+      *
+      * If no arguments are supplied, it returns `data`.
+      *
+      * If a string of a property is given, it returns `data[property]`.
+      *
+      * If an object is given, it will merge `data` with `objectToUpdate`,
+      * adding and replacing any properties provided.
+      *
+      * If two arguments are given, the first should be the `property` to be
+      * updated, and the second should be the `newValue`.
+      */
     bvg.data = function () {
       if (arguments.length === 0) {
         return data;
