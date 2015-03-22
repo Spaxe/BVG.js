@@ -96,23 +96,26 @@ define([], function () {
   BVG.addUtilityMethods = function (bvg, data, bind) {
 
     /** ### `bvg.data()`
-      * ### `bvg.data(property)`
-      * ### `bvg.data(objectToUpdate)`
-      * ### `bvg.data(property, newValue)`
       * Get/set the `data` object in a BVG. There are four ways to use this
       * function.
       *
-      * Return `bvg` object reference itself.
+      * Return `data` bound to the BVG.
       *
-      * If no arguments are supplied, it returns `data`.
+      * ### `bvg.data(property)`
       *
-      * If a string of a property is given, it returns `data[property]`.
+      * Return `data[property]` from the BVG.
       *
-      * If an object is given, it will merge `data` with `objectToUpdate`,
-      * adding and replacing any properties provided.
+      * ### `bvg.data(objectToUpdate)`
       *
-      * If two arguments are given, the first should be the `property` to be
-      * updated, and the second should be the `newValue`.
+      * Update `data` with `objectToUpdate`, adding and replacing any properties.
+      *
+      * Return `bvg` object reference.
+      *
+      * ### `bvg.data(property, newValue)`
+      *
+      * Update `property` with `newValue`.
+      *
+      * Return `bvg` object reference.
       */
     bvg.data = function () {
       if (arguments.length === 0) {
