@@ -1,32 +1,24 @@
 # BVG - Bindable Vector Graphics
 **Real-time data-driven visualisation for the web.**
 
-Examples to come.
-
-Live testing page: http://spaxe.github.io/BVG.js/
-
 *Bindable Vector Graphics* was born out of frustration for lack of a
 middle level SVG library. [D3.js](http://d3js.org/) abstracts too much
 logic, and [SVG.js](http://svgjs.com/) provides only low-level SVG drawing.
 Bindable Vector Graphics offers SVG elements that change as the data change,
-and gives you all the tools to control their look.
+and gives you tools to control their look.
   
 
-## Module Functions 
+The heart of this library is a trinity:*SVG + Data + Binding**. This
+connects your data to the SVG element through the binding function, which
+creates a living connection that can react to change. BVG uses
+[`Object.observe()`](http://caniuse.com/#feat=object-observe) which is
+available on Chrome 36+, Opera 27+ and Android Browser 37+.
 
-### `BVG(svg, data, bind)`
-Create a Bindable Vector Graphic with `svg` element. This BVG depends on
-`data` for its attributes and the callback function `bind` on how those
-attributes are presented.
+If you wish to use this for older browsers, you can polyfill with
+[`observe-shim`](https://github.com/KapIT/observe-shim).
 
-Returns the BVG object created.
+## Example
 
- - `svg`   : Either a `String` for the SVG `tagName` or any DOM [`SVGElement`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element)
- - `data`  : Object with arbitrary data to your desire
- - `bind`  : Callback function to handle when `data` is updated. The
-             function has signature `bind(bvg, change)`, where `bvg` is
-             the BVG object reference, and `change` tells what is changed.
-             For more information, see [`Object.observe()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/observe#Parameters).
     
 
 ### `BVG.create(htmlElement)`
@@ -137,4 +129,26 @@ is omitted, it defaults to `1`.
 
  if `css` is `true`, it returns a string `'rgba(r, g, b, a)'` instead.
    
+
+### The MIT License (MIT)
+Copyright © 2015 Xavier Ho
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+  
 
