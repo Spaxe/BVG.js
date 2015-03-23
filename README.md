@@ -58,6 +58,8 @@ bvg.addEventListener('mousemove', function (event) {
 ```
     
 
+## BVG Container 
+
 ### `BVG.create(htmlElement)`
 Create a BVG container inside `htmlElement`.
 
@@ -166,6 +168,12 @@ is omitted, it defaults to `1`.
 
  if `css` is `true`, it returns a string `'rgba(r, g, b, a)'` instead.
    
+
+## Contribute to this library
+[Make a pull request](https://github.com/Spaxe/BVG.js/pulls) or
+[post an issue](https://github.com/Spaxe/BVG.js/issues). Say hello to
+contact@xaiverho.com.
+  
 
 ### The MIT License (MIT)
 Copyright © 2015 Xavier Ho

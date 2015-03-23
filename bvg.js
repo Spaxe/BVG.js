@@ -109,6 +109,8 @@ define([], function () {
     return bvg;
   };
 
+  /** ## BVG Container */
+
   /** ### `BVG.create(htmlElement)`
     * Create a BVG container inside `htmlElement`.
     *
@@ -416,6 +418,12 @@ define([], function () {
 
   return BVG;
 });
+
+/** ## Contribute to this library
+  * [Make a pull request](https://github.com/Spaxe/BVG.js/pulls) or
+  * [post an issue](https://github.com/Spaxe/BVG.js/issues). Say hello to
+  * contact@xaiverho.com.
+  */
 
 /**
   * ### The MIT License (MIT)
