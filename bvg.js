@@ -49,13 +49,13 @@ define([], function () {
     * // Create a BVG container based on selected HTML element
     * var bvg = BVG.create('#bvg-container');
     * // Create a Bindable circle, colour it orange
-    * var circle = bvg.ellipse(200, 200, 150, 150)
+    * var circle = bvg.ellipse(0, 0, 150, 150)
     *                 .fill(220, 64, 12);
     * // Change its size based on mouse movement
     * bvg.addEventListener('mousemove', function (event) {
     *   circle.data({
-    *     rx: event.clientX - 200,
-    *     ry: event.clientY - 200
+    *     rx: event.clientX,
+    *     ry: event.clientY
     *   });
     * });
     * ```
@@ -132,9 +132,6 @@ define([], function () {
 
 
   /** ## Drawing BVGs
-    * BVG supports many popular SVG objects out of the box. If you don't see
-    * them here, you can use `BVG()` to make your own.
-    *
     * ### `BVG.rect(x, y, width, height)`
     *
     * Return a rectangle at position `(x, y)` at `width` x `height` in size.
