@@ -211,14 +211,11 @@ define([], function () {
   BVG.factory = function (bvg, svg, attrs) {
     bvg[svg] = function () {
       var newBVG;
-      if (arguments.length === 1 &&
+      if (arguments.length <= 2 &&
           arguments[0] instanceof Object) {
-        newBVG = BVG(svg, arguments[0], BVG.defaultBind);
-      }
-      else if (arguments.length === 2 &&
-          arguments[0] instanceof Object &&
-          typeof arguments[1] === 'function') {
-        newBVG = BVG(svg, arguments[0], arguments[1]);
+        var bind = typeof arguments[1] === 'function' ?
+                      arguments[1] : BVG.defaultBind;
+        newBVG = BVG(svg, arguments[0], bind);
       } else {
         var data = {};
         var paranmeters = [];
@@ -240,7 +237,7 @@ define([], function () {
         if (datum instanceof Array) {
           newBVG = BVG[svg].apply(BVG[svg], datum);
         } else {
-          newBVG = BVG[svg](datum);
+          newBVG = BVG[svg](datum, bind);
         }
         if (bvg.isBVG)
           bvg.appendChild(newBVG);
