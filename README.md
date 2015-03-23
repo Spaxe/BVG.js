@@ -22,31 +22,40 @@ If you wish to use this for older browsers, you can polyfill with
 [`observe-shim`](https://github.com/KapIT/observe-shim).
 
 ## Quickstart
+
+![Quickstart Example](https://raw.githubusercontent.com/Spaxe/BVG.js/master/demo/001-hello.gif)
+
 HTML:
 
-    <div id="bvg-container"></div>
+```HTML
+<div id="bvg-container"></div>
+```
 
 CSS (Make the container large enough):
 
-    html, body, #bvg-container {
-      height: 100%;
-      margin: 0;
-    }
+```CSS
+html, body, #bvg-container {
+  height: 100%;
+  margin: 0;
+}
+```
 
 Javascript:
 
-    // Create a BVG container based on selected HTML element
-    var bvg = BVG.create('#bvg-container');
-    // Create a Bindable circle, colour it orange
-    var circle = bvg.ellipse(200, 200, 150, 150)
-                    .fill(220, 64, 12);
-    // Change its size based on mouse movement
-    bvg.addEventListener('mousemove', function (event) {
-      circle.data({
-        rx: event.clientX - 200,
-        ry: event.clientY - 200
-      });
-    });
+```Javascript
+// Create a BVG container based on selected HTML element
+var bvg = BVG.create('#bvg-container');
+// Create a Bindable circle, colour it orange
+var circle = bvg.ellipse(200, 200, 150, 150)
+                .fill(220, 64, 12);
+// Change its size based on mouse movement
+bvg.addEventListener('mousemove', function (event) {
+  circle.data({
+    rx: event.clientX - 200,
+    ry: event.clientY - 200
+  });
+});
+```
     
 
 ### `BVG.create(htmlElement)`
