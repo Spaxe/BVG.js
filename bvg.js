@@ -4,6 +4,8 @@
   *
   * Examples to come.
   *
+  * Live testing page: http://spaxe.github.io/BVG.js/
+  *
   * *Bindable Vector Graphics* was born out of frustration for lack of a
   * middle level SVG library. [D3.js](http://d3js.org/) abstracts too much
   * logic, and [SVG.js](http://svgjs.com/) provides only low-level SVG drawing.
