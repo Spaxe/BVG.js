@@ -12,7 +12,7 @@ Bindable Vector Graphics offers SVG elements that change as the data change,
 and gives you tools to control their look.
   
 
-The heart of this library is a trinity: **SVG + Data + Binding** . This
+The heart of this library is a trinity: **SVG + Data + Binding**. This
 connects your data to the SVG element through the binding function, which
 creates a living connection that can react to change. BVG uses
 [`Object.observe()`](http://caniuse.com/#feat=object-observe) which is
@@ -21,8 +21,32 @@ available on Chrome 36+, Opera 27+ and Android Browser 37+.
 If you wish to use this for older browsers, you can polyfill with
 [`observe-shim`](https://github.com/KapIT/observe-shim).
 
-## Example
+## Quickstart
+HTML:
 
+    <div id="bvg-container"></div>
+
+CSS (Make the container large enough):
+
+    html, body, #bvg-container {
+      height: 100%;
+      margin: 0;
+    }
+
+Javascript:
+
+    // Create a BVG container based on selected HTML element
+    var bvg = BVG.create('#bvg-container');
+    // Create a Bindable circle, colour it orange
+    var circle = bvg.ellipse(200, 200, 150, 150)
+                    .fill(220, 64, 12);
+    // Change its size based on mouse movement
+    bvg.addEventListener('mousemove', function (event) {
+      circle.data({
+        rx: event.clientX - 200,
+        ry: event.clientY - 200
+      });
+    });
     
 
 ### `BVG.create(htmlElement)`
