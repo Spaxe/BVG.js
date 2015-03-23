@@ -15,7 +15,7 @@
 define([], function () {
   var BVGIDCounter = 0;
 
-  /** The heart of this library is a trinity: **SVG + Data + Binding**. This
+  /** The heart of this library is a trinity: **SVG + Data + Binding** . This
     * connects your data to the SVG element through the binding function, which
     * creates a living connection that can react to change. BVG uses
     * [`Object.observe()`](http://caniuse.com/#feat=object-observe) which is

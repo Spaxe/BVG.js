@@ -12,7 +12,7 @@ Bindable Vector Graphics offers SVG elements that change as the data change,
 and gives you tools to control their look.
   
 
-The heart of this library is a trinity:*SVG + Data + Binding**. This
+The heart of this library is a trinity:*SVG + Data + Binding** . This
 connects your data to the SVG element through the binding function, which
 creates a living connection that can react to change. BVG uses
 [`Object.observe()`](http://caniuse.com/#feat=object-observe) which is
