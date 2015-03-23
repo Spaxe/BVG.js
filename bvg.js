@@ -320,9 +320,10 @@ define([], function () {
           }
         }
       } else if (typeof c === 'number') {
+        c = Math.round(c);
         colour = [c, c, c];
       } else if (c instanceof Array && (c.length === 3 || c.length === 4)) {
-        colour = c.map(Number);
+        colour = c.map(Number).map(Math.round);
       }
       if (arguments[1])
         css = true;
