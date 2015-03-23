@@ -99,14 +99,14 @@ define([], function () {
       * Get/set the `data` object in a BVG. There are four ways to use this
       * function.
       *
-      * **`bvg.data()`**: Return `data` bound to the BVG.
+      *  - **`bvg.data()`**: Return `data` bound to the BVG.
       *
-      * **`bvg.data(property)`**: Return `data[property]` from the BVG.
+      *  - **`bvg.data(property)`**: Return `data[property]` from the BVG.
       *
-      * **`bvg.data(objectToUpdate)`**: Update `data` with `objectToUpdate`,
+      *  - **`bvg.data(objectToUpdate)`**: Update `data` with `objectToUpdate`,
       * adding and replacing any properties. Return `bvg` object reference.
       *
-      * **`bvg.data(property, newValue)`**: Update `property` with `newValue`.
+      *  - **`bvg.data(property, newValue)`**: Update `property` with `newValue`.
       * Return `bvg` object reference.
       */
     bvg.data = function () {
@@ -130,16 +130,16 @@ define([], function () {
     };
 
     /** ### `bvg.stroke()`
-      * Get/set the `stroke` property. There are 4 ways to use this function.
+      * Get/set the outline colour. There are 4 ways to use this function.
       *
-      * **`bvg.stroke()`**: Return `stroke` colour as [r, g, b, a].
+      *  - **`bvg.stroke()`**: Return `stroke` colour as [r, g, b, a].
       *
-      * **`bvg.stroke(hex)`**: Set `stroke` colour with a CSS hex string.
+      *  - **`bvg.stroke(hex)`**: Set `stroke` colour with a CSS hex string.
       *
-      * **`bvg.stroke(rgb)`**: Set `stroke` with a greyscale colour with equal
+      *  - **`bvg.stroke(rgb)`**: Set `stroke` with a greyscale colour with equal
       * values `(rgb, rgb, rgb)`.
       *
-      * **`bvg.stroke(r, g, b, [a])`**: Set `stroke` with `(r, g, b, a)`. If `a`
+      *  - **`bvg.stroke(r, g, b, [a])`**: Set `stroke` with `(r, g, b, a)`. If `a`
       * is omitted, it defaults to `1`.
       *
       * `r`, `g`, `b` should be in the range of 0-255 inclusive.
@@ -149,9 +149,55 @@ define([], function () {
         return BVG.rgba(bvg.getAttribute('stroke'));
       }
       if (arguments.length === 1) {
-        bvg.setAttribute('stroke', BVG.rgba(arguments[0], true))
+        bvg.setAttribute('stroke', BVG.rgba(arguments[0], true));
       } else {
-        bvg.setAttribute('stroke', BVG.rgba([].slice.call(arguments), true))
+        bvg.setAttribute('stroke', BVG.rgba([].slice.call(arguments), true));
+      }
+      return bvg;
+    };
+
+    /** ### `bvg.strokeWidth([width])`
+      * Get/set the outline thickness.
+      *
+      * Returns the current outline thickness if `width` is omitted. Otherise,
+      * it assigns the outline thickness with a new value, and returns the `bvg`
+      * object reference.
+      *
+      *  - `width`  : Outline thickness in pixels.
+      */
+    bvg.strokeWidth = function () {
+      if (arguments.length === 0) {
+        return BVG.rgba(bvg.getAttribute('stroke-width'));
+      }
+      if (arguments.length === 1) {
+        bvg.setAttribute('stroke-width', arguments[0], true);
+      }
+      return bvg;
+    };
+
+    /** ### `bvg.fill()`
+      * Get/set the filling colour. There are 4 ways to use this function.
+      *
+      *  - **`bvg.fill()`**: Return `fill` colour as [r, g, b, a].
+      *
+      *  - **`bvg.fill(hex)`**: Set `fill` colour with a CSS hex string.
+      *
+      *  - **`bvg.fill(rgb)`**: Set `fill` with a greyscale colour with equal
+      * values `(rgb, rgb, rgb)`.
+      *
+      *  - **`bvg.fill(r, g, b, [a])`**: Set `fill` with `(r, g, b, a)`. If `a`
+      * is omitted, it defaults to `1`.
+      *
+      * `r`, `g`, `b` should be in the range of 0-255 inclusive.
+      */
+    bvg.fill = function () {
+      if (arguments.length === 0) {
+        return BVG.rgba(bvg.getAttribute('fill'));
+      }
+      if (arguments.length === 1) {
+        bvg.setAttribute('fill', BVG.rgba(arguments[0], true));
+      } else {
+        bvg.setAttribute('fill', BVG.rgba([].slice.call(arguments), true));
       }
       return bvg;
     };
@@ -165,10 +211,14 @@ define([], function () {
   BVG.factory = function (bvg, svg, attrs) {
     bvg[svg] = function () {
       var newBVG;
-      if (arguments.length === 2 &&
+      if (arguments.length === 1 &&
+          arguments[0] instanceof Object) {
+        newBVG = BVG(svg, arguments[0], BVG.defaultBind);
+      }
+      else if (arguments.length === 2 &&
           arguments[0] instanceof Object &&
           typeof arguments[1] === 'function') {
-        newBVG = BVG(svg, arguments[0]. arguments[1]);
+        newBVG = BVG(svg, arguments[0], arguments[1]);
       } else {
         var data = {};
         var paranmeters = [];
@@ -178,7 +228,7 @@ define([], function () {
         attrs.forEach(function (arg) {
           data[arg] = paranmeters.shift();
         });
-        newBVG = BVG(svg, data, bvg.bindEqual);
+        newBVG = BVG(svg, data, bvg.defaultBind);
       }
       if (bvg.isBVG)
         bvg.appendChild(newBVG);
@@ -186,7 +236,12 @@ define([], function () {
     };
     bvg[svg + 'Array'] = function(data, bind) {
       return data.map(function (datum) {
-        var newBVG = BVG[svg].apply(BVG[svg], datum);
+        var newBVG;
+        if (datum instanceof Array) {
+          newBVG = BVG[svg].apply(BVG[svg], datum);
+        } else {
+          newBVG = BVG[svg](datum);
+        }
         if (bvg.isBVG)
           bvg.appendChild(newBVG);
         return newBVG;
@@ -201,12 +256,16 @@ define([], function () {
   };
   BVG.addFactoryMethods(BVG);
 
-  /*- ### `BVG.bindEqual(svg, change)`
+  /*- ### `BVG.defaultBind(svg, change)`
    *  Default callback function that assigns each data property to BVG data.
    */
-  BVG.bindEqual = function (svg, change) {
+  BVG.defaultBind = function (svg, change) {
     if (change.type === 'add' || change.type === 'update') {
-      svg.setAttribute(change.name, change.object[change.name]);
+      if (svg.hasOwnProperty(change.name) && typeof svg[change.name] === 'function') {
+        svg[change.name](change.object[change.name]);
+      } else {
+        svg.setAttribute(change.name, change.object[change.name]);
+      }
     } else if (change.type === 'remove') {
       svg.removeAttribute(change.name);
     }
@@ -241,21 +300,22 @@ define([], function () {
     var colour = [];
     var css = false;
     if (arguments.length === 1 || arguments.length === 2) {
-      var c = arguments[0]
+      var c = arguments[0];
       if (typeof c === 'string') {
         var rgba = c.match(/rgba?\((.*)\)/);
         if (rgba) {
-          colour = rgba[1].split(',');
+          colour = rgba[1].split(',').map(Number);
         } else {
           c = c.replace('#', '');
+          var i;
           if (c.length === 3) {
-            for (var i = 0; i < c.length; i++) {
+            for (i = 0; i < c.length; i++) {
               h += c[i] + c[i];
             }
           } else {
             h = c;
           }
-          for (var i = 0; i < h.length; i+=2) {
+          for (i = 0; i < h.length; i+=2) {
             var hex = h.substring(i, i+2);
             if (hex.length !== 2)
               break;
@@ -265,7 +325,7 @@ define([], function () {
       } else if (typeof c === 'number') {
         colour = [c, c, c];
       } else if (c instanceof Array && (c.length === 3 || c.length === 4)) {
-        colour = c;
+        colour = c.map(Number);
       }
       if (arguments[1])
         css = true;
@@ -277,16 +337,16 @@ define([], function () {
       } else {
         colour = [].slice.call(arguments).slice(0, 3);
         if (arguments[3])
-          css = true
+          css = true;
       }
     } else if (arguments.length === 5) {
       colour = [].slice.call(arguments).slice(0, 4);
       if (arguments[4])
-        css = true
+        css = true;
     }
 
     if (colour.length !== 3 && colour.length !== 4) {
-      throw new TypeError(c + ' is not a valid colour.');
+      throw new TypeError('BVG.rgba() can\'t work with ' + arguments);
     }
 
     if (colour.length === 3) {
