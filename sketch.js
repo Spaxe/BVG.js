@@ -2,27 +2,45 @@ require(['bvg'], function(BVG) {
 
   var bvg = BVG.create('#universe');
 
-  var px = [];
-  var size = 16;
-  for (var x = 0; x < 1200; x += size*2) {
-    for (var y = 0; y < 800; y += size*2) {
-      px.push({
-        cx: x,
-        cy: y,
-        rx: size,
-        ry: size,
-        fill: 255
+  var size = 128;
+  var pos = 400;
+
+  var albedo = bvg.ellipse(pos, pos, size, size)
+                   .fill(64);
+
+  var diffuse = bvg.ellipse(pos, pos, size, size)
+                   .fill(255, 255, 255, 0.4);
+
+  var specular = bvg.ellipse(pos, pos, size/8, size/8)
+                    .fill(255, 255, 255, 0.5);
+
+  var outline = bvg.ellipse(pos, pos, size, size)
+                   .fill(0, 0, 0, 0)
+                   .stroke(32)
+                   .strokeWidth(8);
+
+  bvg.addEventListener('mousemove', function (event) {
+    var mx = event.clientX;
+    var my = event.clientY;
+    var angle = Math.atan2(my-pos, mx-pos);
+    var distance = Math.sqrt(Math.pow(mx - pos, 2) + Math.pow(my - pos, 2));
+    distance = Math.min(distance, size/2);
+    if (!isNaN(angle)) {
+      diffuse.data({
+        cx: Math.cos(angle) * distance + pos,
+        cy: Math.sin(angle) * distance + pos,
+        rx: Math.max(distance, size),
+        ry: Math.max(distance, size)
+      });
+      var cx = Math.cos(angle) * Math.min(Math.pow(distance, 1.1), size/3*2) + pos;
+      var cy = Math.sin(angle) * Math.min(Math.pow(distance, 1.1), size/3*2) + pos;
+      specular.data({
+        cx: cx,
+        cy: cy,
+        transform: 'rotate(' + [angle / Math.PI * 180, cx, cy].join() + ')',
+        rx: size/8 * (size-distance)/size
       });
     }
-  }
-  var pixels = bvg.ellipseArray(px);
-
-  document.addEventListener('mouseover', function (event) {
-    pixels.forEach(function (pixel) {
-      var d = Math.sqrt(Math.pow(event.clientX - pixel.data('cx'), 2) +
-                        Math.pow(event.clientY - pixel.data('cy'), 2));
-      pixel.data('fill', Math.min(d, 255));
-    });
   });
 
   // Remove loading placeholder

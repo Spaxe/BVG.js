@@ -185,7 +185,7 @@ define([], function () {
         return BVG.rgba(bvg.getAttribute('stroke-width'));
       }
       if (arguments.length === 1) {
-        bvg.setAttribute('stroke-width', arguments[0], true);
+        bvg.setAttribute('stroke-width', arguments[0]);
       }
       return bvg;
     };
@@ -227,7 +227,7 @@ define([], function () {
     bvg[svg] = function () {
       var newBVG;
       if (arguments.length <= 2 &&
-          arguments[0] instanceof Object) {
+          arguments[0].constructor.name === 'Object') {
         var bind = typeof arguments[1] === 'function' ?
                       arguments[1] : BVG.defaultBind;
         newBVG = BVG(svg, arguments[0], bind);
@@ -240,7 +240,7 @@ define([], function () {
         attrs.forEach(function (arg) {
           data[arg] = paranmeters.shift();
         });
-        newBVG = BVG(svg, data, bvg.defaultBind);
+        newBVG = BVG(svg, data, BVG.defaultBind);
       }
       if (bvg.isBVG)
         bvg.appendChild(newBVG);
@@ -335,10 +335,10 @@ define([], function () {
           }
         }
       } else if (typeof c === 'number') {
-        c = Math.round(c);
+        c = c;
         colour = [c, c, c];
       } else if (c instanceof Array && (c.length === 3 || c.length === 4)) {
-        colour = c.map(Number).map(Math.round);
+        colour = c.map(Number);
       }
       if (arguments[1])
         css = true;

@@ -16,6 +16,7 @@
   "sub": true,
   "strict": false,
   "globals": {
-    "define": true
+    "define": true,
+    "require": true
   }
 }
