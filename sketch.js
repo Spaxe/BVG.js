@@ -1,4 +1,4 @@
-require(['BVG'], function(BVG) {
+require(['bvg'], function(BVG) {
 
   var bvg = BVG.create('#universe');
 
