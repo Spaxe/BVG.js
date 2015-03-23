@@ -27,7 +27,7 @@ def cleanup(docs):
   output = ''
   for doc in docs:
     for m in doc.split('\n'):
-      output += re.sub(r'\s*\*\s?', '', m, count=1) + '\n'
+      output += re.sub(r'^\s*\*\s?', '', m, count=1) + '\n'
     output += '\n'
   return output
 
