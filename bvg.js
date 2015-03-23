@@ -128,16 +128,20 @@ define([], function () {
         return bvg;
       }
     };
+
+    bvg.stroke = function () {
+      if (arguments.length === 0) {
+        return bvg.getAttribute('stroke');
+      } else if (arguments.length === 1) {
+        bvg.setAttribute('stroke', BVG.rgba(arguments[0], true))
+      }
+    };
   };
 
-  /* Internal methods */
+  /*- Internal methods */
 
-  /*  BVG.factory(svg, attrs)
-    *
+  /*- ### `BVG.factory(svg, attrs)`
     * Populate the library with functions to create a BVG.
-    *
-    * This allows name checking for functions since calling an undefined
-    * function would fail.
     */
   BVG.factory = function (bvg, svg, attrs) {
     bvg[svg] = function () {
@@ -178,13 +182,46 @@ define([], function () {
   };
   BVG.addFactoryMethods(BVG);
 
+  /*- ### `BVG.bindEqual(svg, change)`
+   *  Default callback function that assigns each data property to BVG data.
+   */
   BVG.bindEqual = function (svg, change) {
-    console.log(change);
     if (change.type === 'add' || change.type === 'update') {
       svg.setAttribute(change.name, change.object[change.name]);
     } else if (change.type === 'remove') {
       svg.removeAttribute(change.name);
     }
+  };
+
+  /*- ### `BVG.rgba(hex)`
+   *  Converts #XXXXXX to rgba(r, g, b, a). Returns an array [r, g, b, 1].
+   *
+   *  if `css` is `true`, it returns `'rgba(r, g, b, a)'` instead.
+   */
+  BVG.rgba = function (hex, css) {
+    var h = '';
+    hex = hex.replace('#', '');
+    if (hex.length === 3) {
+      for (var i = 0; i < hex.length; i++) {
+        h += hex[i] + hex[i];
+      }
+    } else {
+      h = hex;
+    }
+    if (h.length !== 6 && h.length !== 8) {
+      throw new Error('hex (' + hex + ') is not a valid colour.');
+    }
+
+    var colour = [];
+    for (var i = 0; i < h.length; i+=2) {
+      colour.push(parseInt(h.substring(i, i+2), 16));
+    }
+    if (colour.length === 3) {
+      colour.push(1);
+    }
+    if (css)
+      return 'rgba(' + colour.join() + ')';
+    return colour;
   };
 
   return BVG;

@@ -9,7 +9,8 @@ require(['BVG'], function(BVG) {
     [50, 270, 210, 300]
   ]);
 
-  rects[0].data('x', 300);
+  rects[0].stroke('#009AFE');
+  console.log(rects[0]);
 
   // Remove loading placeholder
   document.getElementById('loading').remove();
