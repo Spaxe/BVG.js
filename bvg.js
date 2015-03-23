@@ -129,12 +129,31 @@ define([], function () {
       }
     };
 
+    /** ### `bvg.stroke()`
+      * Get/set the `stroke` property. There are 4 ways to use this function.
+      *
+      * **`bvg.stroke()`**: Return `stroke` colour as [r, g, b, a].
+      *
+      * **`bvg.stroke(hex)`**: Set `stroke` colour with a CSS hex string.
+      *
+      * **`bvg.stroke(rgb)`**: Set `stroke` with a greyscale colour with equal
+      * values `(rgb, rgb, rgb)`.
+      *
+      * **`bvg.stroke(r, g, b, [a])`**: Set `stroke` with `(r, g, b, a)`. If `a`
+      * is omitted, it defaults to `1`.
+      *
+      * `r`, `g`, `b` should be in the range of 0-255 inclusive.
+      */
     bvg.stroke = function () {
       if (arguments.length === 0) {
-        return bvg.getAttribute('stroke');
-      } else if (arguments.length === 1) {
-        bvg.setAttribute('stroke', BVG.rgba(arguments[0], true))
+        return BVG.rgba(bvg.getAttribute('stroke'));
       }
+      if (arguments.length === 1) {
+        bvg.setAttribute('stroke', BVG.rgba(arguments[0], true))
+      } else {
+        bvg.setAttribute('stroke', BVG.rgba([].slice.call(arguments), true))
+      }
+      return bvg;
     };
   };
 
@@ -193,29 +212,83 @@ define([], function () {
     }
   };
 
-  /*- ### `BVG.rgba(hex)`
-   *  Converts #XXXXXX to rgba(r, g, b, a). Returns an array [r, g, b, 1].
+  /** ## Utility Methods */
+
+  /** ### `BVG.rgba()`
+   *  Converts a hex string or colour value to rgba(r, g, b, a).
    *
-   *  if `css` is `true`, it returns `'rgba(r, g, b, a)'` instead.
+   *  Returns `[r, g, b, a]`.
+   *
+   *  Possible ways to use this function are:
+   *
+   *  **`BVG.rgba(hex, [css])`**
+   *
+   *  **`BVG.rgba(rgb, [css])`**
+   *
+   *  **`BVG.rgba(r, g, b, [css])`**
+   *
+   *  **`BVG.rgba(r, g, b, a, [css])`**
+   *
+   *  `hex` is a CSS colour string between `#000000` and `#FFFFFF`.
+   *
+   *  `r`, `g`, `b` are in the range of 0-255 inclusive. `a` is the opacity and
+   *  is in the range of 0.0-1.0. If not specified, `a` will be `1`.
+   *
+   *  if `css` is `true`, it returns a string `'rgba(r, g, b, a)'` instead.
    */
-  BVG.rgba = function (hex, css) {
+  BVG.rgba = function () {
     var h = '';
-    hex = hex.replace('#', '');
-    if (hex.length === 3) {
-      for (var i = 0; i < hex.length; i++) {
-        h += hex[i] + hex[i];
+    var colour = [];
+    var css = false;
+    if (arguments.length === 1 || arguments.length === 2) {
+      var c = arguments[0]
+      if (typeof c === 'string') {
+        var rgba = c.match(/rgba?\((.*)\)/);
+        if (rgba) {
+          colour = rgba[1].split(',');
+        } else {
+          c = c.replace('#', '');
+          if (c.length === 3) {
+            for (var i = 0; i < c.length; i++) {
+              h += c[i] + c[i];
+            }
+          } else {
+            h = c;
+          }
+          for (var i = 0; i < h.length; i+=2) {
+            var hex = h.substring(i, i+2);
+            if (hex.length !== 2)
+              break;
+            colour.push(parseInt(hex, 16));
+          }
+        }
+      } else if (typeof c === 'number') {
+        colour = [c, c, c];
+      } else if (c instanceof Array && (c.length === 3 || c.length === 4)) {
+        colour = c;
       }
-    } else {
-      h = hex;
-    }
-    if (h.length !== 6 && h.length !== 8) {
-      throw new Error('hex (' + hex + ') is not a valid colour.');
+      if (arguments[1])
+        css = true;
+    } else if (arguments.length === 3) {
+      colour = [].slice.call(arguments);
+    } else if (arguments.length === 4) {
+      if (typeof arguments[3] === 'number') {
+        colour = [].slice.call(arguments);
+      } else {
+        colour = [].slice.call(arguments).slice(0, 3);
+        if (arguments[3])
+          css = true
+      }
+    } else if (arguments.length === 5) {
+      colour = [].slice.call(arguments).slice(0, 4);
+      if (arguments[4])
+        css = true
     }
 
-    var colour = [];
-    for (var i = 0; i < h.length; i+=2) {
-      colour.push(parseInt(h.substring(i, i+2), 16));
+    if (colour.length !== 3 && colour.length !== 4) {
+      throw new TypeError(c + ' is not a valid colour.');
     }
+
     if (colour.length === 3) {
       colour.push(1);
     }
