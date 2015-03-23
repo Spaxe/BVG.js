@@ -3,13 +3,14 @@ require(['bvg'], function(BVG) {
   var bvg = BVG.create('#universe');
 
   var rects = [];
-  for (var x = 0; x < 1200; x += 16) {
-    for (var y = 0; y < 800; y += 16) {
+  var size = 32;
+  for (var x = 0; x < 1200; x += size) {
+    for (var y = 0; y < 800; y += size) {
       rects.push({
         x: x,
         y: y,
-        width: 16,
-        height: 16,
+        width: size,
+        height: size,
         fill: 255
       });
     }
