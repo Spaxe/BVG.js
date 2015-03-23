@@ -1,6 +1,10 @@
 # BVG - Bindable Vector Graphics
 **Real-time data-driven visualisation for the web.**
 
+![Example](https://raw.githubusercontent.com/Spaxe/BVG.js/master/example.gif)
+
+Live example: http://spaxe.github.io/BVG.js/
+
 *Bindable Vector Graphics* was born out of frustration for lack of a
 middle level SVG library. [D3.js](http://d3js.org/) abstracts too much
 logic, and [SVG.js](http://svgjs.com/) provides only low-level SVG drawing.
