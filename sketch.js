@@ -2,25 +2,25 @@ require(['bvg'], function(BVG) {
 
   var bvg = BVG.create('#universe');
 
-  var rects = [];
-  var size = 32;
-  for (var x = 0; x < 1200; x += size) {
-    for (var y = 0; y < 800; y += size) {
-      rects.push({
-        x: x,
-        y: y,
-        width: size,
-        height: size,
+  var px = [];
+  var size = 16;
+  for (var x = 0; x < 1200; x += size*2) {
+    for (var y = 0; y < 800; y += size*2) {
+      px.push({
+        cx: x,
+        cy: y,
+        rx: size,
+        ry: size,
         fill: 255
       });
     }
   }
-  var pixels = bvg.rectArray(rects);
+  var pixels = bvg.ellipseArray(px);
 
   document.addEventListener('mouseover', function (event) {
     pixels.forEach(function (pixel) {
-      var d = Math.sqrt(Math.pow(event.clientX - pixel.data('x'), 2) +
-                        Math.pow(event.clientY - pixel.data('y'), 2));
+      var d = Math.sqrt(Math.pow(event.clientX - pixel.data('cx'), 2) +
+                        Math.pow(event.clientY - pixel.data('cy'), 2));
       pixel.data('fill', Math.min(d, 255));
     });
   });

@@ -84,6 +84,26 @@ define([], function () {
     return svg;
   };
 
+
+  /** ## Drawing BVGs
+    * BVG supports many popular SVG objects out of the box. If you don't see
+    * them here, you can use `BVG()` to make your own.
+    *
+    * ### `BVG.rect(x, y, width, height)`
+    *
+    * Return a rectangle at position `(x, y)` at `width` x `height` in size.
+    *
+    * ### `BVG.ellipse(cx, cy, rx, ry)`
+    *
+    * Return a ellipse centred on `(cx, cy)` with radii `rx` and `ry`.
+    */
+  var svgElements = {
+    svg: ['xmlns:xlink', 'version', 'width', 'height'],
+    g: ['transform'],
+    rect: ['x', 'y', 'width', 'height'],
+    ellipse: ['cx', 'cy', 'rx', 'ry']
+  };
+
   /** ## The BVG Object
     * BVGs are SVGs with extra superpowers. In addition to all the [SVG methods](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model#SVG_interfaces),
     * BVG has the following:
@@ -122,25 +142,6 @@ define([], function () {
         data[arguments[0]] = arguments[1];
         return bvg;
       }
-    };
-
-    /** ## Drawing BVGs
-      * BVG supports many popular SVG objects out of the box. If you don't see
-      * them here, you can use `BVG()` to make your own.
-      *
-      * ### `BVG.rect(x, y, width, height)`
-      *
-      * Return a rectangle at position `(x, y)` at `width` x `height` in size.
-      *
-      * ### `BVG.ellipse(cx, cy, rx, ry)`
-      *
-      * Return a ellipse centred on `(cx, cy)` with radii `rx` and `ry`.
-      */
-    var svgElements = {
-      svg: ['xmlns:xlink', 'version', 'width', 'height'],
-      g: ['transform'],
-      rect: ['x', 'y', 'width', 'height'],
-      ellipse: ['cx', 'cy', 'rx', 'ry']
     };
 
     /** ### `bvg.stroke()`

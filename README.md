@@ -38,6 +38,19 @@ Return the BVG container object.
                     or any [HTMLElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement).
     
 
+## Drawing BVGs
+BVG supports many popular SVG objects out of the box. If you don't see
+them here, you can use `BVG()` to make your own.
+
+### `BVG.rect(x, y, width, height)`
+
+Return a rectangle at position `(x, y)` at `width` x `height` in size.
+
+### `BVG.ellipse(cx, cy, rx, ry)`
+
+Return a ellipse centred on `(cx, cy)` with radii `rx` and `ry`.
+    
+
 ## The BVG Object
 BVGs are SVGs with extra superpowers. In addition to all the [SVG methods](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model#SVG_interfaces),
 BVG has the following:
@@ -56,19 +69,6 @@ adding and replacing any properties. Return `bvg` object reference.
 
  - **`bvg.data(property, newValue)`**: Update `property` with `newValue`.
 Return `bvg` object reference.
-      
-
-## Drawing BVGs
-BVG supports many popular SVG objects out of the box. If you don't see
-them here, you can use `BVG()` to make your own.
-
-### `BVG.rect(x, y, width, height)`
-
-Return a rectangle at position `(x, y)` at `width` x `height` in size.
-
-### `BVG.ellipse(cx, cy, rx, ry)`
-
-Return a ellipse centred on `(cx, cy)` with radii `rx` and `ry`.
       
 
 ### `bvg.stroke()`
