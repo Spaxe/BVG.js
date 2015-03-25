@@ -163,7 +163,7 @@ define([], function () {
     * ### `bvg.g([transform])`
     *
     * Create a group to contain BVG objects. It acts like a BVG container with
-    * an optionaal `transform` attribute.
+    * an optional `transform` attribute.
     *
     * ```Javascript
     * // Create a new group and fill it with dashes using Array.prototype.map()
@@ -183,8 +183,7 @@ define([], function () {
   };
 
   /** ## The BVG Object
-    * BVGs are SVGs with extra superpowers. In addition to all the [SVG methods](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model#SVG_interfaces),
-    * BVG has the following:
+    * BVGs are SVGs with extra superpowers.
     */
   BVG.addUtilityMethods = function (bvg, data, bind) {
 
@@ -324,19 +323,6 @@ define([], function () {
         bvg.appendChild(newBVG);
       return newBVG;
     };
-    // bvg[svg + 'Array'] = function(data, bind) {
-    //   return data.map(function (datum) {
-    //     var newBVG;
-    //     if (datum instanceof Array) {
-    //       newBVG = BVG[svg].apply(BVG[svg], datum);
-    //     } else {
-    //       newBVG = BVG[svg](datum, bind);
-    //     }
-    //     if (bvg.isBVG)
-    //       bvg.appendChild(newBVG);
-    //     return newBVG;
-    //   });
-    // };
   };
 
   BVG.addFactoryMethods = function (bvg) {

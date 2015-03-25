@@ -102,7 +102,7 @@ var small_ellipse = bvg.ellipse([300, 300, 20, 40]);
 ### `bvg.g([transform])`
 
 Create a group to contain BVG objects. It acts like a BVG container with
-an optionaal `transform` attribute.
+an optional `transform` attribute.
 
 ```Javascript
 // Create a new group and fill it with dashes using Array.prototype.map()
@@ -115,8 +115,7 @@ data.map(dashes.rect);
     
 
 ## The BVG Object
-BVGs are SVGs with extra superpowers. In addition to all the [SVG methods](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model#SVG_interfaces),
-BVG has the following:
+BVGs are SVGs with extra superpowers.
     
 
 ### `bvg.data()`
