@@ -61,7 +61,7 @@ define([], function () {
     * ```
     */
 
-  /*- **`BVG(svg, data, bind)`**
+  /*- `BVG(svg, data, bind)`
     * Create a Bindable Vector Graphic with `svg` element. This BVG depends on
     * `data` for its attributes and the callback function `bind` on how those
     * attributes are presented.
@@ -192,14 +192,14 @@ define([], function () {
       * Get/set the `data` object in a BVG. There are four ways to use this
       * function.
       *
-      *  - **`bvg.data()`**: Return `data` bound to the BVG.
+      *  - `bvg.data()`: Return `data` bound to the BVG.
       *
-      *  - **`bvg.data(property)`**: Return `data[property]` from the BVG.
+      *  - `bvg.data(property)`: Return `data[property]` from the BVG.
       *
-      *  - **`bvg.data(objectToUpdate)`**: Update `data` with `objectToUpdate`,
+      *  - `bvg.data(objectToUpdate)`: Update `data` with `objectToUpdate`,
       * adding and replacing any properties. Return `bvg` object reference.
       *
-      *  - **`bvg.data(property, newValue)`**: Update `property` with `newValue`.
+      *  - `bvg.data(property, newValue)`: Update `property` with `newValue`.
       * Return `bvg` object reference.
       */
     bvg.data = function () {
@@ -225,14 +225,14 @@ define([], function () {
     /** ### `bvg.stroke()`
       * Get/set the outline colour. There are 4 ways to use this function.
       *
-      *  - **`bvg.stroke()`**: Return `stroke` colour as [r, g, b, a].
+      *  - `bvg.stroke()`: Return `stroke` colour as [r, g, b, a].
       *
-      *  - **`bvg.stroke(hex)`**: Set `stroke` colour with a CSS hex string.
+      *  - `bvg.stroke(hex)`: Set `stroke` colour with a CSS hex string.
       *
-      *  - **`bvg.stroke(rgb)`**: Set `stroke` with a greyscale colour with equal
+      *  - `bvg.stroke(rgb)`: Set `stroke` with a greyscale colour with equal
       * values `(rgb, rgb, rgb)`.
       *
-      *  - **`bvg.stroke(r, g, b, [a])`**: Set `stroke` with `(r, g, b, a)`. If `a`
+      *  - `bvg.stroke(r, g, b, [a])`: Set `stroke` with `(r, g, b, a)`. If `a`
       * is omitted, it defaults to `1`.
       *
       * `r`, `g`, `b` should be in the range of 0-255 inclusive.
@@ -271,14 +271,14 @@ define([], function () {
     /** ### `bvg.fill()`
       * Get/set the filling colour. There are 4 ways to use this function.
       *
-      *  - **`bvg.fill()`**: Return `fill` colour as [r, g, b, a].
+      *  - `bvg.fill()`: Return `fill` colour as [r, g, b, a].
       *
-      *  - **`bvg.fill(hex)`**: Set `fill` colour with a CSS hex string.
+      *  - `bvg.fill(hex)`: Set `fill` colour with a CSS hex string.
       *
-      *  - **`bvg.fill(rgb)`**: Set `fill` with a greyscale colour with equal
+      *  - `bvg.fill(rgb)`: Set `fill` with a greyscale colour with equal
       * values `(rgb, rgb, rgb)`.
       *
-      *  - **`bvg.fill(r, g, b, [a])`**: Set `fill` with `(r, g, b, a)`. If `a`
+      *  - `bvg.fill(r, g, b, [a])`: Set `fill` with `(r, g, b, a)`. If `a`
       * is omitted, it defaults to `1`.
       *
       * `r`, `g`, `b` should be in the range of 0-255 inclusive.
@@ -370,13 +370,13 @@ define([], function () {
    *
    *  Possible ways to use this function are:
    *
-   *  **`BVG.rgba(hex, [css])`**
+   *  `BVG.rgba(hex, [css])`
    *
-   *  **`BVG.rgba(rgb, [css])`**
+   *  `BVG.rgba(rgb, [css])`
    *
-   *  **`BVG.rgba(r, g, b, [css])`**
+   *  `BVG.rgba(r, g, b, [css])`
    *
-   *  **`BVG.rgba(r, g, b, a, [css])`**
+   *  `BVG.rgba(r, g, b, a, [css])`
    *
    *  `hex` is a CSS colour string between `#000000` and `#FFFFFF`.
    *
