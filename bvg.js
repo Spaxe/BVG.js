@@ -192,13 +192,11 @@ define([], function () {
       * function.
       *
       *  - `bvg.data()`: Return `data` bound to the BVG.
-      *
       *  - `bvg.data(property)`: Return `data[property]` from the BVG.
-      *
       *  - `bvg.data(objectToUpdate)`: Update `data` with `objectToUpdate`,
-      * adding and replacing any properties. Return `bvg` object reference.
-      *
+      *     adding and replacing any properties. Return `bvg` object reference.
       *  - `bvg.data(property, newValue)`: Update `property` with `newValue`.
+      *
       * Return `bvg` object reference.
       */
     bvg.data = function () {
@@ -225,14 +223,11 @@ define([], function () {
       * Get/set the outline colour. There are 4 ways to use this function.
       *
       *  - `bvg.stroke()`: Return `stroke` colour as [r, g, b, a].
-      *
       *  - `bvg.stroke(hex)`: Set `stroke` colour with a CSS hex string.
-      *
       *  - `bvg.stroke(rgb)`: Set `stroke` with a greyscale colour with equal
-      * values `(rgb, rgb, rgb)`.
-      *
+      *    values `(rgb, rgb, rgb)`.
       *  - `bvg.stroke(r, g, b, [a])`: Set `stroke` with `(r, g, b, a)`. If `a`
-      * is omitted, it defaults to `1`.
+      *    is omitted, it defaults to `1`.
       *
       * `r`, `g`, `b` should be in the range of 0-255 inclusive.
       */
