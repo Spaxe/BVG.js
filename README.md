@@ -19,7 +19,7 @@ creates a living connection that can react to change. BVG uses
 available on Chrome 36+, Opera 27+ and Android Browser 37+.
 
 If you wish to use this for older browsers, you can polyfill with
-[`observe-shim`](https://github.com/KapIT/observe-shim).
+[`MaxArt2501/observe.observe`](https://github.com/MaxArt2501/object-observe).
 
 ## Quickstart
 
