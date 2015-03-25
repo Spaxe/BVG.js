@@ -109,7 +109,10 @@ define([], function () {
     return bvg;
   };
 
-  /** ## Creating BVG Container */
+  /** ## Creating BVG Container
+    * The rest of the documentation will assume `bvg` as our BVG container
+    * created by the example below.
+    */
 
   /** ### `BVG.create(htmlElement)`
     * Create a BVG container inside `htmlElement`.
@@ -137,11 +140,9 @@ define([], function () {
 
   /** ## Creating Basic Shapes
     *
-    * The recommended way is to draw shapes by call with BVG objects.
+    * All BVG objects have access to the drawing functions in this section.
     *
     * ```Javascript
-    * // Create a new BVG container and append it to an existing HTML element.
-    * var bvg = BVG.create('#bvg-container');
     * // Create a rectangle at (0, 0) with dimensions 100x100 px and add it to bvg
     * bvg.rect(0, 0, 100, 100);
     * ```
@@ -150,10 +151,8 @@ define([], function () {
     * BVG manually later.
     *
     * ```Javascript
-    * // Create a new BVG container and append it to an existing HTML element.
-    * var bvg = BVG.create('#bvg-container');
     * // Create a rectangle at (0, 0) with dimensions 100x100 px
-    * // Note this example uses BVG module directly to create the rectangle.
+    * // Note it uses the BVG module directly to create the rectangle.
     * var rect = BVG.rect(0, 0, 100, 100);
     * // Add the rectangle to an existing BVG container
     * bvg.appendChild(rect);
