@@ -109,7 +109,7 @@ define([], function () {
     return bvg;
   };
 
-  /** ## Creating BVG Container
+  /** ## The BVG Container
     * The rest of the documentation will assume `bvg` as our BVG container
     * created by the example below.
     */
@@ -138,7 +138,7 @@ define([], function () {
     return svg;
   };
 
-  /** ## Creating Basic Shapes
+  /** ## BVG Elements
     * All BVG objects, including the container, have access to drawing functions
     * and return reference to the new shape, which is also a BVG.
     *
@@ -157,7 +157,6 @@ define([], function () {
     * bvg.appendChild(rect);
     * ```
     *
-    * ## Basic Shape Functions
     * Drawing functions can be called in a number of ways. Take `bvg.rect(x, y, width, height)`
     * as an example below. Sometimes it is easier to use one over another style.
     *
