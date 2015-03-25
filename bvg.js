@@ -141,7 +141,7 @@ define([], function () {
   /** ## Creating Basic Shapes
     *
     * All BVG objects, including the container, have access drawing functions.
-    * They also return the shapes created. For example:
+    * They also return the shapes created.
     *
     * ```Javascript
     * // Create a rectangle at (0, 0) with dimensions 100x100 px and add it to bvg
@@ -159,8 +159,8 @@ define([], function () {
     * ```
     *
     * Drawing functions can be called in a number of ways. Take `bvg.rect(x, y, width, height)`
-    * for example, all following function calls are functionally equivalent.
-    * These variants exist because sometimes it is easier to use one over
+    * The following function calls are functionally equivalent. These variants
+    * are offered because sometimes it is easier to use one over
     * another.
     *
     * ```Javascript
@@ -181,10 +181,15 @@ define([], function () {
     * Create a rectangle at position `(x, y)` at `width` x `height` in size.
     *
     * ```Javascript
-    * // Basic usage with 4 paranmeters
-    * var wide_rect = bvg.rect(100, 100, 300, 150);
-    * // You can also use an array
-    * var tall_rect = bvg.rect([300, 300, 150, 300]);
+    * var rect = bvg.rect(100, 100, 300, 150);
+    * ```
+    *
+    * ### `bvg.circle(cx, cy, r)`
+    *
+    * Create a circle centred on `(cx, cy)` with radius `r`.
+    *
+    * ```Javascript
+    * var circle = bvg.ellipse(100, 100, 50);
     * ```
     *
     * ### `bvg.ellipse(cx, cy, rx, ry)`
@@ -192,10 +197,7 @@ define([], function () {
     * Create a ellipse centred on `(cx, cy)` with radii `rx` and `ry`.
     *
     * ```Javascript
-    * // Basic usage with 4 paranmeters
-    * var big_ellipse = bvg.ellipse(100, 100, 200, 180);
-    * // You can also use an array
-    * var small_ellipse = bvg.ellipse([300, 300, 20, 40]);
+    * var ellipse = bvg.ellipse(100, 100, 200, 180);
     * ```
     *
     * ## Grouping Elements
@@ -205,12 +207,11 @@ define([], function () {
     * an optional `transform` attribute.
     *
     * ```Javascript
-    * // Create a new group and fill it with dashes using Array.prototype.map()
+    * // Create a new group and fill it with dashes.
     * var dashes = bvg.g();
-    * var data = [];
-    * for (int i = 0; i < 5; i++)
-    *   data.push([10, 10 + i * 30, 50, 20]);
-    * data.map(dashes.rect);
+    * for (int i = 0; i < 5; i++) {
+    *   dahses.rect(10, 10 + i * 30, 50, 20);
+    * }
     * ```
     *
     * ## Hyperlinks
