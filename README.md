@@ -79,8 +79,8 @@ var bvg = BVG.create('#bvg-container');
 
 ## Creating Basic Shapes
 
-All BVG objects, including the container, have access drawing functions.
-They also return the shapes created.
+All BVG objects, including the container, have access to drawing functions
+and return reference to the new shape, which is also a BVG.
 
 ```Javascript
 // Create a rectangle at (0, 0) with dimensions 100x100 px and add it to bvg
