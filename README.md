@@ -139,6 +139,14 @@ Create a ellipse centred on `(cx, cy)` with radii `rx` and `ry`.
 var ellipse = bvg.ellipse(100, 100, 200, 180);
 ```
 
+### `bvg.line(x1, y1, x2, y2)`
+
+Create a line from `(x1, y1)` to `(x2, y2)`.
+
+```Javascript
+var line = bvg.line(100, 100, 200, 300);
+```
+
 ## Grouping Elements
 ### `bvg.g([transform])`
 
