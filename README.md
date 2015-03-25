@@ -87,6 +87,17 @@ var wide_rect = bvg.rect(100, 100, 300, 150);
 var tall_rect = bvg.rect([300, 300, 150, 300]);
 ```
 
+<div id="rect-example">
+  <script type="text/javascript">
+    var bvg = BVG.create('rect-example');
+    // Basic usage with 4 paranmeters
+    var wide_rect = bvg.rect(100, 100, 300, 150);
+    // You can also use an array
+    var tall_rect = bvg.rect([300, 300, 150, 300]);
+  </script>
+</div>
+
+
 ### `bvg.ellipse(cx, cy, rx, ry)`
 
 Create a ellipse centred on `(cx, cy)` with radii `rx` and `ry`.
