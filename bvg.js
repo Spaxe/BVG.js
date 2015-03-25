@@ -139,7 +139,6 @@ define([], function () {
   };
 
   /** ## Creating Basic Shapes
-    *
     * All BVG objects, including the container, have access to drawing functions
     * and return reference to the new shape, which is also a BVG.
     *
@@ -158,6 +157,7 @@ define([], function () {
     * bvg.appendChild(rect);
     * ```
     *
+    * ## Basic Shape Functions
     * Drawing functions can be called in a number of ways. Take `bvg.rect(x, y, width, height)`
     * as an example below. Sometimes it is easier to use one over another style.
     *
@@ -172,10 +172,7 @@ define([], function () {
     * });
     * ```
     *
-    * ## Basic Shape Functions
-    *
     * ### `bvg.rect(x, y, width, height)`
-    *
     * Create a rectangle at position `(x, y)` at `width` x `height` in size.
     *
     * ```Javascript
@@ -183,7 +180,6 @@ define([], function () {
     * ```
     *
     * ### `bvg.circle(cx, cy, r)`
-    *
     * Create a circle centred on `(cx, cy)` with radius `r`.
     *
     * ```Javascript
@@ -191,7 +187,6 @@ define([], function () {
     * ```
     *
     * ### `bvg.ellipse(cx, cy, rx, ry)`
-    *
     * Create a ellipse centred on `(cx, cy)` with radii `rx` and `ry`.
     *
     * ```Javascript
@@ -199,7 +194,6 @@ define([], function () {
     * ```
     *
     * ### `bvg.line(x1, y1, x2, y2)`
-    *
     * Create a line from `(x1, y1)` to `(x2, y2)`.
     *
     * ```Javascript
