@@ -1,3 +1,10 @@
+require.config({
+  paths: {
+    'bvg': 'bvg',
+    'observe-shim': 'lib/observe-shim'
+  };
+});
+
 require(['bvg'], function(BVG) {
 
   var bvg = BVG.create('#universe');

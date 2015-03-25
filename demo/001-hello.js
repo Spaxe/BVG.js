@@ -1,4 +1,11 @@
-require(['../bvg'], function(BVG) {
+require.config({
+  paths: {
+    'bvg': '../bvg',
+    'observe-shim': '../lib/observe-shim'
+  };
+});
+
+require(['bvg', 'observe-shim'], function(BVG) {
   // Create a BVG container based on selected HTML element
   var bvg = BVG.create('#bvg-container');
   // Create a Bindable circle, colour it orange.

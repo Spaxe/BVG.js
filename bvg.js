@@ -118,6 +118,11 @@ define([], function () {
     *
     *  - `htmlElement`  : Either a [CSS Selector](https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Getting_Started/Selectors)
     *                     or any [HTMLElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement).
+    *
+    * ```Javascript
+    * // Create a new BVG container and append it to an existing HTML element.
+    * var bvg = BVG.create('#bvg-container');
+    * ```
     */
   BVG.create = function (htmlElement) {
     if (typeof htmlElement === 'string')
@@ -130,18 +135,48 @@ define([], function () {
     return svg;
   };
 
-
-  /** ## Drawing BVGs
-    * ### `BVG.rect(x, y, width, height)`
+  /** ## Drawing Basic Shapes
     *
-    * Return a rectangle at position `(x, y)` at `width` x `height` in size.
+    * ### `bvg.rect(x, y, width, height)`
     *
-    * ### `BVG.ellipse(cx, cy, rx, ry)`
+    * Create a rectangle at position `(x, y)` at `width` x `height` in size.
     *
-    * Return a ellipse centred on `(cx, cy)` with radii `rx` and `ry`.
+    * ```Javascript
+    * // Basic usage with 4 paranmeters
+    * var wide_rect = bvg.rect(100, 100, 300, 150);
+    * // You can also use an array
+    * var tall_rect = bvg.rect([300, 300, 150, 300]);
+    * ```
+    *
+    * ### `bvg.ellipse(cx, cy, rx, ry)`
+    *
+    * Create a ellipse centred on `(cx, cy)` with radii `rx` and `ry`.
+    *
+    * ```Javascript
+    * // Basic usage with 4 paranmeters
+    * var big_ellipse = bvg.ellipse(100, 100, 200, 180);
+    * // You can also use an array
+    * var small_ellipse = bvg.ellipse([300, 300, 20, 40]);
+    * ```
+    *
+    * ## Grouping Elements
+    * ### `bvg.g([transform])`
+    *
+    * Create a group to contain BVG objects. It acts like a BVG container with
+    * an optionaal `transform` attribute.
+    *
+    * ```Javascript
+    * // Create a new group and fill it with dashes using Array.prototype.map()
+    * var dashes = bvg.g();
+    * var data = [];
+    * for (int i = 0; i < 5; i++)
+    *   data.push([10, 10 + i * 30, 50, 20]);
+    * data.map(dashes.rect);
+    * ```
     */
   var svgElements = {
     svg: ['xmlns:xlink', 'version', 'width', 'height'],
+    a: ['xlink:href'],
     g: ['transform'],
     rect: ['x', 'y', 'width', 'height'],
     ellipse: ['cx', 'cy', 'rx', 'ry']
@@ -289,19 +324,19 @@ define([], function () {
         bvg.appendChild(newBVG);
       return newBVG;
     };
-    bvg[svg + 'Array'] = function(data, bind) {
-      return data.map(function (datum) {
-        var newBVG;
-        if (datum instanceof Array) {
-          newBVG = BVG[svg].apply(BVG[svg], datum);
-        } else {
-          newBVG = BVG[svg](datum, bind);
-        }
-        if (bvg.isBVG)
-          bvg.appendChild(newBVG);
-        return newBVG;
-      });
-    };
+    // bvg[svg + 'Array'] = function(data, bind) {
+    //   return data.map(function (datum) {
+    //     var newBVG;
+    //     if (datum instanceof Array) {
+    //       newBVG = BVG[svg].apply(BVG[svg], datum);
+    //     } else {
+    //       newBVG = BVG[svg](datum, bind);
+    //     }
+    //     if (bvg.isBVG)
+    //       bvg.appendChild(newBVG);
+    //     return newBVG;
+    //   });
+    // };
   };
 
   BVG.addFactoryMethods = function (bvg) {
