@@ -163,14 +163,11 @@ object reference.
 Get/set the filling colour. There are 4 ways to use this function.
 
  - `bvg.fill()`: Return `fill` colour as [r, g, b, a].
-
  - `bvg.fill(hex)`: Set `fill` colour with a CSS hex string.
-
  - `bvg.fill(rgb)`: Set `fill` with a greyscale colour with equal
-values `(rgb, rgb, rgb)`.
-
+   values `(rgb, rgb, rgb)`.
  - `bvg.fill(r, g, b, [a])`: Set `fill` with `(r, g, b, a)`. If `a`
-is omitted, it defaults to `1`.
+   is omitted, it defaults to `1`.
 
 `r`, `g`, `b` should be in the range of 0-255 inclusive.
       
@@ -178,27 +175,24 @@ is omitted, it defaults to `1`.
 ## Utility Methods 
 
 ### `BVG.rgba()`
- Converts a hex string or colour value to rgba(r, g, b, a).
+Converts a hex string or colour value to rgba(r, g, b, a).
 
- Returns `[r, g, b, a]`.
+Returns `[r, g, b, a]`.
 
- Possible ways to use this function are:
+Possible ways to use this function are:
 
- `BVG.rgba(hex, [css])`
+ - `BVG.rgba(hex, [css])`
+ - `BVG.rgba(rgb, [css])`
+ - `BVG.rgba(r, g, b, [css])`
+ - `BVG.rgba(r, g, b, a, [css])`
 
- `BVG.rgba(rgb, [css])`
+`hex` is a CSS colour string between `#000000` and `#FFFFFF`.
 
- `BVG.rgba(r, g, b, [css])`
+`r`, `g`, `b` are in the range of 0-255 inclusive. `a` is the opacity and
+is in the range of 0.0-1.0. If not specified, `a` will be `1`.
 
- `BVG.rgba(r, g, b, a, [css])`
-
- `hex` is a CSS colour string between `#000000` and `#FFFFFF`.
-
- `r`, `g`, `b` are in the range of 0-255 inclusive. `a` is the opacity and
- is in the range of 0.0-1.0. If not specified, `a` will be `1`.
-
- if `css` is `true`, it returns a string `'rgba(r, g, b, a)'` instead.
-   
+if `css` is `true`, it returns a string `'rgba(r, g, b, a)'` instead.
+    
 
 ## Contribute to this library
 [Make a pull request](https://github.com/Spaxe/BVG.js/pulls) or
