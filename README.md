@@ -98,9 +98,7 @@ bvg.appendChild(rect);
 ```
 
 Drawing functions can be called in a number of ways. Take `bvg.rect(x, y, width, height)`
-The following function calls are functionally equivalent. These variants
-are offered because sometimes it is easier to use one over
-another.
+as an example below. Sometimes it is easier to use one over another style.
 
 ```Javascript
 bvg.rect(0, 10, 30, 70);      // Arguments style
