@@ -58,7 +58,7 @@ bvg.addEventListener('mousemove', function (event) {
 ```
     
 
-## BVG Container 
+## Creating BVG Container 
 
 ### `BVG.create(htmlElement)`
 Create a BVG container inside `htmlElement`.
@@ -74,7 +74,45 @@ var bvg = BVG.create('#bvg-container');
 ```
     
 
-## Drawing Basic Shapes
+## Creating Basic Shapes
+
+The recommended way is to draw shapes by call with BVG objects.
+
+```Javascript
+// Create a new BVG container and append it to an existing HTML element.
+var bvg = BVG.create('#bvg-container');
+// Create a rectangle at (0, 0) with dimensions 100x100 px and add it to bvg
+bvg.rect(0, 0, 100, 100);
+```
+
+You can also create a BVG by using the module object and then append the
+BVG manually later.
+
+```Javascript
+// Create a new BVG container and append it to an existing HTML element.
+var bvg = BVG.create('#bvg-container');
+// Create a rectangle at (0, 0) with dimensions 100x100 px
+// Note this example uses BVG module directly to create the rectangle.
+var rect = BVG.rect(0, 0, 100, 100);
+// Add the rectangle to an existing BVG container
+bvg.appendChild(rect);
+```
+
+Drawing functions can be called in a number of ways. Take `bvg.rect(x, y, width, height)`
+for example, all following function calls are functionally equivalent.
+These variants exist because sometimes it is easier to use one over
+another.
+
+```Javascript
+bvg.rect(0, 10, 30, 70);      // Arguments style
+bvg.rect([0, 10, 30, 70]);    // Array style
+bvg.rect({                    // Object style
+  x: 0,
+  y: 10,
+  width: 30,
+  height:70
+});
+```
 
 ### `bvg.rect(x, y, width, height)`
 
