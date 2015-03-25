@@ -140,15 +140,15 @@ define([], function () {
 
   /** ## Creating Basic Shapes
     *
-    * All BVG objects have access to the drawing functions in this section.
+    * All BVG objects, including the container, have access drawing functions in
+    * this section. They also return the shapes created. For example:
     *
     * ```Javascript
     * // Create a rectangle at (0, 0) with dimensions 100x100 px and add it to bvg
-    * bvg.rect(0, 0, 100, 100);
+    * var rect = bvg.rect(0, 0, 100, 100);
     * ```
     *
-    * You can also create a BVG by using the module object and then append the
-    * BVG manually later.
+    * The BVG module also has drawing functions, which return the BVG object:
     *
     * ```Javascript
     * // Create a rectangle at (0, 0) with dimensions 100x100 px
