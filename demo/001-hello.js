@@ -1,8 +1,10 @@
 require.config({
   paths: {
-    'bvg': '../bvg',
+    'bvg': '../bvg'
+  },
+  shim: {
     'observe-shim': '../lib/observe-shim'
-  };
+  }
 });
 
 require(['bvg', 'observe-shim'], function(BVG) {
