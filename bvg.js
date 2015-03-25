@@ -22,7 +22,7 @@ define([], function () {
     * available on Chrome 36+, Opera 27+ and Android Browser 37+.
     *
     * If you wish to use this for older browsers, you can polyfill with
-    * [`MaxArt2501/observe.observe`](https://github.com/MaxArt2501/object-observe).
+    * [`MaxArt2501/Object.observe`](https://github.com/MaxArt2501/object-observe).
     *
     * ## Quickstart
     *
