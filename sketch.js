@@ -1,9 +1,6 @@
 require.config({
   paths: {
     'bvg': 'bvg'
-  },
-  shim: {
-    'observe-shim': 'lib/observe-shim'
   }
 });
 
