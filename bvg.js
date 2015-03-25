@@ -173,6 +173,19 @@ define([], function () {
     *   data.push([10, 10 + i * 30, 50, 20]);
     * data.map(dashes.rect);
     * ```
+    *
+    * ## Hyperlinks
+    * ### `bvg.a(href)`
+    *
+    * Create a hyperlink BVG to target URL `href`. It does not have any display
+    * elements. Make sure to append elements to it.
+    *
+    * ```Javascript
+    * // Clicking on this element will bring them to the Github page
+    * var githubLink = bvg.a('https://github.com/spaxe/BVG.js');
+    * // Make a button and attack it to the link
+    * githubLink.ellipse(200, 200, 50, 50);
+    * ```
     */
   var svgElements = {
     svg: ['xmlns:xlink', 'version', 'width', 'height'],
