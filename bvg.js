@@ -140,8 +140,8 @@ define([], function () {
 
   /** ## Creating Basic Shapes
     *
-    * All BVG objects, including the container, have access drawing functions in
-    * this section. They also return the shapes created. For example:
+    * All BVG objects, including the container, have access drawing functions.
+    * They also return the shapes created. For example:
     *
     * ```Javascript
     * // Create a rectangle at (0, 0) with dimensions 100x100 px and add it to bvg
@@ -168,11 +168,13 @@ define([], function () {
     * bvg.rect([0, 10, 30, 70]);    // Array style
     * bvg.rect({                    // Object style
     *   x: 0,
-    *   y: 10,
-    *   width: 30,
-    *   height:70
+    *   y: 10,                      // Name of the object properties must match
+    *   width: 30,                  // names of the arguments in the functions,
+    *   height: 70                  // but the order can be any.
     * });
     * ```
+    *
+    * ## Basic Shape Functions
     *
     * ### `bvg.rect(x, y, width, height)`
     *
