@@ -229,7 +229,7 @@ define([], function () {
   var svgElements = {
     svg: ['xmlns:xlink', 'version', 'width', 'height'],
     rect: ['x', 'y', 'width', 'height'],
-    circle: ['cx', 'cy', r],
+    circle: ['cx', 'cy', 'r'],
     ellipse: ['cx', 'cy', 'rx', 'ry'],
     line: ['x1', 'y1', 'x2', 'y2'],
     g: ['transform'],
