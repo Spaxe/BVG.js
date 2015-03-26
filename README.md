@@ -206,6 +206,10 @@ object reference.
  - `width`  : Outline thickness in pixels.
       
 
+### `bvg.noStroke()`
+Remove BVG object's outline completely.
+      
+
 ### `bvg.fill()`
 Get/set the filling colour. There are 4 ways to use this function.
 
@@ -217,6 +221,10 @@ Get/set the filling colour. There are 4 ways to use this function.
    is omitted, it defaults to `1`.
 
 `r`, `g`, `b` should be in the range of 0-255 inclusive.
+      
+
+### `bvg.noFill()`
+Remove BVG object's colour filling completely.
       
 
 ## Utility Methods 

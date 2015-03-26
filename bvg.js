@@ -232,8 +232,8 @@ define([], function () {
     circle: ['cx', 'cy', 'r'],
     ellipse: ['cx', 'cy', 'rx', 'ry'],
     line: ['x1', 'y1', 'x2', 'y2'],
-    polyline: ['points'],
-    polygon: ['points'],
+    polyline: ['pts'],
+    polygon: ['pts'],
     g: ['transform'],
     a: ['xlink:href']
   };
@@ -318,6 +318,13 @@ define([], function () {
       return bvg;
     };
 
+    /** ### `bvg.noStroke()`
+      * Remove BVG object's outline completely.
+      */
+    bvg.noStroke = function () {
+      bvg.setAttribute('stroke', 'none');
+    }
+
     /** ### `bvg.fill()`
       * Get/set the filling colour. There are 4 ways to use this function.
       *
@@ -342,8 +349,15 @@ define([], function () {
       return bvg;
     };
 
+    /** ### `bvg.noFill()`
+      * Remove BVG object's colour filling completely.
+      */
+    bvg.noFill = function () {
+      bvg.setAttribute('fill', 'none');
+    }
+
     if (bvg.tagName === 'polygon' || bvg.tagName === 'polyline') {
-      bvg.points = function () {
+      bvg.pts = function () {
         if (arguments.length === 0) {
           var points = [];
           bvg.getAttribute('points').split(' ').forEach(function (pair) {
@@ -354,7 +368,8 @@ define([], function () {
         if (arguments.length === 1) {
           bvg.setAttribute('points', arguments[0].join(' '));
         }
-      }
+        return bvg;
+      };
     }
   };
 
@@ -372,6 +387,7 @@ define([], function () {
                       arguments[1] : BVG.defaultBind;
         newBVG = BVG(svg, arguments[0], bind);
       } else {
+        debugger;
         var data = {};
         var paranmeters = [];
         for (var i = 0; i < arguments.length; i++) {
