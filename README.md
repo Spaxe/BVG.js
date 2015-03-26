@@ -1,7 +1,7 @@
 # BVG - Bindable Vector Graphics
 **Real-time data-driven visualisation for the web.**
 
-![Example](https://raw.githubusercontent.com/Spaxe/BVG.js/master/example.gif)
+![Example](https://raw.githubusercontent.com/Spaxe/BVG.js/master/demo/000-index.gif)
 
 Live example: http://spaxe.github.io/BVG.js/
 

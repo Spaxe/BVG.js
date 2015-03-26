@@ -1,6 +1,6 @@
 require.config({
   paths: {
-    'bvg': 'bvg'
+    'bvg': '../bvg'
   }
 });
 
