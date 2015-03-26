@@ -232,8 +232,10 @@ define([], function () {
     circle: ['cx', 'cy', 'r'],
     ellipse: ['cx', 'cy', 'rx', 'ry'],
     line: ['x1', 'y1', 'x2', 'y2'],
+    polyline: ['points'],
+    polygon: ['points'],
     g: ['transform'],
-    a: ['xlink:href'],
+    a: ['xlink:href']
   };
 
   /** ## The BVG Object
@@ -339,6 +341,21 @@ define([], function () {
       }
       return bvg;
     };
+
+    if (bvg.tagName === 'polygon' || bvg.tagName === 'polyline') {
+      bvg.points = function () {
+        if (arguments.length === 0) {
+          var points = [];
+          bvg.getAttribute('points').split(' ').forEach(function (pair) {
+            points.push(pair.split().map(Number));
+          });
+          return points;
+        }
+        if (arguments.length === 1) {
+          bvg.setAttribute('points', arguments[0].join(' '));
+        }
+      }
+    }
   };
 
   /*- Internal methods */

@@ -4,13 +4,15 @@ mic.py - Markdown in Code
 =========================
 Create simple Markdown files for Github.
 
+Author: Xavier Ho <contact@xavierho.com>
+
 Any comments in /** ... */ are extracted to create README.md.
 
 This is not meant to be used outside of this project (for now).
 
-Usage:
+Usage (in top folder):
 
-    ./mic.py <source>
+    ./lib/mic.py <source>
 '''
 import re
 import os
