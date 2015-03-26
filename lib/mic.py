@@ -38,6 +38,6 @@ if '__main__' in __name__:
   with open(sys.argv[1]) as f:
     source = f.read()
     markdown = cleanup(extract_c(source))
-  with open('README.md'), 'w') as target:
+  with open('README.md', 'w') as target:
     target.write(str(markdown))
 
