@@ -329,7 +329,7 @@ define([], function () {
       */
     bvg.noStroke = function () {
       bvg.setAttribute('stroke', 'none');
-    }
+    };
 
     /** ### `bvg.fill()`
       * Get/set the filling colour. There are 4 ways to use this function.
@@ -360,7 +360,7 @@ define([], function () {
       */
     bvg.noFill = function () {
       bvg.setAttribute('fill', 'none');
-    }
+    };
 
     if (bvg.tagName === 'polygon' || bvg.tagName === 'polyline') {
       bvg.pts = function () {
