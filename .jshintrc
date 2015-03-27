@@ -15,8 +15,5 @@
   "unused": false,
   "sub": true,
   "strict": false,
-  "globals": {
-    "define": true,
-    "require": true
-  }
+  "node": true
 }

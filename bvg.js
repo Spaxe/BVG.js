@@ -1,4 +1,3 @@
-/* globals define */
 /** # BVG - Bindable Vector Graphics
   * **Real-time data-driven visualisation for the web.**
   *
