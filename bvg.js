@@ -393,7 +393,6 @@ define([], function () {
                       arguments[1] : BVG.defaultBind;
         newBVG = BVG(svg, arguments[0], bind);
       } else {
-        debugger;
         var data = {};
         var paranmeters = [];
         for (var i = 0; i < arguments.length; i++) {
