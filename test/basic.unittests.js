@@ -17,8 +17,12 @@ define(['../bvg'], function (BVG) {
 
     it('should be able to create a container', function () {
       BVG.should.be.a('function');
+      BVG.create.should.be.a('function');
       bvg = BVG.create('#container');
       bvg.isBVG.should.equal(true);
+      var dummy = BVG.create(container);
+      dummy.isBVG.should.equal(true);
+      container.removeChild(dummy);
     });
 
     it('should provide basic shape functions', function () {
