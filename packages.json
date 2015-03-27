@@ -1,0 +1,27 @@
+{
+  "name": "bvg.js",
+  "version": "0.0.1",
+  "keywords": ["BVG", "bindable vector graphcs", "SVG", "observe"],
+  "description": "Bindable Vector Graphics provides real-time data-driven visualisation for the web.",
+  "homepage": "https://github.com/Spaxe/BVG.js",
+  "bugs": {
+    "url": "https://github.com/Spaxe/BVG.js/issues",
+    "email": "contact@xavierho.com"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Xavier Ho",
+    "email": "contact@xavierho.com",
+    "url": "http://jumptoglide.com"
+  },
+  "files": ["bvg.js"],
+  "main": "bvg",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Spaxe/BVG.js"
+  },
+  "dependencies": {
+    "amdefine": ">=0.1.0",
+    "requirejs": ">=2.1.16"
+  }
+}
