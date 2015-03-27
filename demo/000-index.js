@@ -1,10 +1,5 @@
-require.config({
-  paths: {
-    'bvg': '../bvg'
-  }
-});
-
-require(['bvg'], function(BVG) {
+define(function (require) {
+  var BVG = require('../bvg');
 
   var bvg = BVG.create('#universe');
 

@@ -1,28 +1,31 @@
+/* global mocha: true, define: true, describe: true, it: true, before: true, after: true */
+if (typeof define !== 'function') {
+  var define = require('amdefine')(module);
+}
 
-/* global describe before it */
-var assert = require('better-assert');
-var jsdom = require('mocha-jsdom');
-var BVG = require('../bvg.js');
+define(['../bvg'], function (BVG) {
 
-describe('BVG.js', function () {
-  jsdom();
-  var bvg;
-  var container;
+  describe('BVG.js', function () {
+    var bvg;
+    var container;
 
-  before(function () {
-    container = document.createElement('div');
-    container.id = 'container';
-  });
+    before(function () {
+      container = document.createElement('div');
+      container.id = 'container';
+      document.body.appendChild(container);
+    });
 
-  it('should be able to create a container', function () {
-    assert(typeof BVG === 'function');
-    bvg = BVG('#container');
-    // assert(bvg.isBVG === true);
-  });
+    it('should be able to create a container', function () {
+      BVG.should.be.a('function');
+      bvg = BVG.create('#container');
+      bvg.isBVG.should.equal(true);
+    });
 
-  it('should provide basic shape functions', function () {
-    ['rect', 'ellipse', 'line'].forEach(function (f) {
-      assert(typeof BVG[f] === 'function');
+    it('should provide basic shape functions', function () {
+      ['rect', 'ellipse', 'line'].forEach(function (f) {
+        BVG[f].should.be.a('function');
+      });
     });
   });
+
 });

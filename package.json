@@ -32,9 +32,9 @@
     "requirejs": ">=2.1.16"
   },
   "devDependencies": {
-    "better-assert": "^1.0.2",
-    "jsdom": "^4.0.5",
+    "chai": "^2.1.2",
     "mocha": "^2.2.1",
-    "mocha-jsdom": "^0.2.1"
+    "mocha-phantomjs": "^3.5.3",
+    "phantomjs": "^1.9.16"
   }
 }
