@@ -15,7 +15,7 @@
 
 // NodeJS amdefine patch
 if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
+  var define = require('amdefine')(module);
 }
 
 define([], function () {
