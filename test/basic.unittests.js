@@ -23,7 +23,7 @@ define(['../bvg'], function (BVG) {
       var dummy = BVG.create(container);
       dummy.isBVG.should.equal(true);
       container.removeChild(dummy);
-      (function () { BVG.create('#not-container') }).should.Throw(TypeError);
+      BVG.create.bind(BVG, '#not-container').should.Throw(TypeError);
     });
 
     it('should provide basic shape functions', function () {
