@@ -81,8 +81,13 @@ define([], function () {
     *              For more information, see [`Object.observe()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/observe#Parameters).
     */
   var BVG = function (svg, data, bind) {
-    if (typeof svg === 'string')
-      svg = document.createElementNS('http://www.w3.org/2000/svg', svg);
+    if (typeof svg === 'string') {
+      try {
+        svg = document.createElementNS('http://www.w3.org/2000/svg', svg);
+      } catch (e) {
+        throw new TypeError(svg + ' is not a valid SVG tagName.');
+      }
+    }
     if (!(svg instanceof SVGElement))
       throw new TypeError('svg (' + svg + ') must be SVG tag name or element.');
 

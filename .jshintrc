@@ -15,5 +15,11 @@
   "unused": false,
   "sub": true,
   "strict": false,
-  "node": true
+  "node": true,
+  "globals": {
+    "describe": true,
+    "before": true,
+    "after": true,
+    "it": true
+  }
 }
