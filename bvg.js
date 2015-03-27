@@ -299,7 +299,10 @@ define([], function () {
       */
     bvg.stroke = function () {
       if (arguments.length === 0) {
-        return BVG.rgba(bvg.getAttribute('stroke'));
+        var s = bvg.getAttribute('stroke');
+        if (s && s !== 'none')
+          return BVG.rgba(s);
+        return null;
       }
       if (arguments.length === 1) {
         bvg.setAttribute('stroke', BVG.rgba(arguments[0], true));
@@ -349,7 +352,10 @@ define([], function () {
       */
     bvg.fill = function () {
       if (arguments.length === 0) {
-        return BVG.rgba(bvg.getAttribute('fill'));
+        var f = bvg.getAttribute('fill');
+        if (f && f !== 'none')
+          return BVG.rgba(f);
+        return null;
       }
       if (arguments.length === 1) {
         bvg.setAttribute('fill', BVG.rgba(arguments[0], true));
@@ -380,6 +386,14 @@ define([], function () {
         }
         return bvg;
       };
+    }
+
+    /** ### `bvg.remove()`
+      * Remove the BVG object from its parent and return itself.
+      */
+    bvg.remove = function () {
+      bvg.parentNode.removeChild(bvg);
+      return bvg;
     }
   };
 
@@ -508,7 +522,7 @@ define([], function () {
     }
 
     if (colour.length !== 3 && colour.length !== 4) {
-      throw new TypeError('BVG.rgba() can\'t work with ' + arguments);
+      throw new TypeError('BVG.rgba() can\'t work with ' + [].slice.call(arguments));
     }
 
     if (colour.length === 3) {

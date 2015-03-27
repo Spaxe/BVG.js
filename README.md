@@ -227,6 +227,10 @@ Get/set the filling colour. There are 4 ways to use this function.
 Remove BVG object's colour filling completely.
       
 
+### `bvg.remove()`
+Remove the BVG object from its parent and return itself.
+      
+
 ## Utility Methods 
 
 ### `BVG.rgba()`
