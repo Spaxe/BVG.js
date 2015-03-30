@@ -10,10 +10,12 @@ define(function (require) {
                    .fill(64);
 
   var diffuse = bvg.ellipse(pos, pos, size, size)
-                   .fill(255, 255, 255, 0.4);
+                   .fill(255, 255, 255, 0.4)
+                   .noStroke();
 
   var specular = bvg.ellipse(pos, pos, size/8, size/8)
-                    .fill(255, 255, 255, 0.5);
+                    .fill(255, 255, 255, 0.5)
+                    .noStroke();
 
   var outline = bvg.ellipse(pos, pos, size, size)
                    .fill(0, 0, 0, 0)
