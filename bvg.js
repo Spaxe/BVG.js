@@ -242,20 +242,47 @@ define([], function () {
     * githubLink.ellipse(200, 200, 50, 50);
     * ```
     */
-  var svgElements = {
-    svg: ['xmlns:xlink', 'version', 'width', 'height'],
-    rect: ['x', 'y', 'width', 'height'],
-    circle: ['cx', 'cy', 'r'],
-    ellipse: ['cx', 'cy', 'rx', 'ry'],
-    line: ['x1', 'y1', 'x2', 'y2'],
-    polyline: ['pts'],
-    polygon: ['pts'],
-    g: ['transform'],
-    a: ['xlink:href']
+  var creationFunctions = {
+    svg: {
+      tag: 'svg',
+      paranmeters: ['xmlns:xlink', 'version', 'width', 'height']
+    },
+    rect: {
+      tag: 'rect',
+      paranmeters: ['x', 'y', 'width', 'height']
+    },
+    circle: {
+      tag: 'circle',
+      paranmeters: ['cx', 'cy', 'r']
+    },
+    ellipse: {
+      tag: 'ellipse',
+      paranmeters: ['cx', 'cy', 'rx', 'ry']
+    },
+    line: {
+      tag: 'line',
+      paranmeters: ['x1', 'y1', 'x2', 'y2']
+    },
+    polyline: {
+      tag: 'polyline',
+      paranmeters: ['vertices']
+    },
+    polygon: {
+      tag: 'polygon',
+      paranmeters: ['vertices']
+    },
+    g: {
+      tag: 'g',
+      paranmeters: ['transform']
+    },
+    a: {
+      tag: 'a',
+      paranmeters: ['xlink:href']
+    }
   };
 
   /*- ### `objectifyArguments(paranmeters, args)`
-    * Return an object with {paramanters: args} pair.
+    * Return an object with {paranmeters: args} pair.
     */
   function objectifyArguments (paranmeters, args) {
     var obj = {};
@@ -266,14 +293,14 @@ define([], function () {
     return obj;
   };
 
-  /*- ### `creationMethods(svg, attrs)`
+  /*- ### `creationMethods(svg, paranmeters)`
     * Populate the library with functions to create a BVG.
     */
-  function creationMethods (bvg, svg, attrs) {
+  function creationMethods (bvg, svg, paranmeters) {
     bvg[svg] = function () {
       var newBVG;
       var obj = arguments[0].constructor.name === 'Object' ? arguments[0] :
-                objectifyArguments(svgElements[svg], arguments);
+                objectifyArguments(paranmeters, arguments);
       newBVG = BVG(svg, obj);
       if (bvg.isBVG)
         bvg.appendChild(newBVG);
@@ -282,8 +309,10 @@ define([], function () {
   };
 
   BVG.addCreationMethods = function (bvg) {
-    for (var tagName in svgElements) {
-      creationMethods(bvg, tagName, svgElements[tagName]);
+    for (var f in creationFunctions) {
+      creationMethods(bvg,
+                      creationFunctions[f].tag,
+                      creationFunctions[f].paranmeters);
     }
   };
   BVG.addCreationMethods(BVG);
@@ -421,7 +450,7 @@ define([], function () {
     };
 
     if (bvg.tagName === 'polygon' || bvg.tagName === 'polyline') {
-      bvg.pts = function () {
+      bvg.vertices = function () {
         if (arguments.length === 0) {
           var points = [];
           bvg.getAttribute('points').split(' ').forEach(function (pair) {
