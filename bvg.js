@@ -91,12 +91,6 @@ define([], function () {
     BVG.addFactoryMethods(bvg);
     BVG.addUtilityMethods(bvg, data);
 
-    Object.observe(data, function(changes) {
-      changes.forEach(function (change) {
-        bind(bvg, change);
-      });
-    });
-
     var bind = function (bvg, change) {
       if (change.type === 'update' || change.type === 'add') {
         if (typeof bvg[change.name] === 'function') {
@@ -108,6 +102,12 @@ define([], function () {
         bvg.removeAttribute(change.name);
       }
     };
+
+    Object.observe(data, function(changes) {
+      changes.forEach(function (change) {
+        bind(bvg, change);
+      });
+    });
 
     if (!data.id)
       data.id = 'BVG_' + bvg.tagName + '_' + BVGIDCounter++;
@@ -311,7 +311,11 @@ define([], function () {
         return null;
       }
       if (arguments.length === 1) {
-        bvg.setAttribute('stroke', BVG.rgba(arguments[0], true));
+        if (arguments[0] === 'none') {
+          bvg.noStroke();
+        } else {
+          bvg.setAttribute('stroke', BVG.rgba(arguments[0], true));
+        }
       } else {
         bvg.setAttribute('stroke', BVG.rgba([].slice.call(arguments), true));
       }
@@ -364,7 +368,11 @@ define([], function () {
         return null;
       }
       if (arguments.length === 1) {
-        bvg.setAttribute('fill', BVG.rgba(arguments[0], true));
+        if (arguments[0] === 'none') {
+          bvg.noFill();
+        } else {
+          bvg.setAttribute('fill', BVG.rgba(arguments[0], true));
+        }
       } else {
         bvg.setAttribute('fill', BVG.rgba([].slice.call(arguments), true));
       }
