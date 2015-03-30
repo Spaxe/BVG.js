@@ -12,8 +12,10 @@ require(['bvg'], function(BVG) {
   // Change its size based on mouse movement
   bvg.addEventListener('mousemove', function (event) {
     if (event.buttons & 0x01) {
-      data.push([event.clientX, event.clientY]);
+      var xy = [event.clientX, event.clientY];
+      data.push(xy);
       polyline.vertices(data);
+      bvg.polygon([[xy[0] - 25, xy[1] + 25], [xy[0] + 25, xy[1] + 25], [xy[0], xy[1] - 17]])
     } else if (event.buttons & 0x10) {
       polyline.vertices([]);
     } else {

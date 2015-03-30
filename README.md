@@ -143,6 +143,13 @@ Create a series of lines from point to point.
 var polyline = bvg.polyline([[100, 200], [200, 300], [400, 800]]);
 ```
 
+### `bvg.polygon([[x1, y1], [x2, y2], ...])`
+Create a closed polygon from point to point.
+
+```Javascript
+var polygon = bvg.polygon([[100, 200], [200, 300], [400, 800]]);
+```
+
 ## Grouping Elements
 ### `bvg.g([transform])`
 
