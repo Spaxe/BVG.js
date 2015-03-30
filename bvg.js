@@ -66,21 +66,16 @@ define([], function () {
     * ```
     */
 
-  /*- `BVG(svg, data, bind)`
+  /*- `BVG(svg, data)`
     * Create a Bindable Vector Graphic with `svg` element. This BVG depends on
-    * `data` for its attributes and the callback function `bind` on how those
-    * attributes are presented.
+    * `data` for its attributes.
     *
     * Returns the BVG object created.
     *
     *  - `svg`   : Either a `String` for the SVG `tagName` or any DOM [`SVGElement`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element)
-    *  - `data`  : Object with arbitrary data to your desire
-    *  - `bind`  : Callback function to handle when `data` is updated. The
-    *              function has signature `bind(bvg, change)`, where `bvg` is
-    *              the BVG object reference, and `change` tells what is changed.
-    *              For more information, see [`Object.observe()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/observe#Parameters).
+    *  - `data`  : Object with arbitrary data to your desire.
     */
-  var BVG = function (svg, data, bind) {
+  var BVG = function (svg, data) {
     if (typeof svg === 'string') {
       try {
         svg = document.createElementNS('http://www.w3.org/2000/svg', svg);
@@ -93,15 +88,26 @@ define([], function () {
 
     var bvg = svg;
     bvg.isBVG = true;
-    bvg.bind = bind;
     BVG.addFactoryMethods(bvg);
-    BVG.addUtilityMethods(bvg, data, bind);
+    BVG.addUtilityMethods(bvg, data);
 
     Object.observe(data, function(changes) {
       changes.forEach(function (change) {
         bind(bvg, change);
       });
     });
+
+    var bind = function (bvg, change) {
+      if (change.type === 'update' || change.type === 'add') {
+        if (typeof bvg[change.name] === 'function') {
+          bvg[change.name](change.object[change.name]);
+        } else {
+          bvg.setAttribute(change.name, change.object[change.name]);
+        }
+      } else if (change.type === 'remove' && bvg.hasAttribute(change.name)) {
+        bvg.removeAttribute(change.name);
+      }
+    };
 
     if (!data.id)
       data.id = 'BVG_' + bvg.tagName + '_' + BVGIDCounter++;
@@ -251,7 +257,7 @@ define([], function () {
   /** ## The BVG Object
     * BVGs are SVGs with extra superpowers.
     */
-  BVG.addUtilityMethods = function (bvg, data, bind) {
+  BVG.addUtilityMethods = function (bvg, data) {
 
     /** ### `bvg.data()`
       * Get/set the `data` object in a BVG. There are four ways to use this
@@ -394,7 +400,7 @@ define([], function () {
     bvg.remove = function () {
       bvg.parentNode.removeChild(bvg);
       return bvg;
-    }
+    };
   };
 
   /*- Internal methods */
@@ -405,11 +411,8 @@ define([], function () {
   BVG.factory = function (bvg, svg, attrs) {
     bvg[svg] = function () {
       var newBVG;
-      if (arguments.length <= 2 &&
-          arguments[0].constructor.name === 'Object') {
-        var bind = typeof arguments[1] === 'function' ?
-                      arguments[1] : BVG.defaultBind;
-        newBVG = BVG(svg, arguments[0], bind);
+      if (arguments.length === 1 && arguments[0].constructor.name === 'Object') {
+        newBVG = BVG(svg, arguments[0]);
       } else {
         var data = {};
         var paranmeters = [];
@@ -433,21 +436,6 @@ define([], function () {
     }
   };
   BVG.addFactoryMethods(BVG);
-
-  /*- ### `BVG.defaultBind(svg, change)`
-   *  Default callback function that assigns each data property to BVG data.
-   */
-  BVG.defaultBind = function (svg, change) {
-    if (change.type === 'add' || change.type === 'update') {
-      if (svg.hasOwnProperty(change.name) && typeof svg[change.name] === 'function') {
-        svg[change.name](change.object[change.name]);
-      } else {
-        svg.setAttribute(change.name, change.object[change.name]);
-      }
-    } else if (change.type === 'remove') {
-      svg.removeAttribute(change.name);
-    }
-  };
 
   /** ## Utility Methods */
 
