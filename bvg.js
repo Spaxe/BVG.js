@@ -124,11 +124,11 @@ define([], function () {
       }
     }
 
-    if (!data.fill)
-      bvg.noFill();
-
     if (!data.stroke)
       bvg.stroke(175);
+
+    if (!data.fill)
+      bvg.noFill();
 
     if (!data.strokeWidth)
       bvg.strokeWidth(1);
@@ -308,6 +308,15 @@ define([], function () {
     for (var f in creationFunctions) {
       creationMethods(bvg, f, creationFunctions[f]);
     }
+    bvg.triangle = function () {
+      var obj = objectifyArguments(['cx', 'cy', 'r'], arguments);
+      var vertices = [
+        [obj.cx, obj.cy-obj.r],
+        [obj.cx-obj.r/2*Math.sqrt(3), obj.cy+obj.r/2],
+        [obj.cx+obj.r/2*Math.sqrt(3), obj.cy+obj.r/2]
+      ];
+      return bvg.polygon(vertices);
+    }
   }
   addCreationMethods(BVG);
 
@@ -442,6 +451,17 @@ define([], function () {
       */
     bvg.noFill = function () {
       bvg.setAttribute('fill', 'none');
+      return bvg;
+    };
+
+    // TODO: DOCUMENTATION
+    bvg.xform = function () {
+      if (arguments.length === 0) {
+        return bvg.getAttribute('transform');
+      }
+      if (arguments.length === 1) {
+        bvg.setAttribute('transform', arguments[0]);
+      }
       return bvg;
     };
 
