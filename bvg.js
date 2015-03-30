@@ -425,6 +425,7 @@ define([], function () {
       */
     bvg.noStroke = function () {
       bvg.setAttribute('stroke', 'none');
+      return bvg;
     };
 
     /** ### `bvg.fill()`
@@ -463,6 +464,7 @@ define([], function () {
       */
     bvg.noFill = function () {
       bvg.setAttribute('fill', 'none');
+      return bvg;
     };
 
     if (bvg.tagName === 'polygon' || bvg.tagName === 'polyline') {
