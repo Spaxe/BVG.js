@@ -11,7 +11,7 @@ require(['bvg'], function(BVG) {
     while (bvg.firstChild)
       bvg.removeChild(bvg.firstChild);
 
-    var r = 16;
+    var r = 32;
     var inc = r*Math.sqrt(3);
     var w = document.body.scrollWidth+r;
     var h = document.body.scrollHeight+inc;
@@ -39,11 +39,8 @@ require(['bvg'], function(BVG) {
   draw();
   window.addEventListener('resize', draw);
 
-  bvg.addEventListener('mouseover', function (event) {
+  bvg.addEventListener('mouseout', function (event) {
     if (event.target.tagName === 'polygon')
       event.target.fill(0);
-  });
-  bvg.addEventListener('mouseout', function (event) {
-    event.target.className = '';
   });
 });
