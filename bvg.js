@@ -66,6 +66,19 @@ define([], function () {
     * ```
     */
 
+  // Deep Object.observe() from
+  // http://kolodny.github.io/blog/blog/2014/05/21/object-dot-observe-nested-objects/
+  function observe(obj, callback) {
+    Object.observe(obj, function(changes){
+      changes.forEach(function(change) {
+        if (obj[change.name] instanceof Object) {
+          observe(obj[change.name], callback);
+        }
+      });
+      callback.apply(this, arguments);
+    });
+  }
+
   /*- `BVG(svg, data)`
     * Create a Bindable Vector Graphic with `svg` element. This BVG depends on
     * `data` for its attributes.
@@ -103,7 +116,7 @@ define([], function () {
       }
     };
 
-    Object.observe(data, function(changes) {
+    observe(data, function(changes) {
       changes.forEach(function (change) {
         bind(bvg, change);
       });
@@ -111,16 +124,6 @@ define([], function () {
 
     if (!data.id)
       data.id = 'BVG_' + bvg.tagName + '_' + BVGIDCounter++;
-
-    for (var name in data) {
-      if (data.hasOwnProperty(name)) {
-        bind(bvg, {
-          type: 'add',
-          object: data,
-          name: name
-        });
-      }
-    }
 
     return bvg;
   };
@@ -459,8 +462,7 @@ define([], function () {
           return points;
         }
         if (arguments.length === 1) {
-          bvg.data[points] = arguments[0].join(' ');
-          // bvg.setAttribute('points', arguments[0].join(' '));
+          bvg.setAttribute('points', arguments[0].join(' '));
         }
         return bvg;
       };
