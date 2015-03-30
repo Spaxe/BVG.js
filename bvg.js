@@ -1,7 +1,7 @@
 /** # BVG - Bindable Vector Graphics
   * **Real-time data-driven visualisation for the web.**
   *
-  * ![Example](https://raw.githubusercontent.com/Spaxe/BVG.js/master/demo/000-index.gif)
+  * ![Example](https://raw.githubusercontent.com/Spaxe/BVG.js/master/demo/index.gif)
   *
   * Live example: http://spaxe.github.io/BVG.js/
   *
@@ -88,8 +88,8 @@ define([], function () {
 
     var bvg = svg;
     bvg.isBVG = true;
-    BVG.addCreationMethods(bvg);
-    BVG.addUtilityMethods(bvg, data);
+    addCreationMethods(bvg);
+    addUtilityMethods(bvg, data);
 
     var bind = function (bvg, change) {
       if (change.type === 'update' || change.type === 'add') {
@@ -308,19 +308,19 @@ define([], function () {
     };
   };
 
-  BVG.addCreationMethods = function (bvg) {
+  function addCreationMethods (bvg) {
     for (var f in creationFunctions) {
       creationMethods(bvg,
                       creationFunctions[f].tag,
                       creationFunctions[f].paranmeters);
     }
   };
-  BVG.addCreationMethods(BVG);
+  addCreationMethods(BVG);
 
   /** ## The BVG Object
     * BVGs are SVGs with extra superpowers.
     */
-  BVG.addUtilityMethods = function (bvg, data) {
+  function addUtilityMethods (bvg, data) {
 
     /** ### `bvg.data()`
       * Get/set the `data` object in a BVG. There are four ways to use this
