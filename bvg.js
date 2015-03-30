@@ -224,6 +224,12 @@ define([], function () {
     * ```Javascript
     * var line = bvg.line(100, 100, 200, 300);
     * ```
+    * ### `bvg.polyline([[x1, y1], [x2, y2], ...])`
+    * Create a series of lines from point to point.
+    *
+    * ```Javascript
+    * var polyline = bvg.polyline([[100, 200], [200, 300], [400, 800]]);
+    * ```
     *
     * ## Grouping Elements
     * ### `bvg.g([transform])`

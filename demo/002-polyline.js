@@ -16,6 +16,9 @@ require(['bvg'], function(BVG) {
       polyline.vertices(data);
     } else if (event.buttons & 0x10) {
       polyline.vertices([]);
+    } else {
+      data = [];
+      polyline = bvg.polyline(data);
     }
   });
 });
