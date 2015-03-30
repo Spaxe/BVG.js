@@ -88,7 +88,7 @@ define([], function () {
 
     var bvg = svg;
     bvg.isBVG = true;
-    BVG.addFactoryMethods(bvg);
+    BVG.addCreationMethods(bvg);
     BVG.addUtilityMethods(bvg, data);
 
     var bind = function (bvg, change) {
@@ -438,12 +438,12 @@ define([], function () {
     };
   };
 
-  BVG.addFactoryMethods = function (bvg) {
+  BVG.addCreationMethods = function (bvg) {
     for (var tagName in svgElements) {
       BVG.factory(bvg, tagName, svgElements[tagName]);
     }
   };
-  BVG.addFactoryMethods(BVG);
+  BVG.addCreationMethods(BVG);
 
   /** ## Utility Methods */
 
