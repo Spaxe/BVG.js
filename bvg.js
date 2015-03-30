@@ -254,25 +254,27 @@ define([], function () {
     a: ['xlink:href']
   };
 
-  /*- ### `BVG.creationMethods(svg, attrs)`
+  /*- ### `objectifyArguments(paranmeters, args)`
+    * Return an object with {paramanters: args} pair.
+    */
+  function objectifyArguments (paranmeters, args) {
+    var obj = {};
+    var data = [].slice.call(args);
+    data.forEach(function (d, i) {
+      obj[paranmeters[i]] = d;
+    });
+    return obj;
+  };
+
+  /*- ### `creationMethods(svg, attrs)`
     * Populate the library with functions to create a BVG.
     */
-  BVG.creationMethods = function (bvg, svg, attrs) {
+  function creationMethods (bvg, svg, attrs) {
     bvg[svg] = function () {
       var newBVG;
-      if (arguments.length === 1 && arguments[0].constructor.name === 'Object') {
-        newBVG = BVG(svg, arguments[0]);
-      } else {
-        var data = {};
-        var paranmeters = [];
-        for (var i = 0; i < arguments.length; i++) {
-          paranmeters.push(arguments[i]);
-        }
-        attrs.forEach(function (arg) {
-          data[arg] = paranmeters.shift();
-        });
-        newBVG = BVG(svg, data);
-      }
+      var obj = arguments[0].constructor.name === 'Object' ? arguments[0] :
+                objectifyArguments(svgElements[svg], arguments);
+      newBVG = BVG(svg, obj);
       if (bvg.isBVG)
         bvg.appendChild(newBVG);
       return newBVG;
@@ -281,7 +283,7 @@ define([], function () {
 
   BVG.addCreationMethods = function (bvg) {
     for (var tagName in svgElements) {
-      BVG.creationMethods(bvg, tagName, svgElements[tagName]);
+      creationMethods(bvg, tagName, svgElements[tagName]);
     }
   };
   BVG.addCreationMethods(BVG);
