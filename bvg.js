@@ -266,42 +266,15 @@ define([], function () {
     * ```
     */
   var creationFunctions = {
-    svg: {
-      tag: 'svg',
-      paranmeters: ['xmlns:xlink', 'version', 'width', 'height']
-    },
-    rect: {
-      tag: 'rect',
-      paranmeters: ['x', 'y', 'width', 'height']
-    },
-    circle: {
-      tag: 'circle',
-      paranmeters: ['cx', 'cy', 'r']
-    },
-    ellipse: {
-      tag: 'ellipse',
-      paranmeters: ['cx', 'cy', 'rx', 'ry']
-    },
-    line: {
-      tag: 'line',
-      paranmeters: ['x1', 'y1', 'x2', 'y2']
-    },
-    polyline: {
-      tag: 'polyline',
-      paranmeters: ['vertices']
-    },
-    polygon: {
-      tag: 'polygon',
-      paranmeters: ['vertices']
-    },
-    g: {
-      tag: 'g',
-      paranmeters: ['transform']
-    },
-    a: {
-      tag: 'a',
-      paranmeters: ['xlink:href']
-    }
+    svg: ['xmlns:xlink', 'version', 'width', 'height'],
+    rect: ['x', 'y', 'width', 'height'],
+    circle: ['cx', 'cy', 'r'],
+    ellipse: ['cx', 'cy', 'rx', 'ry'],
+    line: ['x1', 'y1', 'x2', 'y2'],
+    polyline: ['vertices'],
+    polygon: ['vertices'],
+    g: ['transform'],
+    a: ['xlink:href']
   };
 
   /*- ### `objectifyArguments(paranmeters, args)`
@@ -333,9 +306,7 @@ define([], function () {
 
   function addCreationMethods (bvg) {
     for (var f in creationFunctions) {
-      creationMethods(bvg,
-                      creationFunctions[f].tag,
-                      creationFunctions[f].paranmeters);
+      creationMethods(bvg, f, creationFunctions[f]);
     }
   }
   addCreationMethods(BVG);
