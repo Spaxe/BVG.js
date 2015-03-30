@@ -42,9 +42,11 @@ define(['../bvg'], function (BVG) {
         var shape = BVG[f](10, 20, 30, 40);
         shape.should.be.instanceof(SVGElement);
       });
-      BVG.polyline([
+      var polyline = BVG.polyline([
         [10, 20], [30, 40]
-      ]).should.be.instanceof(SVGElement);
+      ]);
+      polyline.should.be.instanceof(SVGElement);
+      polyline.vertices().should.eql([[10, 20], [30, 40]]);
     });
 
     it('should provide access to data, strokes and fills', function () {

@@ -7,11 +7,15 @@ require.config({
 require(['bvg'], function(BVG) {
   var bvg = BVG.create('#bvg-container');
 
-  var data = {vertices: []};
+  var data = [];
   var polyline = bvg.polyline(data);
   // Change its size based on mouse movement
-  bvg.node.addEventListener('click', function (event) {
-    data.vertices.push([event.clientX, event.clientY]);
-    data.b = event.clientX;
+  bvg.addEventListener('mousemove', function (event) {
+    if (event.buttons & 0x01) {
+      data.push([event.clientX, event.clientY]);
+      polyline.vertices(data);
+    } else if (event.buttons & 0x10) {
+      polyline.vertices([]);
+    }
   });
 });

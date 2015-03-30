@@ -101,7 +101,6 @@ as an example below. Sometimes it is easier to use one over another style.
 
 ```Javascript
 bvg.rect(0, 10, 30, 70);      // Arguments style
-bvg.rect([0, 10, 30, 70]);    // Array style
 bvg.rect({                    // Object style
   x: 0,
   y: 10,                      // Name of the object properties must match

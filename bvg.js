@@ -1,3 +1,4 @@
+//
 /** # BVG - Bindable Vector Graphics
   * **Real-time data-driven visualisation for the web.**
   *
@@ -11,6 +12,7 @@
   * Bindable Vector Graphics offers SVG elements that change as the data change,
   * and gives you tools to control their look.
   */
+'use strict';
 
 // NodeJS amdefine patch
 if (typeof define !== 'function') {
@@ -66,19 +68,6 @@ define([], function () {
     * ```
     */
 
-  // Deep Object.observe() from
-  // http://kolodny.github.io/blog/blog/2014/05/21/object-dot-observe-nested-objects/
-  function observe(obj, callback) {
-    Object.observe(obj, function(changes){
-      changes.forEach(function(change) {
-        if (obj[change.name] instanceof Object) {
-          observe(obj[change.name], callback);
-        }
-      });
-      callback.apply(this, arguments);
-    });
-  }
-
   /*- `BVG(svg, data)`
     * Create a Bindable Vector Graphic with `svg` element. This BVG depends on
     * `data` for its attributes.
@@ -116,7 +105,7 @@ define([], function () {
       }
     };
 
-    observe(data, function(changes) {
+    Object.observe(data, function(changes) {
       changes.forEach(function (change) {
         bind(bvg, change);
       });
@@ -124,6 +113,25 @@ define([], function () {
 
     if (!data.id)
       data.id = 'BVG_' + bvg.tagName + '_' + BVGIDCounter++;
+
+    for (var name in data) {
+      if (data.hasOwnProperty(name)) {
+        bind(bvg, {
+          type: 'add',
+          object: data,
+          name: name
+        });
+      }
+    }
+
+    if (!data.fill)
+      bvg.noFill();
+
+    if (!data.stroke)
+      bvg.stroke(175);
+
+    if (!data.strokeWidth)
+      bvg.strokeWidth(1);
 
     return bvg;
   };
@@ -181,7 +189,6 @@ define([], function () {
     *
     * ```Javascript
     * bvg.rect(0, 10, 30, 70);      // Arguments style
-    * bvg.rect([0, 10, 30, 70]);    // Array style
     * bvg.rect({                    // Object style
     *   x: 0,
     *   y: 10,                      // Name of the object properties must match
@@ -294,7 +301,7 @@ define([], function () {
       obj[paranmeters[i]] = d;
     });
     return obj;
-  };
+  }
 
   /*- ### `creationMethods(svg, paranmeters)`
     * Populate the library with functions to create a BVG.
@@ -309,7 +316,7 @@ define([], function () {
         bvg.appendChild(newBVG);
       return newBVG;
     };
-  };
+  }
 
   function addCreationMethods (bvg) {
     for (var f in creationFunctions) {
@@ -317,7 +324,7 @@ define([], function () {
                       creationFunctions[f].tag,
                       creationFunctions[f].paranmeters);
     }
-  };
+  }
   addCreationMethods(BVG);
 
   /** ## The BVG Object
@@ -457,7 +464,7 @@ define([], function () {
         if (arguments.length === 0) {
           var points = [];
           bvg.getAttribute('points').split(' ').forEach(function (pair) {
-            points.push(pair.split().map(Number));
+            points.push(pair.split(',').map(Number));
           });
           return points;
         }
@@ -475,7 +482,7 @@ define([], function () {
       bvg.parentNode.removeChild(bvg);
       return bvg;
     };
-  };
+  }
 
   /** ## Utility Methods */
 
