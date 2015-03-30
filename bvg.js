@@ -254,6 +254,38 @@ define([], function () {
     a: ['xlink:href']
   };
 
+  /*- ### `BVG.creationMethods(svg, attrs)`
+    * Populate the library with functions to create a BVG.
+    */
+  BVG.creationMethods = function (bvg, svg, attrs) {
+    bvg[svg] = function () {
+      var newBVG;
+      if (arguments.length === 1 && arguments[0].constructor.name === 'Object') {
+        newBVG = BVG(svg, arguments[0]);
+      } else {
+        var data = {};
+        var paranmeters = [];
+        for (var i = 0; i < arguments.length; i++) {
+          paranmeters.push(arguments[i]);
+        }
+        attrs.forEach(function (arg) {
+          data[arg] = paranmeters.shift();
+        });
+        newBVG = BVG(svg, data);
+      }
+      if (bvg.isBVG)
+        bvg.appendChild(newBVG);
+      return newBVG;
+    };
+  };
+
+  BVG.addCreationMethods = function (bvg) {
+    for (var tagName in svgElements) {
+      BVG.creationMethods(bvg, tagName, svgElements[tagName]);
+    }
+  };
+  BVG.addCreationMethods(BVG);
+
   /** ## The BVG Object
     * BVGs are SVGs with extra superpowers.
     */
@@ -410,40 +442,6 @@ define([], function () {
       return bvg;
     };
   };
-
-  /*- Internal methods */
-
-  /*- ### `BVG.factory(svg, attrs)`
-    * Populate the library with functions to create a BVG.
-    */
-  BVG.factory = function (bvg, svg, attrs) {
-    bvg[svg] = function () {
-      var newBVG;
-      if (arguments.length === 1 && arguments[0].constructor.name === 'Object') {
-        newBVG = BVG(svg, arguments[0]);
-      } else {
-        var data = {};
-        var paranmeters = [];
-        for (var i = 0; i < arguments.length; i++) {
-          paranmeters.push(arguments[i]);
-        }
-        attrs.forEach(function (arg) {
-          data[arg] = paranmeters.shift();
-        });
-        newBVG = BVG(svg, data, BVG.defaultBind);
-      }
-      if (bvg.isBVG)
-        bvg.appendChild(newBVG);
-      return newBVG;
-    };
-  };
-
-  BVG.addCreationMethods = function (bvg) {
-    for (var tagName in svgElements) {
-      BVG.factory(bvg, tagName, svgElements[tagName]);
-    }
-  };
-  BVG.addCreationMethods(BVG);
 
   /** ## Utility Methods */
 
