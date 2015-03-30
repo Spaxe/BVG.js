@@ -105,6 +105,7 @@ define([], function () {
 
     Object.observe(data, function(changes) {
       changes.forEach(function (change) {
+        console.log(change);
         bind(bvg, change);
       });
     });
@@ -459,7 +460,8 @@ define([], function () {
           return points;
         }
         if (arguments.length === 1) {
-          bvg.setAttribute('points', arguments[0].join(' '));
+          bvg.data[points] = arguments[0].join(' ');
+          // bvg.setAttribute('points', arguments[0].join(' '));
         }
         return bvg;
       };
