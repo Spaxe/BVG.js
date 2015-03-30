@@ -105,7 +105,6 @@ define([], function () {
 
     Object.observe(data, function(changes) {
       changes.forEach(function (change) {
-        console.log(change);
         bind(bvg, change);
       });
     });
