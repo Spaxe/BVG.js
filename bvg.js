@@ -340,7 +340,8 @@ define([], function () {
       var obj = objectifyArguments(['content', 'x', 'y'], arguments);
       var element = BVG('text', obj).noStroke()
                                     .fill(175);
-      bvg.appendChild(element);
+      if (bvg.isBVG)
+        bvg.content(element);
       return element;
     };
   }
@@ -388,7 +389,7 @@ define([], function () {
         return bvg.innerHTML;
       }
       else if (arguments.length === 1) {
-        bvg.content.innerHTML = arguments[0];
+        bvg.innerHTML = arguments[0];
         return bvg;
       }
     };
@@ -443,7 +444,7 @@ define([], function () {
           return BVG.rgba(s);
         return null;
       }
-      if (arguments.length === 1) {
+      else if (arguments.length === 1) {
         if (arguments[0] === 'none') {
           bvg.noStroke();
         } else {
@@ -468,7 +469,7 @@ define([], function () {
       if (arguments.length === 0) {
         return BVG.rgba(bvg.getAttribute('stroke-width'));
       }
-      if (arguments.length === 1) {
+      else if (arguments.length === 1) {
         bvg.setAttribute('stroke-width', arguments[0]);
       }
       return bvg;
@@ -501,7 +502,7 @@ define([], function () {
           return BVG.rgba(f);
         return null;
       }
-      if (arguments.length === 1) {
+      else if (arguments.length === 1) {
         if (arguments[0] === 'none') {
           bvg.noFill();
         } else {

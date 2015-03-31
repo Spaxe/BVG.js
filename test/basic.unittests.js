@@ -91,9 +91,15 @@ define(['../bvg'], function (BVG) {
       shape.fill().should.eql([0, 0, 0, 0]);
     });
 
-    it('should draw triangles', function () {
+    it('should draw geometry', function () {
       var triangle = BVG.triangle(50, 50, 60);
       triangle.should.be.instanceof(SVGElement);
+    });
+
+    it('should render text', function () {
+      var text = BVG.text('Mrraa!', 30, 40).fill(0);
+      text.should.be.instanceof(SVGElement);
+      text.tagName.should.eql('text');
     });
   });
 
