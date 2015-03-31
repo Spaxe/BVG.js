@@ -135,7 +135,7 @@ define([], function () {
         bvg.stroke(175);
 
       if (!data.strokeWidth)
-        bvg.strokeWidth(1);
+        bvg.strokeWidth(0.5);
 
       if (!data.fill)
         bvg.noFill();
