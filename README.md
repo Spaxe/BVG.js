@@ -150,14 +150,6 @@ Create a closed polygon from point to point.
 var polygon = bvg.polygon([[100, 200], [200, 300], [400, 800]]);
 ```
 
-### `bvg.triangle(cx, cy, r)`
-Create a regular triangle centred on `(cx, cy)` with vertices `r` distance
-away.
-
-```Javascript
-var triangle = bvg.triangle(50, 50, 10);
-```
-
 ## Grouping Elements
 ### `bvg.g([transform])`
 
@@ -185,6 +177,16 @@ var githubLink = bvg.a('https://github.com/spaxe/BVG.js');
 githubLink.ellipse(200, 200, 50, 50);
 ```
     
+
+## Other Geometry
+### `bvg.triangle(cx, cy, r)`
+Create a regular triangle centred on `(cx, cy)` with vertices `r` distance
+away.
+
+```Javascript
+var triangle = bvg.triangle(50, 50, 10);
+```
+      
 
 ## The BVG Object
 BVGs are SVGs with extra superpowers.

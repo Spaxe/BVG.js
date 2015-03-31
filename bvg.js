@@ -246,14 +246,6 @@ define([], function () {
     * var polygon = bvg.polygon([[100, 200], [200, 300], [400, 800]]);
     * ```
     *
-    * ### `bvg.triangle(cx, cy, r)`
-    * Create a regular triangle centred on `(cx, cy)` with vertices `r` distance
-    * away.
-    *
-    * ```Javascript
-    * var triangle = bvg.triangle(50, 50, 10);
-    * ```
-    *
     * ## Grouping Elements
     * ### `bvg.g([transform])`
     *
@@ -324,6 +316,16 @@ define([], function () {
     for (var f in creationFunctions) {
       creationMethods(bvg, f, creationFunctions[f]);
     }
+
+    /** ## Other Geometry
+      * ### `bvg.triangle(cx, cy, r)`
+      * Create a regular triangle centred on `(cx, cy)` with vertices `r` distance
+      * away.
+      *
+      * ```Javascript
+      * var triangle = bvg.triangle(50, 50, 10);
+      * ```
+      */
     bvg.triangle = function () {
       var obj = objectifyArguments(['cx', 'cy', 'r'], arguments);
       var vertices = [
@@ -333,6 +335,14 @@ define([], function () {
       ];
       return bvg.polygon(vertices);
     }
+
+    bvg.text = function () {
+      var obj = objectifyArguments(['content', 'x', 'y'], arguments);
+      var element = BVG('text', obj).noStroke()
+                                    .fill(175);
+      bvg.appendChild(element);
+      return element;
+    };
   }
   addCreationMethods(BVG);
 
@@ -369,6 +379,16 @@ define([], function () {
         }
       } else {
         data[arguments[0]] = arguments[1];
+        return bvg;
+      }
+    };
+
+    bvg.content = function() {
+      if (arguments.length === 0) {
+        return bvg.innerHTML;
+      }
+      else if (arguments.length === 1) {
+        bvg.content.innerHTML = arguments[0];
         return bvg;
       }
     };

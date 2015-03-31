@@ -46,10 +46,15 @@ require(['bvg'], function(BVG) {
   }
   draw();
   window.addEventListener('resize', draw);
+  window.oncontextmenu = function () {
+    return false;
+  };
 
   bvg.addEventListener('mousemove', function (event) {
-    if (event.buttons & 0x01 && event.target.hasClass('triangle'))
+    if (event.buttons & 0x01 !== 0 && event.target.hasClass('triangle'))
       event.target.addClass('painted');
+    else if (event.button === 2 && event.target.hasClass('triangle'))
+      event.target.removeClass('painted');
   });
   bvg.addEventListener('click', function (event) {
     if (event.target.hasClass('triangle'))
