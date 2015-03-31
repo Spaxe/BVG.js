@@ -348,7 +348,7 @@ define([], function () {
       var element = BVG('text', obj).noStroke()
                                     .fill(175);
       if (bvg.isBVG)
-        bvg.content(element);
+        bvg.appendChild(element);
       return element;
     };
   }
