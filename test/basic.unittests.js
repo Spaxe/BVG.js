@@ -94,12 +94,20 @@ define(['../bvg'], function (BVG) {
     it('should draw geometry', function () {
       var triangle = BVG.triangle(50, 50, 60);
       triangle.should.be.instanceof(SVGElement);
+      var arc = BVG.arc(250, 250, 100, 200, 0, Math.PI/3);
+      arc.should.be.instanceof(SVGElement);
+      arc = BVG.arc(600, 350, 200, 200, Math.PI, Math.PI*2-0.1);
+      arc.should.be.instanceof(SVGElement);
+      arc = BVG.arc(624, 375, 200, 200, Math.PI, Math.PI/2);
+      arc.should.be.instanceof(SVGElement);
     });
 
     it('should render text', function () {
-      var text = BVG.text('Mrraa!', 30, 40).fill(0);
+      var text = bvg.text('Mrraa!', 30, 40).fill(0);
       text.should.be.instanceof(SVGElement);
       text.tagName.should.eql('text');
+      text.parentNode.should.equal(bvg);
+      bvg.removeChild(text);
     });
   });
 

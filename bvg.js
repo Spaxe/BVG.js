@@ -351,6 +351,46 @@ define([], function () {
         bvg.appendChild(element);
       return element;
     };
+
+    /** ### `bvg.arc(cx, cy, rx, ry, startAngle, endAngle)`
+      * Create an arc centred on `(cx, cy)` with radius `rx` and `ry`, starting
+      * from `startAngle` anti-clockwise to `endAngle`, where 0 is the positive
+      * x-axis.
+      *
+      * ```Javascript
+      * var arc = bvg.arc(50, 50, 50, 100, 0, Math.PI);
+      * ```
+      */
+    bvg.arc = function () {
+      var obj = objectifyArguments(['cx', 'cy', 'rx', 'ry', 'startAngle', 'endAngle'], arguments);
+      var element = BVG('path', {});
+
+      var p1 = getPointOnEllipse(obj.cx, obj.cy, obj.rx, obj.ry, obj.startAngle);
+      var p2 = getPointOnEllipse(obj.cx, obj.cy, obj.rx, obj.ry, obj.endAngle);
+      var largeArc = (obj.endAngle - obj.startAngle) > Math.PI ? 1 : 0;
+      var sweepArc = obj.endAngle > obj.startAngle ? 1 : 0
+
+      var d = [
+        ['M', p1[0], p1[1]],
+        ['A', obj.rx, obj.ry, 0, largeArc, sweepArc, p2[0], p2[1]]
+      ];
+      var path = '';
+      d.forEach(function (x) {
+        path += x.join(' ') + ' ';
+      });
+      element.setAttribute('d', path);
+
+      if (bvg.isBVG)
+        bvg.appendChild(element);
+      return element;
+    }
+
+    function getPointOnEllipse(cx, cy, rx, ry, angle) {
+      return [
+        rx * Math.cos(angle) + cx,
+        ry * Math.sin(angle) + cy
+      ];
+    }
   }
   addCreationMethods(BVG);
 

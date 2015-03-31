@@ -196,6 +196,16 @@ var text = bvg.text('Mrraa!', 20, 10);
 ```
       
 
+### `bvg.arc(cx, cy, rx, ry, startAngle, endAngle)`
+Create an arc centred on `(cx, cy)` with radius `rx` and `ry`, starting
+from `startAngle` anti-clockwise to `endAngle`, where 0 is the positive
+x-axis.
+
+```Javascript
+var arc = bvg.arc(50, 50, 50, 100, 0, Math.PI);
+```
+      
+
 ## The BVG Object
 BVGs are SVGs with extra superpowers.
     
