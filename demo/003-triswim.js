@@ -47,8 +47,12 @@ require(['bvg'], function(BVG) {
   draw();
   window.addEventListener('resize', draw);
 
-  bvg.addEventListener('mouseover', function (event) {
+  bvg.addEventListener('mousemove', function (event) {
     if (event.buttons & 0x01 && event.target.hasClass('triangle'))
+      event.target.addClass('painted');
+  });
+  bvg.addEventListener('click', function (event) {
+    if (event.target.hasClass('triangle'))
       event.target.addClass('painted');
   });
 });

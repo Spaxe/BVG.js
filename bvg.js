@@ -130,6 +130,17 @@ define([], function () {
       }
     }
 
+    if (['svg', 'g', 'a'].indexOf(bvg.tagName) < 0) {
+      if (!data.stroke)
+        bvg.stroke(175);
+
+      if (!data.strokeWidth)
+        bvg.strokeWidth(1);
+
+      if (!data.fill)
+        bvg.noFill();
+    }
+
     return bvg;
   };
 
@@ -427,8 +438,7 @@ define([], function () {
       * Remove BVG object's outline completely.
       */
     bvg.noStroke = function () {
-      if (bvg.hasAttribute('stroke'))
-        bvg.removeAttribute('stroke')
+      bvg.setAttribute('stroke', 'rgba(0, 0, 0, 0)');
       return bvg;
     };
 
@@ -467,8 +477,7 @@ define([], function () {
       * Remove BVG object's colour filling completely.
       */
     bvg.noFill = function () {
-      if (bvg.hasAttribute('fill'))
-        bvg.removeAttribute('fill')
+      bvg.setAttribute('fill', 'rgba(0, 0, 0, 0)');
       return bvg;
     };
 

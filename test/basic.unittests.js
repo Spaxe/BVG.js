@@ -74,12 +74,10 @@ define(['../bvg'], function (BVG) {
       shape.stroke().should.not.eql(c);
       shape.stroke(255, 30, 50, 1);
       shape.stroke().should.eql(c);
-      shape.stroke('none');
-      should.not.exist(shape.stroke());
       shape.stroke(255);
       shape.stroke().should.eql([255, 255, 255, 1]);
       shape.noStroke();
-      should.not.exist(shape.stroke());
+      shape.stroke().should.eql([0, 0, 0, 0]);
 
       shape.fill(c);
       shape.fill().should.eql(c);
@@ -87,12 +85,10 @@ define(['../bvg'], function (BVG) {
       shape.fill().should.not.eql(c);
       shape.fill(255, 30, 50, 1);
       shape.fill().should.eql(c);
-      shape.fill('none');
-      should.not.exist(shape.fill());
       shape.fill(255);
       shape.fill().should.eql([255, 255, 255, 1]);
       shape.noFill();
-      should.not.exist(shape.fill());
+      shape.fill().should.eql([0, 0, 0, 0]);
     });
   });
 
