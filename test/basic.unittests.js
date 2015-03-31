@@ -90,6 +90,11 @@ define(['../bvg'], function (BVG) {
       shape.noFill();
       shape.fill().should.eql([0, 0, 0, 0]);
     });
+
+    it('should draw triangles', function () {
+      var triangle = BVG.triangle(50, 50, 60);
+      triangle.should.be.instanceof(SVGElement);
+    });
   });
 
 });

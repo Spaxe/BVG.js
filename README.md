@@ -150,6 +150,14 @@ Create a closed polygon from point to point.
 var polygon = bvg.polygon([[100, 200], [200, 300], [400, 800]]);
 ```
 
+### `bvg.triangle(cx, cy, r)`
+Create a regular triangle centred on `(cx, cy)` with vertices `r` distance
+away.
+
+```Javascript
+var triangle = bvg.triangle(50, 50, 10);
+```
+
 ## Grouping Elements
 ### `bvg.g([transform])`
 
@@ -193,6 +201,22 @@ function.
  - `bvg.data(property, newValue)`: Update `property` with `newValue`.
 
 Return `bvg` object reference.
+      
+
+### `bvg.addClass(c)`
+Add a class name to the element.
+      
+
+### `bvg.removeClass(c)`
+Remove a class name to the element.
+      
+
+### `bvg.hasClass(c)`
+Return true if the element has class `c`.
+      
+
+### `bvg.removeClass(c)`
+Add or remove the class `c` to the element.
       
 
 ### `bvg.stroke()`

@@ -246,6 +246,14 @@ define([], function () {
     * var polygon = bvg.polygon([[100, 200], [200, 300], [400, 800]]);
     * ```
     *
+    * ### `bvg.triangle(cx, cy, r)`
+    * Create a regular triangle centred on `(cx, cy)` with vertices `r` distance
+    * away.
+    *
+    * ```Javascript
+    * var triangle = bvg.triangle(50, 50, 10);
+    * ```
+    *
     * ## Grouping Elements
     * ### `bvg.g([transform])`
     *
@@ -365,20 +373,32 @@ define([], function () {
       }
     };
 
+    /** ### `bvg.addClass(c)`
+      * Add a class name to the element.
+      */
     bvg.addClass = function (c) {
       bvg.classList.add(c);
       return bvg;
     };
 
+    /** ### `bvg.removeClass(c)`
+      * Remove a class name to the element.
+      */
     bvg.removeClass = function (c) {
       bvg.classList.remove(c);
       return bvg;
     };
 
+    /** ### `bvg.hasClass(c)`
+      * Return true if the element has class `c`.
+      */
     bvg.hasClass = function (c) {
       return bvg.classList.contains(c);
     };
 
+    /** ### `bvg.removeClass(c)`
+      * Add or remove the class `c` to the element.
+      */
     bvg.toggleClass = function (c) {
       bvg.classList.toggle(c);
       return bvg;
