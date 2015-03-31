@@ -20,8 +20,6 @@ if (typeof define !== 'function') {
 }
 
 define([], function () {
-  var BVGIDCounter = 0;
-
   /** The heart of this library is a trinity: **SVG + Data + Binding**. This
     * connects your data to the SVG element through the binding function, which
     * creates a living connection that can react to change. BVG uses
@@ -68,6 +66,13 @@ define([], function () {
     * ```
     */
 
+  // Inject default SVG styles at top of page
+  // if (document.head) {
+  //   var defaultStyle = document.createElement('style');
+  //   defaultStyle.innerHTML = 'svg * { fill: none; stroke: rgb(175, 175, 175); stroke-width: 1 }';
+  //   document.head.insertBefore(defaultStyle, document.head.firstChild);
+  // }
+
   /*- `BVG(svg, data)`
     * Create a Bindable Vector Graphic with `svg` element. This BVG depends on
     * `data` for its attributes.
@@ -77,6 +82,7 @@ define([], function () {
     *  - `svg`   : Either a `String` for the SVG `tagName` or any DOM [`SVGElement`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element)
     *  - `data`  : Object with arbitrary data to your desire.
     */
+  var BVGIDCounter = 0;
   var BVG = function (svg, data) {
     if (typeof svg === 'string') {
       try {
@@ -123,15 +129,6 @@ define([], function () {
         });
       }
     }
-
-    if (!data.stroke)
-      bvg.stroke(175);
-
-    if (!data.fill)
-      bvg.noFill();
-
-    if (!data.strokeWidth)
-      bvg.strokeWidth(1);
 
     return bvg;
   };
@@ -357,6 +354,25 @@ define([], function () {
       }
     };
 
+    bvg.addClass = function (c) {
+      bvg.classList.add(c);
+      return bvg;
+    };
+
+    bvg.removeClass = function (c) {
+      bvg.classList.remove(c);
+      return bvg;
+    };
+
+    bvg.hasClass = function (c) {
+      return bvg.classList.contains(c);
+    };
+
+    bvg.toggleClass = function (c) {
+      bvg.classList.toggle(c);
+      return bvg;
+    };
+
     /** ### `bvg.stroke()`
       * Get/set the outline colour. There are 4 ways to use this function.
       *
@@ -411,7 +427,8 @@ define([], function () {
       * Remove BVG object's outline completely.
       */
     bvg.noStroke = function () {
-      bvg.setAttribute('stroke', 'none');
+      if (bvg.hasAttribute('stroke'))
+        bvg.removeAttribute('stroke')
       return bvg;
     };
 
@@ -450,7 +467,8 @@ define([], function () {
       * Remove BVG object's colour filling completely.
       */
     bvg.noFill = function () {
-      bvg.setAttribute('fill', 'none');
+      if (bvg.hasAttribute('fill'))
+        bvg.removeAttribute('fill')
       return bvg;
     };
 
