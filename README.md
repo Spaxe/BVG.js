@@ -188,6 +188,14 @@ var triangle = bvg.triangle(50, 50, 10);
 ```
       
 
+### `bvg.text(title, x, y)`
+Create a string of `title` text at location `(x, y)`.
+
+```Javascript
+var text = bvg.text('Mrraa!', 20, 10);
+```
+      
+
 ## The BVG Object
 BVGs are SVGs with extra superpowers.
     

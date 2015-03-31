@@ -336,6 +336,13 @@ define([], function () {
       return bvg.polygon(vertices);
     }
 
+    /** ### `bvg.text(title, x, y)`
+      * Create a string of `title` text at location `(x, y)`.
+      *
+      * ```Javascript
+      * var text = bvg.text('Mrraa!', 20, 10);
+      * ```
+      */
     bvg.text = function () {
       var obj = objectifyArguments(['content', 'x', 'y'], arguments);
       var element = BVG('text', obj).noStroke()
