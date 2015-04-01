@@ -391,20 +391,20 @@ define([], function () {
       * var arc = bvg.arc(50, 50, 50, 100, 0, Math.PI);
       * ```
       */
-    arc: function (x, y, rx, ry, beginAngle, endAngle) {
+    arc: function (x, y, rx, ry, startAngle, endAngle) {
       return new BVG('path', x.constructor.name === 'Object' ? x : {
         x: x,
         y: y,
         rx: rx,
         ry: ry,
-        beginAngle: beginAngle,
+        startAngle: startAngle,
         endAngle: endAngle
       }, {
         x: _arc,
         y: _arc,
         rx: _arc,
         ry: _arc,
-        beginAngle: _arc,
+        startAngle: _arc,
         endAngle: _arc
       });
 
