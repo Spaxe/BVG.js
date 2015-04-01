@@ -221,10 +221,11 @@ BVGs are SVGs with extra superpowers.
     
 
 ### `bvg.data()`
-Get/set the `data` object in a BVG. There are three ways to use this
+Get/set the `data` object in a BVG. There are four ways to use this
 function.
 
  - `bvg.data()`: Return `data` bound to the BVG.
+ - `bvg.data(newData)`: Update `data` with `newData` object.
  - `bvg.data(property)`: Return `data[property]` from the BVG.
  - `bvg.data(property, newValue)`: Update `property` with `newValue`.
 

@@ -472,10 +472,11 @@ define([], function () {
   };
 
    /** ### `bvg.data()`
-    * Get/set the `data` object in a BVG. There are three ways to use this
+    * Get/set the `data` object in a BVG. There are four ways to use this
     * function.
     *
     *  - `bvg.data()`: Return `data` bound to the BVG.
+    *  - `bvg.data(newData)`: Update `data` with `newData` object.
     *  - `bvg.data(property)`: Return `data[property]` from the BVG.
     *  - `bvg.data(property, newValue)`: Update `property` with `newValue`.
     *
@@ -485,7 +486,14 @@ define([], function () {
     if (arguments.length === 0) {
       return this._data;
     } else if (arguments.length === 1) {
-      return this._data[arguments[0]];
+      if (arguments[0].constructor.name === 'Object') {
+        Object.keys(arguments[0]).forEach(function (key) {
+          this.data(key, arguments[0][key]);
+        });
+        return this;
+      } else {
+        return this._data[arguments[0]];
+      }
     } else if (arguments.length === 2) {
       this._data[arguments[0]] = arguments[1];
       return this;
