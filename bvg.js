@@ -66,82 +66,69 @@ define([], function () {
     * ```
     */
 
-  // Inject default SVG styles at top of page
-  // if (document.head) {
-  //   var defaultStyle = document.createElement('style');
-  //   defaultStyle.innerHTML = 'svg * { fill: none; stroke: rgb(175, 175, 175); stroke-width: 1 }';
-  //   document.head.insertBefore(defaultStyle, document.head.firstChild);
-  // }
-
-  /*- `BVG(svg, data)`
-    * Create a Bindable Vector Graphic with `svg` element. This BVG depends on
-    * `data` for its attributes.
-    *
-    * Returns the BVG object created.
-    *
-    *  - `svg`   : Either a `String` for the SVG `tagName` or any DOM [`SVGElement`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element)
-    *  - `data`  : Object with arbitrary data to your desire.
+  /*- Property-wise Object.observe()
+    * Similar to Object.observe(), except two things:
+    *  - Nested objects are observed
+    *  - All change events report the top-level property as a whole
     */
-  var BVGIDCounter = 0;
-  var BVG = function (svg, data) {
-    if (typeof svg === 'string') {
-      try {
-        svg = document.createElementNS('http://www.w3.org/2000/svg', svg);
-      } catch (e) {
-        throw new TypeError(svg + ' is not a valid SVG tagName.');
-      }
-    }
-    if (!(svg instanceof SVGElement))
-      throw new TypeError('svg (' + svg + ') must be SVG tag name or element.');
-
-    var bvg = svg;
-    bvg.isBVG = true;
-    addCreationMethods(bvg);
-    addUtilityMethods(bvg, data);
-
-    var bind = function (bvg, change) {
-      if (change.type === 'update' || change.type === 'add') {
-        if (typeof bvg[change.name] === 'function') {
-          bvg[change.name](change.object[change.name]);
-        } else {
-          bvg.setAttribute(change.name, change.object[change.name]);
-        }
-      } else if (change.type === 'remove' && bvg.hasAttribute(change.name)) {
-        bvg.removeAttribute(change.name);
-      }
-    };
-
-    Object.observe(data, function(changes) {
+  function observe (obj, callback, _original, _property) {
+    Object.observe(obj, function (changes) {
       changes.forEach(function (change) {
-        bind(bvg, change);
+        if (obj[change.name] instanceof Object && obj[change.name] !== _original) {
+          observe(obj[change.name], notifyOriginal, _original || obj, _property || change.name);
+        }
+
+        function notifyOriginal () {
+          Object.getNotifier(_original || obj).notify({
+            type: 'update',
+            name: _property || change.name,
+            oldValue: change.oldValue,
+            object: _original || obj
+          });
+        }
+      });
+
+      callback.call(this, changes);
+    });
+  }
+
+  /*- `BVG(tag, data, binding)`
+    * The trinity of this library: SVG + Data + Binding Function.
+    *
+    * Return the BVG object created.
+    *
+    *  - `tag`    : Either a `String` for the SVG `tagName` or any [`SVGElement`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element)
+    *  - `data`   : Object with arbitrary data to your desire
+    *  - `binding`: (optional) Object with properties that specify the binding.
+    */
+  var BVG = function (tag, data, binding) {
+    tag = tag instanceof SVGElement ? tag : document.createElementNS('http://www.w3.org/2000/svg', tag);
+    data = data || {};
+    binding = binding || {};
+
+    observe(data, function (changes) {
+      changes.forEach(function (change) {
+        if (binding[change.name] === 'function') {
+          binding[change.name](tag, data);
+        } else {
+          tag.setAttribute(change.name, data[change.name]);
+        }
       });
     });
 
-    if (!data.id)
-      data.id = 'BVG_' + bvg.tagName + '_' + BVGIDCounter++;
+    data.id = data.id || 'BVG_' + tag.tagName + '_' + Date.now();
 
-    for (var name in data) {
-      if (data.hasOwnProperty(name)) {
-        bind(bvg, {
-          type: 'add',
-          object: data,
-          name: name
-        });
-      }
+    this.tag = tag;
+    this._data = data;
+    this._binding = binding;
+
+    if (['svg', 'g', 'a'].indexOf(tag.tagName) < 0) {
+      if (!data.stroke) this.stroke(175);
+      if (!data.strokeWidth) this.strokeWidth(0.5);
+      if (!data.fill) this.noFill();
     }
 
-    if (['svg', 'g', 'a'].indexOf(bvg.tagName) < 0) {
-      if (!data.stroke)
-        bvg.stroke(175);
-
-      if (!data.strokeWidth)
-        bvg.strokeWidth(0.5);
-
-      if (!data.fill)
-        bvg.noFill();
-    }
-
-    return bvg;
+    return this;
   };
 
   /** ## The BVG Container
@@ -168,9 +155,14 @@ define([], function () {
     if (!(htmlElement instanceof HTMLElement))
       throw new TypeError('htmlElement (' + htmlElement + ') was not found.');
 
-    var svg = BVG.svg('http://www.w3.org/1999/xlink', 1.1, '100%', '100%');
-    htmlElement.appendChild(svg);
-    return svg;
+    var bvg = new BVG('svg', {
+      'xmlns:xlink': 'http://www.w3.org/1999/xlink',
+      version: 1.1,
+      width: '100%',
+      height: '100%'
+    });
+    htmlElement.appendChild(bvg.tag);
+    return bvg;
   };
 
   /** ## BVG Elements
@@ -204,118 +196,153 @@ define([], function () {
     *   height: 70                  // but the order can be any.
     * });
     * ```
-    *
-    * ### `bvg.rect(x, y, width, height)`
-    * Create a rectangle at position `(x, y)` at `width` x `height` in size.
-    *
-    * ```Javascript
-    * var rect = bvg.rect(100, 100, 300, 150);
-    * ```
-    *
-    * ### `bvg.circle(cx, cy, r)`
-    * Create a circle centred on `(cx, cy)` with radius `r`.
-    *
-    * ```Javascript
-    * var circle = bvg.ellipse(100, 100, 50);
-    * ```
-    *
-    * ### `bvg.ellipse(cx, cy, rx, ry)`
-    * Create a ellipse centred on `(cx, cy)` with radii `rx` and `ry`.
-    *
-    * ```Javascript
-    * var ellipse = bvg.ellipse(100, 100, 200, 180);
-    * ```
-    *
-    * ### `bvg.line(x1, y1, x2, y2)`
-    * Create a line from `(x1, y1)` to `(x2, y2)`.
-    *
-    * ```Javascript
-    * var line = bvg.line(100, 100, 200, 300);
-    * ```
-    * ### `bvg.polyline([[x1, y1], [x2, y2], ...])`
-    * Create a series of lines from point to point.
-    *
-    * ```Javascript
-    * var polyline = bvg.polyline([[100, 200], [200, 300], [400, 800]]);
-    * ```
-    *
-    * ### `bvg.polygon([[x1, y1], [x2, y2], ...])`
-    * Create a closed polygon from point to point.
-    *
-    * ```Javascript
-    * var polygon = bvg.polygon([[100, 200], [200, 300], [400, 800]]);
-    * ```
-    *
-    * ## Grouping Elements
-    * ### `bvg.g([transform])`
-    *
-    * Create a group to contain BVG objects. It acts like a BVG container with
-    * an optional `transform` attribute.
-    *
-    * ```Javascript
-    * // Create a new group and fill it with dashes.
-    * var dashes = bvg.g();
-    * for (int i = 0; i < 5; i++) {
-    *   dahses.rect(10, 10 + i * 30, 50, 20);
-    * }
-    * ```
-    *
-    * ## Hyperlinks
-    * ### `bvg.a(href)`
-    *
-    * Create a hyperlink BVG to target URL `href`. It does not have any display
-    * elements. Make sure to append elements to it.
-    *
-    * ```Javascript
-    * // Clicking on this element will bring them to the Github page
-    * var githubLink = bvg.a('https://github.com/spaxe/BVG.js');
-    * // Make a button and attack it to the link
-    * githubLink.ellipse(200, 200, 50, 50);
-    * ```
     */
   var creationFunctions = {
-    svg: ['xmlns:xlink', 'version', 'width', 'height'],
-    rect: ['x', 'y', 'width', 'height'],
-    circle: ['cx', 'cy', 'r'],
-    ellipse: ['cx', 'cy', 'rx', 'ry'],
-    line: ['x1', 'y1', 'x2', 'y2'],
-    polyline: ['vertices'],
-    polygon: ['vertices'],
-    g: ['transform'],
-    a: ['xlink:href']
-  };
+    svg: function (xlink, version, width, height) {
+      return new BVG('svg', xlink.constructor.name === 'Object' ? xlink : {
+        'xmlns:xlink': xlink,
+        version: version,
+        width: width,
+        height: height
+      });
+    },
 
-  /*- ### `objectifyArguments(paranmeters, args)`
-    * Return an object with {paranmeters: args} pair.
-    */
-  function objectifyArguments (paranmeters, args) {
-    var obj = {};
-    var data = [].slice.call(args);
-    data.forEach(function (d, i) {
-      obj[paranmeters[i]] = d;
-    });
-    return obj;
-  }
+    /** ### `bvg.rect(x, y, width, height)`
+      * Create a rectangle at position `(x, y)` at `width` x `height` in size.
+      *
+      * ```Javascript
+      * var rect = bvg.rect(100, 100, 300, 150);
+      * ```
+      */
+    rect: function (x, y, width, height) {
+      return new BVG('rect', x.constructor.name === 'Object' ? x : {
+        x: x,
+        y: y,
+        width: width,
+        height: height
+      });
+    },
 
-  /*- ### `creationMethods(svg, paranmeters)`
-    * Populate the library with functions to create a BVG.
-    */
-  function creationMethods (bvg, svg, paranmeters) {
-    bvg[svg] = function () {
-      var newBVG;
-      var obj = arguments[0].constructor.name === 'Object' ? arguments[0] :
-                objectifyArguments(paranmeters, arguments);
-      newBVG = BVG(svg, obj);
-      if (bvg.isBVG)
-        bvg.appendChild(newBVG);
-      return newBVG;
-    };
-  }
+    /** ### `bvg.circle(cx, cy, r)`
+      * Create a circle centred on `(cx, cy)` with radius `r`.
+      *
+      * ```Javascript
+      * var circle = bvg.ellipse(100, 100, 50);
+      * ```
+      */
+    circle: function (x, y, r) {
+      return new BVG('circle', x.constructor.name === 'Object' ? x : {
+        x: x,
+        y: y,
+        r: r
+      }, {
+        x: function (tag, data) { tag.setAttribute('cx', data.x); },
+        y: function (tag, data) { tag.setAttribute('cy', data.y); }
+      });
+    },
 
-  function addCreationMethods (bvg) {
-    for (var f in creationFunctions) {
-      creationMethods(bvg, f, creationFunctions[f]);
-    }
+    /** ### `bvg.ellipse(cx, cy, rx, ry)`
+      * Create a ellipse centred on `(cx, cy)` with radii `rx` and `ry`.
+      *
+      * ```Javascript
+      * var ellipse = bvg.ellipse(100, 100, 200, 180);
+      * ```
+      */
+    ellipse: function (x, y, rx, ry) {
+      return new BVG('ellipse', x.constructor.name === 'Object' ? x : {
+        x: x,
+        y: y,
+        rx: rx,
+        ry: ry
+      }, {
+        x: function (tag, data) { tag.setAttribute('cx', data.x); },
+        y: function (tag, data) { tag.setAttribute('cy', data.y); }
+      });
+    },
+
+    /** ### `bvg.line(x1, y1, x2, y2)`
+      * Create a line from `(x1, y1)` to `(x2, y2)`.
+      *
+      * ```Javascript
+      * var line = bvg.line(100, 100, 200, 300);
+      * ```
+      */
+    line: function (x1, y1, x2, y2) {
+      return new BVG('line', x1.constructor.name === 'Object' ? x1 : {
+        x1: x1,
+        y1: y1,
+        x2: x2,
+        y2: y2
+      });
+    },
+    /** ### `bvg.polyline([[x1, y1], [x2, y2], ...])`
+      * Create a series of lines from point to point.
+      *
+      * ```Javascript
+      * var polyline = bvg.polyline([[100, 200], [200, 300], [400, 800]]);
+      * ```
+      */
+    polyline: function (points) {
+      return new BVG('polyline', points.constructor.name === 'Object' ? points : {
+        points: points
+      }, {
+        points: function (tag, data) { tag.setAttribute('points', data.points.join(' ')); }
+      });
+    },
+    /** ### `bvg.polygon([[x1, y1], [x2, y2], ...])`
+      * Create a closed polygon from point to point. The last point will be
+      * connected back to the first point.
+      *
+      * ```Javascript
+      * var polygon = bvg.polygon([[100, 200], [200, 300], [400, 800]]);
+      * ```
+      */
+    polygon: function (points) {
+      return new BVG('polygon', points.constructor.name === 'Object' ? points : {
+        points: points
+      }, {
+        points: function (tag, data) { tag.setAttribute('points', data.points.join(' ')); }
+      });
+    },
+
+    /** ## Grouping Elements
+      * ### `bvg.group([transform])`
+      *
+      * Create a group to contain BVG objects. It acts like a BVG container with
+      * an optional `transform` attribute.
+      *
+      * ```Javascript
+      * // Create a new group and fill it with dashes.
+      * var dashes = bvg.group();
+      * for (int i = 0; i < 5; i++) {
+      *   dahses.rect(10, 10 + i * 30, 50, 20);
+      * }
+      * ```
+      */
+    group: function (transform) {
+      return new BVG('g', transform.constructor.name === 'Object' ? transform : {
+        transform: transform
+      });
+    },
+
+    /** ## Hyperlinks
+      * ### `bvg.hyperlink(url)`
+      *
+      * Create a hyperlink BVG to target URL `url`. It does not have any display
+      * elements. Make sure to append elements to it.
+      *
+      * ```Javascript
+      * // Clicking on this element will bring them to the Github page
+      * var githubLink = bvg.hyperlink('https://github.com/spaxe/BVG.js');
+      * // Make a button and attack it to the link
+      * githubLink.ellipse(200, 200, 50, 50);
+      * ```
+      */
+    hyperlink: function (url) {
+      return new BVG('a', url.constructor.name === 'Object' ? url : {
+        'xmlns:href': url
+      });
+    },
 
     /** ## Other Geometry
       * ### `bvg.triangle(cx, cy, r)`
@@ -326,31 +353,26 @@ define([], function () {
       * var triangle = bvg.triangle(50, 50, 10);
       * ```
       */
-    bvg.triangle = function () {
-      var obj = objectifyArguments(['cx', 'cy', 'r'], arguments);
-      var vertices = [
-        [obj.cx, obj.cy-obj.r],
-        [obj.cx-obj.r/2*Math.sqrt(3), obj.cy+obj.r/2],
-        [obj.cx+obj.r/2*Math.sqrt(3), obj.cy+obj.r/2]
-      ];
-      return bvg.polygon(vertices);
-    }
+    triangle: function (x, y, r) {
+      return new BVG('polygon', x.constructor.name === 'Object' ? x : {
+        x: x,
+        y: y,
+        r: r
+      }, {
+        x: _triangle,
+        y: _triangle,
+        r: _triangle
+      });
 
-    /** ### `bvg.text(title, x, y)`
-      * Create a string of `title` text at location `(x, y)`.
-      *
-      * ```Javascript
-      * var text = bvg.text('Mrraa!', 20, 10);
-      * ```
-      */
-    bvg.text = function () {
-      var obj = objectifyArguments(['content', 'x', 'y'], arguments);
-      var element = BVG('text', obj).noStroke()
-                                    .fill(175);
-      if (bvg.isBVG)
-        bvg.appendChild(element);
-      return element;
-    };
+      function _triangle(tag, data) {
+        var points = [
+          [data.x, data.y-data.r],
+          [data.x-data.r/2*Math.sqrt(3), data.y+data.r/2],
+          [data.x+data.r/2*Math.sqrt(3), data.y+data.r/2]
+        ];
+        tag.setAttribute('points', points.join(' '));
+      }
+    },
 
     /** ### `bvg.arc(cx, cy, rx, ry, startAngle, endAngle)`
       * Create an arc centred on `(cx, cy)` with radius `rx` and `ry`, starting
@@ -361,249 +383,231 @@ define([], function () {
       * var arc = bvg.arc(50, 50, 50, 100, 0, Math.PI);
       * ```
       */
-    bvg.arc = function () {
-      var obj = objectifyArguments(['cx', 'cy', 'rx', 'ry', 'startAngle', 'endAngle'], arguments);
-      var element = BVG('path', {});
-
-      var p1 = getPointOnEllipse(obj.cx, obj.cy, obj.rx, obj.ry, obj.startAngle);
-      var p2 = getPointOnEllipse(obj.cx, obj.cy, obj.rx, obj.ry, obj.endAngle);
-      var largeArc = (obj.endAngle - obj.startAngle) > Math.PI ? 1 : 0;
-      var sweepArc = obj.endAngle > obj.startAngle ? 1 : 0
-
-      var d = [
-        ['M', p1[0], p1[1]],
-        ['A', obj.rx, obj.ry, 0, largeArc, sweepArc, p2[0], p2[1]]
-      ];
-      var path = '';
-      d.forEach(function (x) {
-        path += x.join(' ') + ' ';
+    arc: function (x, y, rx, ry, beginAngle, endAngle) {
+      return new BVG('path', x.constructor.name === 'Object' ? x : {
+        x: x,
+        y: y,
+        rx: rx,
+        ry: ry,
+        beginAngle: beginAngle,
+        endAngle: endAngle
+      }, {
+        x: _arc,
+        y: _arc,
+        rx: _arc,
+        ry: _arc,
+        beginAngle: _arc,
+        endAngle: _arc
       });
-      element.setAttribute('d', path);
 
-      if (bvg.isBVG)
-        bvg.appendChild(element);
-      return element;
-    }
+      function _arc(tag, data) {
+        var p1 = getPointOnEllipse(data.x, data.y, data.rx, data.ry, data.startAngle);
+        var p2 = getPointOnEllipse(data.x, data.y, data.rx, data.ry, data.endAngle);
+        var largeArc = (data.endAngle - data.startAngle) > Math.PI ? 1 : 0;
+        var sweepArc = data.endAngle > data.startAngle ? 1 : 0;
+        var d = [
+          ['M', p1.x, p1.y],
+          ['A', data.rx, data.ry, 0, largeArc, sweepArc, p2.x, p2.y]
+        ];
+        tag.setAttribute('d', d.map(function (x) {
+          return x.join(' ');
+        })).join(' ');
+      }
 
-    function getPointOnEllipse(cx, cy, rx, ry, angle) {
-      return [
-        rx * Math.cos(angle) + cx,
-        ry * Math.sin(angle) + cy
-      ];
+      function getPointOnEllipse(x, y, rx, ry, angle) {
+        return {
+          x: rx * Math.cos(angle) + x,
+          y: ry * Math.sin(angle) + y
+        };
+      }
+    },
+
+    /** ### `bvg.text(text, x, y)`
+      * Create a string of `text` text at location `(x, y)`.
+      *
+      * ```Javascript
+      * var text = bvg.text('Mrraa!', 20, 10);
+      * ```
+      */
+    text: function (text, x, y) {
+      return new BVG('text', text.constructor.name === 'Object' ? text : {
+        text: text,
+        x: x,
+        y: y,
+        fill: 'rgba(175, 175, 175, 1)',
+        stroke: 'rgba(0, 0, 0, 0)'
+      }, {
+        text: function (tag, data) { tag.innerHTML = data.text; }
+      });
     }
-  }
-  addCreationMethods(BVG);
+  };
+
+  Object.keys(creationFunctions).forEach(function (f) {
+    BVG[f] = function () {
+      return creationFunctions[f].apply(BVG, arguments);
+    };
+    BVG.prototype[f] = function () {
+      var bvg = creationFunctions[f].apply(this, arguments);
+      this.append(bvg);
+      return bvg;
+    };
+  });
 
   /** ## The BVG Object
     * BVGs are SVGs with extra superpowers.
     */
-  function addUtilityMethods (bvg, data) {
 
-    /** ### `bvg.data()`
-      * Get/set the `data` object in a BVG. There are four ways to use this
-      * function.
-      *
-      *  - `bvg.data()`: Return `data` bound to the BVG.
-      *  - `bvg.data(property)`: Return `data[property]` from the BVG.
-      *  - `bvg.data(objectToUpdate)`: Update `data` with `objectToUpdate`,
-      *     adding and replacing any properties. Return `bvg` object reference.
-      *  - `bvg.data(property, newValue)`: Update `property` with `newValue`.
-      *
-      * Return `bvg` object reference.
-      */
-    bvg.data = function () {
-      if (arguments.length === 0) {
-        return data;
-      } else if (arguments.length === 1) {
-        if (typeof arguments[0] === 'string') {
-          return data[arguments[0]];
-        } else {
-          for (var name in arguments[0]) {
-            if (arguments[0].hasOwnProperty(name)) {
-              data[name] = arguments[0][name];
-            }
-          }
-          return bvg;
-        }
-      } else {
-        data[arguments[0]] = arguments[1];
-        return bvg;
-      }
-    };
+  // TODO: Documentation
+  BVG.prototype.append = function (bvg) {
+    this.tag.appendChild(bvg.tag);
+    return this;
+  };
 
-    bvg.content = function() {
-      if (arguments.length === 0) {
-        return bvg.innerHTML;
-      }
-      else if (arguments.length === 1) {
-        bvg.innerHTML = arguments[0];
-        return bvg;
-      }
-    };
-
-    /** ### `bvg.addClass(c)`
-      * Add a class name to the element.
-      */
-    bvg.addClass = function (c) {
-      bvg.classList.add(c);
-      return bvg;
-    };
-
-    /** ### `bvg.removeClass(c)`
-      * Remove a class name to the element.
-      */
-    bvg.removeClass = function (c) {
-      bvg.classList.remove(c);
-      return bvg;
-    };
-
-    /** ### `bvg.hasClass(c)`
-      * Return true if the element has class `c`.
-      */
-    bvg.hasClass = function (c) {
-      return bvg.classList.contains(c);
-    };
-
-    /** ### `bvg.removeClass(c)`
-      * Add or remove the class `c` to the element.
-      */
-    bvg.toggleClass = function (c) {
-      bvg.classList.toggle(c);
-      return bvg;
-    };
-
-    /** ### `bvg.stroke()`
-      * Get/set the outline colour. There are 4 ways to use this function.
-      *
-      *  - `bvg.stroke()`: Return `stroke` colour as [r, g, b, a].
-      *  - `bvg.stroke(hex)`: Set `stroke` colour with a CSS hex string.
-      *  - `bvg.stroke(rgb)`: Set `stroke` with a greyscale colour with equal
-      *    values `(rgb, rgb, rgb)`.
-      *  - `bvg.stroke(r, g, b, [a])`: Set `stroke` with `(r, g, b, a)`. If `a`
-      *    is omitted, it defaults to `1`.
-      *
-      * `r`, `g`, `b` should be in the range of 0-255 inclusive.
-      */
-    bvg.stroke = function () {
-      if (arguments.length === 0) {
-        var s = bvg.getAttribute('stroke');
-        if (s && s !== 'none')
-          return BVG.rgba(s);
-        return null;
-      }
-      else if (arguments.length === 1) {
-        if (arguments[0] === 'none') {
-          bvg.noStroke();
-        } else {
-          bvg.setAttribute('stroke', BVG.rgba(arguments[0], true));
-        }
-      } else {
-        bvg.setAttribute('stroke', BVG.rgba([].slice.call(arguments), true));
-      }
-      return bvg;
-    };
-
-    /** ### `bvg.strokeWidth([width])`
-      * Get/set the outline thickness.
-      *
-      * Returns the current outline thickness if `width` is omitted. Otherise,
-      * it assigns the outline thickness with a new value, and returns the `bvg`
-      * object reference.
-      *
-      *  - `width`  : Outline thickness in pixels.
-      */
-    bvg.strokeWidth = function () {
-      if (arguments.length === 0) {
-        return BVG.rgba(bvg.getAttribute('stroke-width'));
-      }
-      else if (arguments.length === 1) {
-        bvg.setAttribute('stroke-width', arguments[0]);
-      }
-      return bvg;
-    };
-
-    /** ### `bvg.noStroke()`
-      * Remove BVG object's outline completely.
-      */
-    bvg.noStroke = function () {
-      bvg.setAttribute('stroke', 'rgba(0, 0, 0, 0)');
-      return bvg;
-    };
-
-    /** ### `bvg.fill()`
-      * Get/set the filling colour. There are 4 ways to use this function.
-      *
-      *  - `bvg.fill()`: Return `fill` colour as [r, g, b, a].
-      *  - `bvg.fill(hex)`: Set `fill` colour with a CSS hex string.
-      *  - `bvg.fill(rgb)`: Set `fill` with a greyscale colour with equal
-      *    values `(rgb, rgb, rgb)`.
-      *  - `bvg.fill(r, g, b, [a])`: Set `fill` with `(r, g, b, a)`. If `a`
-      *    is omitted, it defaults to `1`.
-      *
-      * `r`, `g`, `b` should be in the range of 0-255 inclusive.
-      */
-    bvg.fill = function () {
-      if (arguments.length === 0) {
-        var f = bvg.getAttribute('fill');
-        if (f && f !== 'none')
-          return BVG.rgba(f);
-        return null;
-      }
-      else if (arguments.length === 1) {
-        if (arguments[0] === 'none') {
-          bvg.noFill();
-        } else {
-          bvg.setAttribute('fill', BVG.rgba(arguments[0], true));
-        }
-      } else {
-        bvg.setAttribute('fill', BVG.rgba([].slice.call(arguments), true));
-      }
-      return bvg;
-    };
-
-    /** ### `bvg.noFill()`
-      * Remove BVG object's colour filling completely.
-      */
-    bvg.noFill = function () {
-      bvg.setAttribute('fill', 'rgba(0, 0, 0, 0)');
-      return bvg;
-    };
-
-    // TODO: DOCUMENTATION
-    bvg.xform = function () {
-      if (arguments.length === 0) {
-        return bvg.getAttribute('transform');
-      }
-      if (arguments.length === 1) {
-        bvg.setAttribute('transform', arguments[0]);
-      }
-      return bvg;
-    };
-
-    if (bvg.tagName === 'polygon' || bvg.tagName === 'polyline') {
-      bvg.vertices = function () {
-        if (arguments.length === 0) {
-          var points = [];
-          bvg.getAttribute('points').split(' ').forEach(function (pair) {
-            points.push(pair.split(',').map(Number));
-          });
-          return points;
-        }
-        if (arguments.length === 1) {
-          bvg.setAttribute('points', arguments[0].join(' '));
-        }
-        return bvg;
-      };
+   /** ### `bvg.data()`
+    * Get/set the `data` object in a BVG. There are three ways to use this
+    * function.
+    *
+    *  - `bvg.data()`: Return `data` bound to the BVG.
+    *  - `bvg.data(property)`: Return `data[property]` from the BVG.
+    *  - `bvg.data(property, newValue)`: Update `property` with `newValue`.
+    *
+    * Return `bvg` object reference.
+    */
+  BVG.prototype.data = function () {
+    if (arguments.length === 0) {
+      return this._data;
+    } else if (arguments.length === 1) {
+      return this._data[arguments[0]];
+    } else if (arguments.length === 2) {
+      this._data[arguments[0]] = arguments[1];
+      return this;
+    } else {
+      throw new RangeError(this, 'data() received more than 2 arguments.');
     }
+  };
 
-    /** ### `bvg.remove()`
-      * Remove the BVG object from its parent and return itself.
-      */
-    bvg.remove = function () {
-      bvg.parentNode.removeChild(bvg);
-      return bvg;
-    };
-  }
+  /** ### `bvg.fill()`
+    * Get/set the filling colour. There are four ways to use this function.
+    *
+    *  - `bvg.fill()`: Return `fill` colour as [r, g, b, a].
+    *  - `bvg.fill(hex)`: Set `fill` colour with a CSS hex string.
+    *  - `bvg.fill(rgb)`: Set `fill` with a greyscale colour with equal
+    *    values `(rgb, rgb, rgb)`.
+    *  - `bvg.fill(r, g, b, [a])`: Set `fill` with `(r, g, b, a)`. If `a`
+    *    is omitted, it defaults to `1`.
+    *
+    * `r`, `g`, `b` should be in the range of 0-255 inclusive.
+    */
+  BVG.prototype.fill = function () {
+    if (arguments.length === 0) {
+      return BVG.rgba(this.data('fill'));
+    } else if (arguments.length === 1) {
+      return this.data('fill', BVG.rgba(arguments[0], true));
+    } else if (arguments.length === 3 || arguments.length === 4) {
+      return this.data('fill', BVG.rgba([].slice.call(arguments), true));
+    } else {
+      throw new RangeError(this, 'fill() received more than 1 argument.');
+    }
+  };
+
+  /** ### `bvg.noFill()`
+    * Remove BVG object's colour filling completely.
+    */
+  BVG.prototype.noFill = function () { return this.fill('rgba(0, 0, 0, 0)'); };
+
+  /** ### `bvg.stroke()`
+    * Get/set the outline colour. There are four ways to use this function.
+    *
+    *  - `bvg.stroke()`: Return `stroke` colour as [r, g, b, a].
+    *  - `bvg.stroke(hex)`: Set `stroke` colour with a CSS hex string.
+    *  - `bvg.stroke(rgb)`: Set `stroke` with a greyscale colour with equal
+    *    values `(rgb, rgb, rgb)`.
+    *  - `bvg.stroke(r, g, b, [a])`: Set `stroke` with `(r, g, b, a)`. If `a`
+    *    is omitted, it defaults to `1`.
+    *
+    * `r`, `g`, `b` should be in the range of 0-255 inclusive.
+    */
+  BVG.prototype.stroke = function () {
+    if (arguments.length === 0) {
+      return BVG.rgba(this.data('stroke'));
+    } else if (arguments.length === 1) {
+      return this.data('stroke', BVG.rgba(arguments[0], true));
+    } else if (arguments.length === 3 || arguments.length === 4) {
+      return this.data('stroke', BVG.rgba([].slice.call(arguments), true));
+    } else {
+      throw new RangeError(this, 'stroke() received more than 1 argument.');
+    }
+  };
+
+  /** ### `bvg.strokeWidth([width])`
+    * Get/set the outline thickness.
+    *
+    * Returns the current outline thickness if `width` is omitted. Otherise,
+    * it assigns the outline thickness with a new value, and returns the `bvg`
+    * object reference.
+    *
+    *  - `width`  : Outline thickness in pixels.
+    */
+  BVG.prototype.strokeWidth = function () {
+    return this.data.bind(this, 'stroke-width');
+  };
+
+  /** ### `bvg.noStroke()`
+    * Remove BVG object's outline completely.
+    */
+  BVG.prototype.noStroke = function () { return this.stroke('rgba(0, 0, 0, 0)'); };
+
+  BVG.prototype.content = function () {
+    if (arguments.length === 0) {
+      return this.tag.innerHTML;
+    } else if (arguments.length === 1) {
+      this.tag.innerHTML = arguments[1];
+      return this;
+    } else {
+      throw new RangeError(this, 'content() received more than 1 argument.');
+    }
+  };
+
+  /** ### `bvg.addClass(c)`
+  * Add a class name to the element.
+  */
+  BVG.prototype.addClass = function (c) {
+    this.tag.classList.add(c);
+    return this;
+  };
+
+  /** ### `bvg.removeClass(c)`
+    * Remove a class name to the element.
+    */
+  BVG.prototype.removeClass = function (c) {
+    this.tag.classList.remove(c);
+    return this;
+  };
+
+  /** ### `bvg.hasClass(c)`
+    * Return true if the element has class `c`.
+    */
+  BVG.prototype.hasClass = function (c) {
+    return this.tag.classList.contains(c);
+  };
+
+  /** ### `bvg.removeClass(c)`
+    * Add or remove the class `c` to the element.
+    */
+  BVG.prototype.toggleClass = function (c) {
+    this.tag.classList.toggle(c);
+    return this;
+  };
+
+  // TODO: temporary
+  BVG.prototype.transform = function () {
+    return this.data.bind(this, 'transform');
+  };
+
+  BVG.prototype.remove = function () {
+    this.tag.parentNode.removeChild(this.tag);
+    return this;
+  };
 
   /** ## Utility Methods */
 

@@ -108,6 +108,7 @@ bvg.rect({                    // Object style
   height: 70                  // but the order can be any.
 });
 ```
+    
 
 ### `bvg.rect(x, y, width, height)`
 Create a rectangle at position `(x, y)` at `width` x `height` in size.
@@ -115,6 +116,7 @@ Create a rectangle at position `(x, y)` at `width` x `height` in size.
 ```Javascript
 var rect = bvg.rect(100, 100, 300, 150);
 ```
+      
 
 ### `bvg.circle(cx, cy, r)`
 Create a circle centred on `(cx, cy)` with radius `r`.
@@ -122,6 +124,7 @@ Create a circle centred on `(cx, cy)` with radius `r`.
 ```Javascript
 var circle = bvg.ellipse(100, 100, 50);
 ```
+      
 
 ### `bvg.ellipse(cx, cy, rx, ry)`
 Create a ellipse centred on `(cx, cy)` with radii `rx` and `ry`.
@@ -129,6 +132,7 @@ Create a ellipse centred on `(cx, cy)` with radii `rx` and `ry`.
 ```Javascript
 var ellipse = bvg.ellipse(100, 100, 200, 180);
 ```
+      
 
 ### `bvg.line(x1, y1, x2, y2)`
 Create a line from `(x1, y1)` to `(x2, y2)`.
@@ -136,47 +140,53 @@ Create a line from `(x1, y1)` to `(x2, y2)`.
 ```Javascript
 var line = bvg.line(100, 100, 200, 300);
 ```
+      
+
 ### `bvg.polyline([[x1, y1], [x2, y2], ...])`
 Create a series of lines from point to point.
 
 ```Javascript
 var polyline = bvg.polyline([[100, 200], [200, 300], [400, 800]]);
 ```
+      
 
 ### `bvg.polygon([[x1, y1], [x2, y2], ...])`
-Create a closed polygon from point to point.
+Create a closed polygon from point to point. The last point will be
+connected back to the first point.
 
 ```Javascript
 var polygon = bvg.polygon([[100, 200], [200, 300], [400, 800]]);
 ```
+      
 
 ## Grouping Elements
-### `bvg.g([transform])`
+### `bvg.group([transform])`
 
 Create a group to contain BVG objects. It acts like a BVG container with
 an optional `transform` attribute.
 
 ```Javascript
 // Create a new group and fill it with dashes.
-var dashes = bvg.g();
+var dashes = bvg.group();
 for (int i = 0; i < 5; i++) {
   dahses.rect(10, 10 + i * 30, 50, 20);
 }
 ```
+      
 
 ## Hyperlinks
-### `bvg.a(href)`
+### `bvg.hyperlink(url)`
 
-Create a hyperlink BVG to target URL `href`. It does not have any display
+Create a hyperlink BVG to target URL `url`. It does not have any display
 elements. Make sure to append elements to it.
 
 ```Javascript
 // Clicking on this element will bring them to the Github page
-var githubLink = bvg.a('https://github.com/spaxe/BVG.js');
+var githubLink = bvg.hyperlink('https://github.com/spaxe/BVG.js');
 // Make a button and attack it to the link
 githubLink.ellipse(200, 200, 50, 50);
 ```
-    
+      
 
 ## Other Geometry
 ### `bvg.triangle(cx, cy, r)`
@@ -185,14 +195,6 @@ away.
 
 ```Javascript
 var triangle = bvg.triangle(50, 50, 10);
-```
-      
-
-### `bvg.text(title, x, y)`
-Create a string of `title` text at location `(x, y)`.
-
-```Javascript
-var text = bvg.text('Mrraa!', 20, 10);
 ```
       
 
@@ -206,68 +208,31 @@ var arc = bvg.arc(50, 50, 50, 100, 0, Math.PI);
 ```
       
 
+### `bvg.text(text, x, y)`
+Create a string of `text` text at location `(x, y)`.
+
+```Javascript
+var text = bvg.text('Mrraa!', 20, 10);
+```
+      
+
 ## The BVG Object
 BVGs are SVGs with extra superpowers.
     
 
 ### `bvg.data()`
-Get/set the `data` object in a BVG. There are four ways to use this
+Get/set the `data` object in a BVG. There are three ways to use this
 function.
 
  - `bvg.data()`: Return `data` bound to the BVG.
  - `bvg.data(property)`: Return `data[property]` from the BVG.
- - `bvg.data(objectToUpdate)`: Update `data` with `objectToUpdate`,
-    adding and replacing any properties. Return `bvg` object reference.
  - `bvg.data(property, newValue)`: Update `property` with `newValue`.
 
 Return `bvg` object reference.
-      
-
-### `bvg.addClass(c)`
-Add a class name to the element.
-      
-
-### `bvg.removeClass(c)`
-Remove a class name to the element.
-      
-
-### `bvg.hasClass(c)`
-Return true if the element has class `c`.
-      
-
-### `bvg.removeClass(c)`
-Add or remove the class `c` to the element.
-      
-
-### `bvg.stroke()`
-Get/set the outline colour. There are 4 ways to use this function.
-
- - `bvg.stroke()`: Return `stroke` colour as [r, g, b, a].
- - `bvg.stroke(hex)`: Set `stroke` colour with a CSS hex string.
- - `bvg.stroke(rgb)`: Set `stroke` with a greyscale colour with equal
-   values `(rgb, rgb, rgb)`.
- - `bvg.stroke(r, g, b, [a])`: Set `stroke` with `(r, g, b, a)`. If `a`
-   is omitted, it defaults to `1`.
-
-`r`, `g`, `b` should be in the range of 0-255 inclusive.
-      
-
-### `bvg.strokeWidth([width])`
-Get/set the outline thickness.
-
-Returns the current outline thickness if `width` is omitted. Otherise,
-it assigns the outline thickness with a new value, and returns the `bvg`
-object reference.
-
- - `width`  : Outline thickness in pixels.
-      
-
-### `bvg.noStroke()`
-Remove BVG object's outline completely.
-      
+    
 
 ### `bvg.fill()`
-Get/set the filling colour. There are 4 ways to use this function.
+Get/set the filling colour. There are four ways to use this function.
 
  - `bvg.fill()`: Return `fill` colour as [r, g, b, a].
  - `bvg.fill(hex)`: Set `fill` colour with a CSS hex string.
@@ -277,15 +242,54 @@ Get/set the filling colour. There are 4 ways to use this function.
    is omitted, it defaults to `1`.
 
 `r`, `g`, `b` should be in the range of 0-255 inclusive.
-      
+    
 
 ### `bvg.noFill()`
 Remove BVG object's colour filling completely.
-      
+    
 
-### `bvg.remove()`
-Remove the BVG object from its parent and return itself.
-      
+### `bvg.stroke()`
+Get/set the outline colour. There are four ways to use this function.
+
+ - `bvg.stroke()`: Return `stroke` colour as [r, g, b, a].
+ - `bvg.stroke(hex)`: Set `stroke` colour with a CSS hex string.
+ - `bvg.stroke(rgb)`: Set `stroke` with a greyscale colour with equal
+   values `(rgb, rgb, rgb)`.
+ - `bvg.stroke(r, g, b, [a])`: Set `stroke` with `(r, g, b, a)`. If `a`
+   is omitted, it defaults to `1`.
+
+`r`, `g`, `b` should be in the range of 0-255 inclusive.
+    
+
+### `bvg.strokeWidth([width])`
+Get/set the outline thickness.
+
+Returns the current outline thickness if `width` is omitted. Otherise,
+it assigns the outline thickness with a new value, and returns the `bvg`
+object reference.
+
+ - `width`  : Outline thickness in pixels.
+    
+
+### `bvg.noStroke()`
+Remove BVG object's outline completely.
+    
+
+### `bvg.addClass(c)`
+Add a class name to the element.
+  
+
+### `bvg.removeClass(c)`
+Remove a class name to the element.
+    
+
+### `bvg.hasClass(c)`
+Return true if the element has class `c`.
+    
+
+### `bvg.removeClass(c)`
+Add or remove the class `c` to the element.
+    
 
 ## Utility Methods 
 
