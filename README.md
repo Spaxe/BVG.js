@@ -93,7 +93,7 @@ The BVG module also has drawing functions, which return the BVG object:
 // Note it uses the BVG module directly to create the rectangle.
 var rect = BVG.rect(0, 0, 100, 100);
 // Add the rectangle to an existing BVG container
-bvg.appendChild(rect);
+bvg.appendChild(rect.tag);
 ```
 
 Drawing functions can be called in a number of ways. Take `bvg.rect(x, y, width, height)`
