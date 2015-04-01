@@ -57,7 +57,7 @@ define([], function () {
     * var circle = bvg.ellipse(0, 0, 150, 150)
     *                 .fill(220, 64, 12);
     * // Change its size based on mouse movement
-    * bvg.addEventListener('mousemove', function (event) {
+    * bvg.tag.addEventListener('mousemove', function (event) {
     *   circle.data({
     *     rx: event.clientX,
     *     ry: event.clientY
@@ -567,7 +567,14 @@ define([], function () {
     *  - `width`  : Outline thickness in pixels.
     */
   BVG.prototype.strokeWidth = function () {
-    return this.data.bind(this, 'stroke-width');
+    if (arguments.length === 0) {
+      return this.data('stroke-width');
+    } else if (arguments.length === 1) {
+      this.data('stroke-width', arguments[0]);
+      return this;
+    } else {
+      throw new RangeError(this, 'strokeWidth() received more than 1 argument.');
+    }
   };
 
   /** ### `bvg.noStroke()`
@@ -579,7 +586,7 @@ define([], function () {
     if (arguments.length === 0) {
       return this.tag.innerHTML;
     } else if (arguments.length === 1) {
-      this.tag.innerHTML = arguments[1];
+      this.tag.innerHTML = arguments[0];
       return this;
     } else {
       throw new RangeError(this, 'content() received more than 1 argument.');
@@ -619,7 +626,14 @@ define([], function () {
 
   // TODO: temporary
   BVG.prototype.transform = function () {
-    return this.data.bind(this, 'transform');
+    if (arguments.length === 0) {
+      return this.data('transform');
+    } else if (arguments.length === 1) {
+      this.data('transform', arguments[0]);
+      return this;
+    } else {
+      throw new RangeError(this, 'transform() received more than 1 argument.');
+    }
   };
 
   BVG.prototype.remove = function () {

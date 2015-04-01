@@ -18,28 +18,28 @@ require(['bvg'], function(BVG) {
     for (x = -r; x < w; x += inc_x) {
       for (y = -inc_y/2; y < h; y += inc_y) {
         t = bvg.triangle(x, y, r)
-               .xform('rotate(90 ' + x + ' ' + y + ')')
+               .transform('rotate(90 ' + x + ' ' + y + ')')
                .addClass(triangleClass);
       }
     }
     for (x = -r/2; x < w; x += inc_x) {
       for (y = 0; y < h; y += inc_y) {
         t = bvg.triangle(x, y, r)
-               .xform('rotate(-90 ' + x + ' ' + y + ')')
+               .transform('rotate(-90 ' + x + ' ' + y + ')')
                .addClass(triangleClass);
       }
     }
     for (x = r; x < w; x += inc_x) {
       for (y = -inc_y/2; y < h; y += inc_y) {
         t = bvg.triangle(x, y, r)
-               .xform('rotate(-90 ' + x + ' ' + y + ')')
+               .transform('rotate(-90 ' + x + ' ' + y + ')')
                .addClass(triangleClass);
       }
     }
     for (x = r/2; x < w; x += inc_x) {
       for (y = 0; y < h; y += inc_y) {
         t = bvg.triangle(x, y, r)
-               .xform('rotate(90 ' + x + ' ' + y + ')')
+               .transform('rotate(90 ' + x + ' ' + y + ')')
                .addClass(triangleClass);
       }
     }
@@ -50,13 +50,13 @@ require(['bvg'], function(BVG) {
     return false;
   };
 
-  bvg.addEventListener('mousemove', function (event) {
+  bvg.tag.addEventListener('mousemove', function (event) {
     if (event.buttons & 0x01 !== 0 && event.target.hasClass('triangle'))
       event.target.addClass('painted');
     else if (event.button === 2 && event.target.hasClass('triangle'))
       event.target.removeClass('painted');
   });
-  bvg.addEventListener('click', function (event) {
+  bvg.tag.addEventListener('click', function (event) {
     if (event.button === 0 && event.target.hasClass('triangle'))
       event.target.addClass('painted');
     else if (event.button === 2 && event.target.hasClass('triangle'))

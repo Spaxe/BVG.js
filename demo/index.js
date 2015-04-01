@@ -22,7 +22,7 @@ define(function (require) {
                    .stroke(32)
                    .strokeWidth(8);
 
-  bvg.addEventListener('mousemove', function (event) {
+  bvg.tag.addEventListener('mousemove', function (event) {
     var mx = event.clientX;
     var my = event.clientY;
     var angle = Math.atan2(my-pos, mx-pos);
@@ -30,16 +30,16 @@ define(function (require) {
     distance = Math.min(distance, size/2);
     if (!isNaN(angle)) {
       diffuse.data({
-        cx: Math.cos(angle) * distance + pos,
-        cy: Math.sin(angle) * distance + pos,
+        x: Math.cos(angle) * distance + pos,
+        y: Math.sin(angle) * distance + pos,
         rx: Math.max(distance, size),
         ry: Math.max(distance, size)
       });
       var cx = Math.cos(angle) * Math.min(Math.pow(distance, 1.1), size/3*2) + pos;
       var cy = Math.sin(angle) * Math.min(Math.pow(distance, 1.1), size/3*2) + pos;
       specular.data({
-        cx: cx,
-        cy: cy,
+        x: cx,
+        y: cy,
         transform: 'rotate(' + [angle / Math.PI * 180, cx, cy].join() + ')',
         rx: size/8 * (size-distance)/size
       });
