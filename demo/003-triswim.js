@@ -51,15 +51,15 @@ require(['bvg'], function(BVG) {
   };
 
   bvg.tag.addEventListener('mousemove', function (event) {
-    if (event.buttons & 0x01 !== 0 && event.target.hasClass('triangle'))
-      event.target.addClass('painted');
-    else if (event.button === 2 && event.target.hasClass('triangle'))
-      event.target.removeClass('painted');
+    if (event.buttons & 0x01 !== 0 && event.target.classList.contains('triangle'))
+      event.target.classList.add('painted');
+    else if (event.button === 2 && event.target.classList.contains('triangle'))
+      event.target.classList.remove('painted');
   });
   bvg.tag.addEventListener('click', function (event) {
-    if (event.button === 0 && event.target.hasClass('triangle'))
-      event.target.addClass('painted');
-    else if (event.button === 2 && event.target.hasClass('triangle'))
-      event.target.removeClass('painted');
+    if (event.button === 0 && event.target.classList.contains('triangle'))
+      event.target.classList.add('painted');
+    else if (event.button === 2 && event.target.classList.contains('triangle'))
+      event.target.classList.remove('painted');
   });
 });
