@@ -189,7 +189,7 @@ define([], function () {
     * // Note it uses the BVG module directly to create the rectangle.
     * var rect = BVG.rect(0, 0, 100, 100);
     * // Add the rectangle to an existing BVG container
-    * bvg.appendChild(rect.tag);
+    * bvg.append(rect);
     * ```
     *
     * Drawing functions can be called in a number of ways. Take `bvg.rect(x, y, width, height)`
