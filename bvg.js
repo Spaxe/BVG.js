@@ -487,9 +487,11 @@ define([], function () {
       return this._data;
     } else if (arguments.length === 1) {
       if (arguments[0].constructor.name === 'Object') {
-        Object.keys(arguments[0]).forEach(function (key) {
-          this.data(key, arguments[0][key]);
-        });
+        for (var k in arguments[0]) {
+          if (arguments[0].hasOwnProperty(k)) {
+            this.data(k, arguments[0][k]);
+          }
+        }
         return this;
       } else {
         return this._data[arguments[0]];
