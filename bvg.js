@@ -108,11 +108,19 @@ define([], function () {
 
     observe(data, function (changes) {
       changes.forEach(function (change) {
-        if (binding[change.name] === 'function') {
+        if (typeof binding[change.name] === 'function') {
           binding[change.name](tag, data);
         } else {
           tag.setAttribute(change.name, data[change.name]);
         }
+      });
+    });
+
+    Object.keys(data).forEach(function (key) {
+      Object.getNotifier(data).notify({
+        type: 'add',
+        name: key,
+        object: data
       });
     });
 
