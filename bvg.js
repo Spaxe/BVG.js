@@ -124,7 +124,8 @@ define([], function () {
       });
     });
 
-    data.id = data.id || 'BVG_' + tag.tagName + '_' + Date.now();
+    // ID function from https://gist.github.com/gordonbrander/2230317
+    data.id = data.id || 'BVG_' + tag.tagName + '_' + Math.random().toString(36).substr(2, 7);
 
     this.tag = tag;
     this._data = data;
