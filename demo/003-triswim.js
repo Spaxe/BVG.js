@@ -57,8 +57,7 @@ require(['bvg'], function(BVG) {
       event.target.removeClass('painted');
   });
   bvg.addEventListener('click', function (event) {
-    console.log(event.button);
-    if (event.buttons & 0x01 !== 0 && event.target.hasClass('triangle'))
+    if (event.button === 0 && event.target.hasClass('triangle'))
       event.target.addClass('painted');
     else if (event.button === 2 && event.target.hasClass('triangle'))
       event.target.removeClass('painted');
