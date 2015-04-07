@@ -130,6 +130,8 @@ define([], function () {
     this.tag = tag;
     this._data = data;
     this._binding = binding;
+    this._parent = null;
+    this._children = [];
 
     if (['svg', 'g', 'a'].indexOf(tag.tagName) < 0) {
       if (!data.stroke) this.stroke(175);
@@ -466,10 +468,30 @@ define([], function () {
     * BVGs are SVGs with extra superpowers.
     */
 
-  // TODO: Documentation
+  /** ### `bvg.append(bvg)`
+    * Insert `child_bvg` inside `bvg`. This is useful to add elements inside a
+    * `BVG.group()`.
+    */
   BVG.prototype.append = function (bvg) {
     this.tag.appendChild(bvg.tag);
+    this._children.push(bvg);
+    bvg._parent = this;
     return this;
+  };
+
+  /** ### `bvg.parent()`
+    * Return the parent BVG. If there is no parent (such is the case for the BVG
+    * container itself), return null.
+    */
+  BVG.prototype.parent = function () {
+    return this._parent || null;
+  };
+
+  /** ### `bvg.children()`
+    * Return a list of BVG elements inside `bvg`.
+    */
+  BVG.prototype.children = function () {
+    return this._children.slice.apply();
   };
 
    /** ### `bvg.data()`

@@ -220,6 +220,20 @@ var text = bvg.text('Mrraa!', 20, 10);
 BVGs are SVGs with extra superpowers.
     
 
+### `bvg.append(bvg)`
+Insert `child_bvg` inside `bvg`. This is useful to add elements inside a
+`BVG.group()`.
+    
+
+### `bvg.parent()`
+Return the parent BVG. If there is no parent (such is the case for the BVG
+container itself), return null.
+    
+
+### `bvg.children()`
+Return a list of BVG elements inside `bvg`.
+    
+
 ### `bvg.data()`
 Get/set the `data` object in a BVG. There are four ways to use this
 function.
