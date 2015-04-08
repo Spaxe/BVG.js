@@ -53,7 +53,7 @@ If you wish to use this for older browsers, you can polyfill with
  2. In `your-script.js`, define your own code with
 
     ```Javascript
-    define(['path/to/bvg.js'], function (BVG) {
+    require(['path/to/bvg.js'], function (BVG) {
       // your code goes here ...
     });
     ```
