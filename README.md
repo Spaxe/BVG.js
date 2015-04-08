@@ -49,7 +49,7 @@ var bvg = BVG.create('#bvg-container');
 var circle = bvg.ellipse(0, 0, 150, 150)
                 .fill(220, 64, 12);
 // Change its size based on mouse movement
-bvg.tag.addEventListener('mousemove', function (event) {
+bvg.tag().addEventListener('mousemove', function (event) {
   circle.data({
     rx: event.clientX,
     ry: event.clientY
@@ -225,6 +225,10 @@ Insert `child_bvg` inside `bvg`. This is useful to add elements inside a
 `BVG.group()`.
     
 
+### `bvg.remove()`
+Remove itself from its parent. Return self reference.
+    
+
 ### `bvg.parent()`
 Return the parent BVG. If there is no parent (such is the case for the BVG
 container itself), return null.
@@ -232,6 +236,10 @@ container itself), return null.
 
 ### `bvg.children()`
 Return a list of BVG elements inside `bvg`.
+    
+
+### `bvg.tag()`
+Return thw BVG graphical content, a SVG.
     
 
 ### `bvg.data()`

@@ -22,7 +22,7 @@ define(function (require) {
                    .stroke(32)
                    .strokeWidth(8);
 
-  bvg.tag.addEventListener('mousemove', function (event) {
+  bvg.tag().addEventListener('mousemove', function (event) {
     var mx = event.clientX;
     var my = event.clientY;
     var angle = Math.atan2(my-pos, mx-pos);

@@ -21,34 +21,34 @@ define(['../bvg'], function (BVG) {
       BVG.create.should.be.a('function');
       bvg = BVG.create('#container');
       bvg.should.be.instanceof(BVG);
-      bvg.tag.parentNode.should.equal(container);
-      bvg.tag.should.be.instanceof(SVGElement);
+      should.not.exist(bvg.parent());
+      bvg.tag().should.be.instanceof(SVGElement);
       BVG.create.bind(BVG, '#not-container').should.Throw(TypeError);
     });
 
     it('should be able to be removed', function () {
       dummy = BVG.create(container);
-      var parent = dummy.tag.parentNode;
-      parent.should.equal(container);
-      dummy.remove();
-      container.should.not.equal(dummy.tag.parentNode);
+      var rect = dummy.rect(10, 20, 30, 40);
+      rect.parent().should.equal(dummy);
+      rect.remove();
+      should.not.exist(rect.parent());
     });
 
     it('should provide basic shape functions', function () {
       ['rect', 'ellipse', 'line'].forEach(function (f) {
         BVG[f].should.be.a('function');
         var shape = BVG[f](10, 20, 30, 40);
-        shape.tag.should.be.instanceof(SVGElement);
+        shape.tag().should.be.instanceof(SVGElement);
       });
       var polyline = BVG.polyline([
         [10, 20], [30, 40]
       ]);
-      polyline.tag.should.be.instanceof(SVGElement);
+      polyline.tag().should.be.instanceof(SVGElement);
       polyline.data('points').should.eql([[10, 20], [30, 40]]);
       var polygon = BVG.polygon([
         [100, 20], [20, 70], [50, 60]
       ]);
-      polygon.tag.should.be.instanceof(SVGElement);
+      polygon.tag().should.be.instanceof(SVGElement);
       polygon.data('points').should.eql([[100, 20], [20, 70], [50, 60]]);
     });
 
@@ -91,21 +91,35 @@ define(['../bvg'], function (BVG) {
 
     it('should draw geometry', function () {
       var triangle = BVG.triangle(50, 50, 60);
-      triangle.tag.should.be.instanceof(SVGElement);
+      triangle.tag().should.be.instanceof(SVGElement);
       var arc = BVG.arc(250, 250, 100, 200, 0, Math.PI/3);
-      arc.tag.should.be.instanceof(SVGElement);
+      arc.tag().should.be.instanceof(SVGElement);
       arc = BVG.arc(600, 350, 200, 200, Math.PI, Math.PI*2-0.1);
-      arc.tag.should.be.instanceof(SVGElement);
+      arc.tag().should.be.instanceof(SVGElement);
       arc = BVG.arc(624, 375, 200, 200, Math.PI, Math.PI/2);
-      arc.tag.should.be.instanceof(SVGElement);
+      arc.tag().should.be.instanceof(SVGElement);
     });
 
     it('should render text', function () {
       var text = bvg.text('Mrraa!', 30, 40).fill(0);
-      text.tag.should.be.instanceof(SVGElement);
-      text.tag.tagName.should.eql('text');
-      text.tag.parentNode.should.equal(bvg.tag);
-      bvg.tag.removeChild(text.tag);
+      text.tag().should.be.instanceof(SVGElement);
+      text.tag().tagName.should.eql('text');
+      text.parent().should.equal(bvg);
+      text.remove();
+    });
+
+    it('should provide access to parent and children nodes', function () {
+      [
+        [10, 20, 30, 40],
+        [30, 20, 40, 30]
+      ].forEach(function (args) {
+        bvg.rect.apply(bvg, args);
+      });
+      var children = bvg.children();
+      children.length.should.eql(2);
+      children[0].parent().should.equal(bvg);
+      children[0].data('x').should.eql(10);
+      children[0].data('height').should.eql(40);
     });
   });
 

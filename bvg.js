@@ -57,7 +57,7 @@ define([], function () {
     * var circle = bvg.ellipse(0, 0, 150, 150)
     *                 .fill(220, 64, 12);
     * // Change its size based on mouse movement
-    * bvg.tag.addEventListener('mousemove', function (event) {
+    * bvg.tag().addEventListener('mousemove', function (event) {
     *   circle.data({
     *     rx: event.clientX,
     *     ry: event.clientY
@@ -127,7 +127,7 @@ define([], function () {
     // ID function from https://gist.github.com/gordonbrander/2230317
     data.id = data.id || 'BVG_' + tag.tagName + '_' + Math.random().toString(36).substr(2, 7);
 
-    this.tag = tag;
+    this._tag = tag;
     this._data = data;
     this._binding = binding;
     this._parent = null;
@@ -172,7 +172,7 @@ define([], function () {
       width: '100%',
       height: '100%'
     });
-    htmlElement.appendChild(bvg.tag);
+    htmlElement.appendChild(bvg.tag());
     return bvg;
   };
 
@@ -472,10 +472,24 @@ define([], function () {
     * Insert `child_bvg` inside `bvg`. This is useful to add elements inside a
     * `BVG.group()`.
     */
-  BVG.prototype.append = function (bvg) {
-    this.tag.appendChild(bvg.tag);
-    this._children.push(bvg);
-    bvg._parent = this;
+  BVG.prototype.append = function (child_bvg) {
+    this._tag.appendChild(child_bvg._tag);
+    this._children.push(child_bvg);
+    child_bvg._parent = this;
+    return this;
+  };
+
+  /** ### `bvg.remove()`
+    * Remove itself from its parent. Return self reference.
+    */
+  BVG.prototype.remove = function () {
+    var parent = this.parent();
+    if (parent) {
+      parent._tag.removeChild(this._tag);
+      var i = parent._children.indexOf(this);
+      if (i > -1) parent._children.splice(i, 1);
+      this._parent = null;
+    }
     return this;
   };
 
@@ -491,7 +505,14 @@ define([], function () {
     * Return a list of BVG elements inside `bvg`.
     */
   BVG.prototype.children = function () {
-    return this._children.slice.apply();
+    return this._children.slice();
+  };
+
+  /** ### `bvg.tag()`
+    * Return thw BVG graphical content, a SVG.
+    */
+  BVG.prototype.tag = function () {
+    return this._tag;
   };
 
    /** ### `bvg.data()`
@@ -607,9 +628,9 @@ define([], function () {
 
   BVG.prototype.content = function () {
     if (arguments.length === 0) {
-      return this.tag.innerHTML;
+      return this._tag.innerHTML;
     } else if (arguments.length === 1) {
-      this.tag.innerHTML = arguments[0];
+      this._tag.innerHTML = arguments[0];
       return this;
     } else {
       throw new RangeError(this, 'content() received more than 1 argument.');
@@ -620,7 +641,7 @@ define([], function () {
   * Add a class name to the element.
   */
   BVG.prototype.addClass = function (c) {
-    this.tag.classList.add(c);
+    this._tag.classList.add(c);
     return this;
   };
 
@@ -628,7 +649,7 @@ define([], function () {
     * Remove a class name to the element.
     */
   BVG.prototype.removeClass = function (c) {
-    this.tag.classList.remove(c);
+    this._tag.classList.remove(c);
     return this;
   };
 
@@ -636,14 +657,14 @@ define([], function () {
     * Return true if the element has class `c`.
     */
   BVG.prototype.hasClass = function (c) {
-    return this.tag.classList.contains(c);
+    return this._tag.classList.contains(c);
   };
 
   /** ### `bvg.removeClass(c)`
     * Add or remove the class `c` to the element.
     */
   BVG.prototype.toggleClass = function (c) {
-    this.tag.classList.toggle(c);
+    this._tag.classList.toggle(c);
     return this;
   };
 
@@ -657,11 +678,6 @@ define([], function () {
     } else {
       throw new RangeError(this, 'transform() received more than 1 argument.');
     }
-  };
-
-  BVG.prototype.remove = function () {
-    this.tag.parentNode.removeChild(this.tag);
-    return this;
   };
 
   /** ## Utility Methods */
