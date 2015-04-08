@@ -60,7 +60,7 @@ define([], function () {
     *  2. In `your-script.js`, define your own code with
     *
     *     ```Javascript
-    *     define(['path/to/bvg.js], function (BVG) {
+    *     define(['path/to/bvg.js'], function (BVG) {
     *       // your code goes here ...
     *     });
     *     ```
