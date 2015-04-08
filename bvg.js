@@ -34,21 +34,31 @@ define([], function () {
     * Install using npm:
     *
     *  1. Install Node.js: https://docs.npmjs.com/getting-started/installing-node
-    *  2. In your working directory: `npm install bvg`
+    *  2. In your working directory:
+    *     ```Bash
+    *     npm install bvg
+    *     ```
     *
     * Install via GitHub:
     *
     *  1. Clone this repo:
-    *     `git clone https://github.com/Spaxe/BVG.js.git`
-    *  2. Copy `require.js` and `bvg.js` in your `src` folder.
+    *
+    *     ```Bash
+    *     git clone https://github.com/Spaxe/BVG.js.git
+    *     ```
+    *
+    *  2. Copy `require.js` and `bvg.js` into your working directory.
     *
     * To include `BVG.js` in your webpage:
     *
     *  1. In your HTML `<head>`, include this script using `require.js`:
+    *
     *     ```HTML
     *     <script src="path/to/require.js" data-main="your-script.js"></script>
     *     ```
+    *
     *  2. In `your-script.js`, define your own code with
+    *
     *     ```Javascript
     *     define(['path/to/bvg.js], function (BVG) {
     *       // your code goes here ...
