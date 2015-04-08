@@ -23,25 +23,26 @@ If you wish to use this for older browsers, you can polyfill with
 
 ## Installation
 
-Install using npm:
+**Install using `npm`**:
 
  1. Install Node.js: https://docs.npmjs.com/getting-started/installing-node
  2. In your working directory:
-    ```Bash
+
+    ```
     npm install bvg
     ```
 
-Install via GitHub:
+**Install via GitHub**:
 
  1. Clone this repo:
 
-    ```Bash
+    ```
     git clone https://github.com/Spaxe/BVG.js.git
     ```
 
  2. Copy `require.js` and `bvg.js` into your working directory.
 
-To include `BVG.js` in your webpage:
+**To include `BVG.js` in your webpage**:
 
  1. In your HTML `<head>`, include this script using `require.js`:
 
