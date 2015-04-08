@@ -21,6 +21,32 @@ available on Chrome 36+, Opera 27+ and Android Browser 37+.
 If you wish to use this for older browsers, you can polyfill with
 [`MaxArt2501/Object.observe`](https://github.com/MaxArt2501/object-observe).
 
+## Installation
+
+Install using npm:
+
+ 1. Install Node.js: https://docs.npmjs.com/getting-started/installing-node
+ 2. In your working directory: `npm install bvg`
+
+Install via GitHub:
+
+ 1. Clone this repo:
+    `git clone https://github.com/Spaxe/BVG.js.git`
+ 2. Copy `require.js` and `bvg.js` in your `src` folder.
+
+To include `BVG.js` in your webpage:
+
+ 1. In your HTML `<head>`, include this script using `require.js`:
+    ```HTML
+    <script src="path/to/require.js" data-main="your-script.js"></script>
+    ```
+ 2. In `your-script.js`, define your own code with
+    ```Javascript
+    define(['path/to/bvg.js], function (BVG) {
+      // your code goes here ...
+    });
+    ```
+
 ## Quickstart
 
 ![Quickstart Example](https://raw.githubusercontent.com/Spaxe/BVG.js/master/demo/001-hello.gif)
