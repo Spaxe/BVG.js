@@ -607,7 +607,8 @@ define([], function () {
     if (arguments.length === 0) {
       return BVG.rgba(this.data('fill'));
     } else if (arguments.length === 1) {
-      return this.data('fill', BVG.rgba(arguments[0], true));
+      if (typeof arguments[0] === 'string') return this.data('fill', arguments[0]);
+      else return this.data('fill', BVG.rgba(arguments[0], true));
     } else if (arguments.length === 3 || arguments.length === 4) {
       return this.data('fill', BVG.rgba([].slice.call(arguments), true));
     } else {
@@ -636,7 +637,8 @@ define([], function () {
     if (arguments.length === 0) {
       return BVG.rgba(this.data('stroke'));
     } else if (arguments.length === 1) {
-      return this.data('stroke', BVG.rgba(arguments[0], true));
+      if (typeof arguments[0] === 'string') return this.data('stroke', arguments[0]);
+      else return this.data('stroke', BVG.rgba(arguments[0], true));
     } else if (arguments.length === 3 || arguments.length === 4) {
       return this.data('stroke', BVG.rgba([].slice.call(arguments), true));
     } else {
