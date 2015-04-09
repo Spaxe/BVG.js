@@ -127,8 +127,8 @@ define(['../bvg'], function (BVG) {
       BVG.rgba(255, true).should.eql('rgba(255,255,255,1)');
       BVG.rgba(255, 200, 244).should.eql([255, 200, 244, 1]);
       BVG.rgba(255, 200, 244, 0.5).should.eql([255, 200, 244, 0.5]);
-      BVG.hsla(230, 100, 75, 0.3).should.eql('hsla(230,100,75,0.3)');
-      BVG.hsla(230, 100, 75).should.eql('hsla(230,100,75,1)');
+      BVG.hsla(230, 100, 75, 0.3).should.eql('hsla(230,100%,75%,0.3)');
+      BVG.hsla(230, 100, 75).should.eql('hsla(230,100%,75%,1)');
     });
   });
 
