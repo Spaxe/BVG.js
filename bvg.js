@@ -667,7 +667,9 @@ define([], function () {
   /** ### `bvg.noStroke()`
     * Remove BVG object's outline completely.
     */
-  BVG.prototype.noStroke = function () { return this.stroke('rgba(0, 0, 0, 0)'); };
+  BVG.prototype.noStroke = function () {
+    return this.strokeWidth(0).stroke('rgba(0, 0, 0, 0)');
+  };
 
   BVG.prototype.content = function () {
     if (arguments.length === 0) {
