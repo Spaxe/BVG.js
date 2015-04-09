@@ -465,7 +465,7 @@ define([], function () {
         ];
         tag.setAttribute('d', d.map(function (x) {
           return x.join(' ');
-        })).join(' ');
+        }).join(' '));
       }
 
       function getPointOnEllipse(x, y, rx, ry, angle) {
