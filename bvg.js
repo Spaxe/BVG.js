@@ -809,6 +809,21 @@ define([], function () {
     return colour;
   };
 
+  /** ### `BVG.hsla(hue, saturation, lightness, [alpha])`
+    * Return the CSS representation in `hsla()` as a string.
+    *
+    *  - `hue`: A value between `0` and `360`, where `0` is red, `120` is green,
+    *           and `240` is blue.
+    *  - `saturation` : A value between `0` and `100`, where `0` is grey and
+    *                 `100` is fully saturate.
+    *  - `lightness`: A value between `0` and `100`, where `0` is black and
+    *                 `100` is full intensity of the colour.
+    */
+  BVG.hsla = function (hue, saturation, lightness, alpha) {
+    alpha = alpha || 1.0;
+    return 'hsla(' + [hue, saturation, lightness, alpha].join(',') + ')';
+  };
+
   return BVG;
 });
 

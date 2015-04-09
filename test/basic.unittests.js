@@ -121,6 +121,15 @@ define(['../bvg'], function (BVG) {
       children[0].data('x').should.eql(10);
       children[0].data('height').should.eql(40);
     });
+
+    it('should support RGBA and HSLA colour functions', function () {
+      BVG.rgba(255).should.eql([255, 255, 255, 1]);
+      BVG.rgba(255, true).should.eql('rgba(255,255,255,1)');
+      BVG.rgba(255, 200, 244).should.eql([255, 200, 244, 1]);
+      BVG.rgba(255, 200, 244, 0.5).should.eql([255, 200, 244, 0.5]);
+      BVG.hsla(230, 100, 75, 0.3).should.eql('hsla(230,100,75,0.3)');
+      BVG.hsla(230, 100, 75).should.eql('hsla(230,100,75,1)');
+    });
   });
 
 });

@@ -373,6 +373,17 @@ is in the range of 0.0-1.0. If not specified, `a` will be `1`.
 if `css` is `true`, it returns a string `'rgba(r, g, b, a)'` instead.
     
 
+### `BVG.hsla(hue, saturation, lightness, [alpha])`
+Return the CSS representation in `hsla()` as a string.
+
+ - `hue`: A value between `0` and `360`, where `0` is red, `120` is green,
+          and `240` is blue.
+ - `saturation` : A value between `0` and `100`, where `0` is grey and
+                `100` is fully saturate.
+ - `lightness`: A value between `0` and `100`, where `0` is black and
+                `100` is full intensity of the colour.
+    
+
 ## Contribute to this library
 [Make a pull request](https://github.com/Spaxe/BVG.js/pulls) or
 [post an issue](https://github.com/Spaxe/BVG.js/issues). Say hello to
