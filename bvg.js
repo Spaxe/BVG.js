@@ -197,18 +197,24 @@ define([], function () {
     * var bvg = BVG.create('#bvg-container');
     * ```
     */
-  BVG.create = function (htmlElement) {
+  BVG.create = function (htmlElement, xDimension, yDimension) {
     if (typeof htmlElement === 'string')
       htmlElement = document.querySelector(htmlElement);
     if (!(htmlElement instanceof HTMLElement))
       throw new TypeError('htmlElement (' + htmlElement + ') was not found.');
 
-    var bvg = new BVG('svg', {
+    var data = {
       'xmlns:xlink': 'http://www.w3.org/1999/xlink',
       version: 1.1,
       width: '100%',
       height: '100%'
-    });
+    };
+    yDimension = yDimension || xDimension;
+    if (xDimension) {
+      data.viewBox = [0, 0, xDimension, yDimension].join(' ');
+    }
+
+    var bvg = new BVG('svg', data);
     htmlElement.appendChild(bvg.tag());
     return bvg;
   };
