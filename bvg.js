@@ -120,6 +120,15 @@ define([], function () {
       // Trigger user callback
       callback.call(this, changes);
     });
+
+    // Immediately fire observe to initiate deep observing
+    Object.keys(obj).forEach(function (key) {
+      Object.getNotifier(obj).notify({
+        type: 'add',
+        name: key,
+        object: obj
+      });
+    });
   }
 
   /*- `BVG(tag, data, binding)`
@@ -143,17 +152,7 @@ define([], function () {
     };
 
     observe(data, function (changes) {
-      changes.forEach(function (change) {
-        binding(tag, data);
-      });
-    });
-
-    Object.keys(data).forEach(function (key) {
-      Object.getNotifier(data).notify({
-        type: 'add',
-        name: key,
-        object: data
-      });
+      binding(tag, data);
     });
 
     // ID function from https://gist.github.com/gordonbrander/2230317
