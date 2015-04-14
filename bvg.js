@@ -474,6 +474,10 @@ define([], function () {
         stroke: 'rgba(0, 0, 0, 0)'
       }, function (tag, data) {
         tag.innerHTML = data.text;
+        tag.setAttribute('x', data.x);
+        tag.setAttribute('y', data.y);
+        tag.setAttribute('fill', data.fill);
+        tag.setAttribute('stroke', data.stroke);
       });
     }
   };
