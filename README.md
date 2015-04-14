@@ -291,6 +291,13 @@ function.
 Return `bvg` object reference.
     
 
+### `bvg.attr()`
+Get/set attributes on a BVG.
+
+ - `bvg.attr(attr)`: Return attribute value.
+ - `bvg.attr(attr, value)`: Update `attr` with `value`.
+    
+
 ### `bvg.fill()`
 Get/set the filling colour. There are four ways to use this function.
 

@@ -103,28 +103,21 @@ define([], function () {
     * ```
     */
 
-  /*- Property-wise Object.observe()
-    * Similar to Object.observe(), except two things:
-    *  - Nested objects are observed
-    *  - All change events report the top-level property as a whole
-    */
-  function observe (obj, callback, _original, _property) {
+  /*- Deep Object.observe() */
+  function observe (obj, callback) {
+
+    // Include https://github.com/MaxArt2501/object-observe if you wish to work
+    // with polyfill on browsers that don't support Object.observe()
     Object.observe(obj, function (changes) {
       changes.forEach(function (change) {
-        if (obj[change.name] instanceof Object && obj[change.name] !== _original) {
-          observe(obj[change.name], notifyOriginal, _original || obj, _property || change.name);
-        }
 
-        function notifyOriginal () {
-          Object.getNotifier(_original || obj).notify({
-            type: 'update',
-            name: _property || change.name,
-            oldValue: change.oldValue,
-            object: _original || obj
-          });
+        // Bind child property if it is an object for deep observing
+        if (obj[change.name] instanceof Object) {
+          observe(obj[change.name], callback);
         }
       });
 
+      // Trigger user callback
       callback.call(this, changes);
     });
   }
@@ -136,20 +129,22 @@ define([], function () {
     *
     *  - `tag`    : Either a `String` for the SVG `tagName` or any [`SVGElement`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element)
     *  - `data`   : Object with arbitrary data to your desire
-    *  - `binding`: (optional) Object with properties that specify the binding.
+    *  - `binding`: (optional) Binding function that sets the tag attributes
     */
   var BVG = function (tag, data, binding) {
     tag = tag instanceof SVGElement ? tag : document.createElementNS('http://www.w3.org/2000/svg', tag);
     data = data || {};
-    binding = binding || {};
+    binding = binding || function (tag, data) {
+      for (var prop in data) {
+        if (data.hasOwnProperty(prop)) {
+          tag.setAttribute(prop, data[prop]);
+        }
+      }
+    };
 
     observe(data, function (changes) {
       changes.forEach(function (change) {
-        if (typeof binding[change.name] === 'function') {
-          binding[change.name](tag, data);
-        } else {
-          tag.setAttribute(change.name, data[change.name]);
-        }
+        binding(tag, data);
       });
     });
 
@@ -289,9 +284,10 @@ define([], function () {
         x: x,
         y: y,
         r: r
-      }, {
-        x: function (tag, data) { tag.setAttribute('cx', data.x); },
-        y: function (tag, data) { tag.setAttribute('cy', data.y); }
+      }, function (tag, data) {
+        tag.setAttribute('cx', data.x);
+        tag.setAttribute('cy', data.y);
+        tag.setAttribute('r', data.r);
       });
     },
 
@@ -308,9 +304,11 @@ define([], function () {
         y: y,
         rx: rx,
         ry: ry
-      }, {
-        x: function (tag, data) { tag.setAttribute('cx', data.x); },
-        y: function (tag, data) { tag.setAttribute('cy', data.y); }
+      }, function (tag, data) {
+        tag.setAttribute('cx', data.x);
+        tag.setAttribute('cy', data.y);
+        tag.setAttribute('rx', data.rx);
+        tag.setAttribute('ry', data.ry);
       });
     },
 
@@ -339,8 +337,8 @@ define([], function () {
     polyline: function (points) {
       return new BVG('polyline', points.constructor.name === 'Object' ? points : {
         points: points
-      }, {
-        points: function (tag, data) { tag.setAttribute('points', data.points.join(' ')); }
+      }, function (tag, data) {
+        tag.setAttribute('points', data.points.join(' '));
       });
     },
     /** ### `bvg.polygon([[x1, y1], [x2, y2], ...])`
@@ -354,8 +352,8 @@ define([], function () {
     polygon: function (points) {
       return new BVG('polygon', points.constructor.name === 'Object' ? points : {
         points: points
-      }, {
-        points: function (tag, data) { tag.setAttribute('points', data.points.join(' ')); }
+      }, function (tag, data) {
+        tag.setAttribute('points', data.points.join(' '));
       });
     },
 
@@ -412,20 +410,14 @@ define([], function () {
         x: x,
         y: y,
         r: r
-      }, {
-        x: _triangle,
-        y: _triangle,
-        r: _triangle
-      });
-
-      function _triangle(tag, data) {
+      }, function (tag, data) {
         var points = [
           [data.x, data.y-data.r],
           [data.x-data.r/2*Math.sqrt(3), data.y+data.r/2],
           [data.x+data.r/2*Math.sqrt(3), data.y+data.r/2]
         ];
         tag.setAttribute('points', points.join(' '));
-      }
+      });
     },
 
     /** ### `bvg.arc(cx, cy, rx, ry, startAngle, endAngle)`
@@ -445,16 +437,7 @@ define([], function () {
         ry: ry,
         startAngle: startAngle,
         endAngle: endAngle
-      }, {
-        x: _arc,
-        y: _arc,
-        rx: _arc,
-        ry: _arc,
-        startAngle: _arc,
-        endAngle: _arc
-      });
-
-      function _arc(tag, data) {
+      }, function (tag, data) {
         var p1 = getPointOnEllipse(data.x, data.y, data.rx, data.ry, data.startAngle);
         var p2 = getPointOnEllipse(data.x, data.y, data.rx, data.ry, data.endAngle);
         var largeArc = (data.endAngle - data.startAngle) > Math.PI ? 1 : 0;
@@ -466,14 +449,14 @@ define([], function () {
         tag.setAttribute('d', d.map(function (x) {
           return x.join(' ');
         }).join(' '));
-      }
 
-      function getPointOnEllipse(x, y, rx, ry, angle) {
-        return {
-          x: rx * Math.cos(angle) + x,
-          y: ry * Math.sin(angle) + y
-        };
-      }
+        function getPointOnEllipse(x, y, rx, ry, angle) {
+          return {
+            x: rx * Math.cos(angle) + x,
+            y: ry * Math.sin(angle) + y
+          };
+        }
+      });
     },
 
     /** ### `bvg.text(text, x, y)`
@@ -490,8 +473,8 @@ define([], function () {
         y: y,
         fill: 'rgba(175, 175, 175, 1)',
         stroke: 'rgba(0, 0, 0, 0)'
-      }, {
-        text: function (tag, data) { tag.innerHTML = data.text; }
+      }, function (tag, data) {
+        tag.innerHTML = data.text;
       });
     }
   };
@@ -591,6 +574,19 @@ define([], function () {
     }
   };
 
+  /** ### `bvg.attr()`
+    * Get/set attributes on a BVG.
+    *
+    *  - `bvg.attr(attr)`: Return attribute value.
+    *  - `bvg.attr(attr, value)`: Update `attr` with `value`.
+    */
+  BVG.prototype.attr = function (attr, value) {
+    if (!attr) throw new Error('attr must be defined');
+    if (!value) return this._tag.getAttribute(attr);
+    else this._tag.setAttribute(attr, value);
+    return this;
+  };
+
   /** ### `bvg.fill()`
     * Get/set the filling colour. There are four ways to use this function.
     *
@@ -605,12 +601,12 @@ define([], function () {
     */
   BVG.prototype.fill = function () {
     if (arguments.length === 0) {
-      return BVG.rgba(this.data('fill'));
+      return BVG.rgba(this.attr('fill'));
     } else if (arguments.length === 1) {
-      if (typeof arguments[0] === 'string') return this.data('fill', arguments[0]);
-      else return this.data('fill', BVG.rgba(arguments[0], true));
+      if (typeof arguments[0] === 'string') return this.attr('fill', arguments[0]);
+      else return this.attr('fill', BVG.rgba(arguments[0], true));
     } else if (arguments.length === 3 || arguments.length === 4) {
-      return this.data('fill', BVG.rgba([].slice.call(arguments), true));
+      return this.attr('fill', BVG.rgba([].slice.call(arguments), true));
     } else {
       throw new RangeError(this, 'fill() received more than 1 argument.');
     }
@@ -635,12 +631,12 @@ define([], function () {
     */
   BVG.prototype.stroke = function () {
     if (arguments.length === 0) {
-      return BVG.rgba(this.data('stroke'));
+      return BVG.rgba(this.attr('stroke'));
     } else if (arguments.length === 1) {
-      if (typeof arguments[0] === 'string') return this.data('stroke', arguments[0]);
-      else return this.data('stroke', BVG.rgba(arguments[0], true));
+      if (typeof arguments[0] === 'string') return this.attr('stroke', arguments[0]);
+      else return this.attr('stroke', BVG.rgba(arguments[0], true));
     } else if (arguments.length === 3 || arguments.length === 4) {
-      return this.data('stroke', BVG.rgba([].slice.call(arguments), true));
+      return this.attr('stroke', BVG.rgba([].slice.call(arguments), true));
     } else {
       throw new RangeError(this, 'stroke() received more than 1 argument.');
     }
@@ -657,9 +653,9 @@ define([], function () {
     */
   BVG.prototype.strokeWidth = function () {
     if (arguments.length === 0) {
-      return this.data('stroke-width');
+      return this.attr('stroke-width');
     } else if (arguments.length === 1) {
-      this.data('stroke-width', arguments[0]);
+      this.attr('stroke-width', arguments[0]);
       return this;
     } else {
       throw new RangeError(this, 'strokeWidth() received more than 1 argument.');
@@ -718,9 +714,9 @@ define([], function () {
   // TODO: temporary
   BVG.prototype.transform = function () {
     if (arguments.length === 0) {
-      return this.data('transform');
+      return this.attr('transform');
     } else if (arguments.length === 1) {
-      this.data('transform', arguments[0]);
+      this.attr('transform', arguments[0]);
       return this;
     } else {
       throw new RangeError(this, 'transform() received more than 1 argument.');

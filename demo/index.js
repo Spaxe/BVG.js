@@ -40,9 +40,8 @@ define(function (require) {
       specular.data({
         x: cx,
         y: cy,
-        transform: 'rotate(' + [angle / Math.PI * 180, cx, cy].join() + ')',
         rx: size/8 * (size-distance)/size
-      });
+      }).transform('rotate(' + [angle / Math.PI * 180, cx, cy].join() + ')');
     }
   });
 

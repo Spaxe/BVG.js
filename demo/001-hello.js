@@ -11,7 +11,7 @@ require(['bvg'], function(BVG) {
   var circle = bvg.ellipse(0, 0, 150, 150)
                   .fill(220, 64, 12);
   // Change its size based on mouse movement
-  bvg.tag.addEventListener('mousemove', function (event) {
+  bvg.tag().addEventListener('mousemove', function (event) {
     circle.data({
       rx: event.clientX,
       ry: event.clientY
