@@ -469,16 +469,13 @@ define([], function () {
       return new BVG('text', text.constructor.name === 'Object' ? text : {
         text: text,
         x: x,
-        y: y,
-        fill: 'rgba(175, 175, 175, 1)',
-        stroke: 'rgba(0, 0, 0, 0)'
+        y: y
       }, function (tag, data) {
         tag.innerHTML = data.text;
         tag.setAttribute('x', data.x);
         tag.setAttribute('y', data.y);
-        tag.setAttribute('fill', data.fill);
-        tag.setAttribute('stroke', data.stroke);
-      });
+      }).fill('rgba(175, 175, 175, 1)')
+        .stroke('rgba(0, 0, 0, 0)');
     }
   };
 
