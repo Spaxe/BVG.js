@@ -612,8 +612,8 @@ define([], function () {
   /** ### `bvg.fill()`
     * Get/set the filling colour.
     *
-    *  - `bvg.fill()`: Return `fill` colour as [r, g, b, a], or `null` if fill
-    *                  is not specified on the object.
+    *  - `bvg.fill()`: Return `fill` colour as [r, g, b, a], or `''` (empty
+    *                  strig) if fill is not specified on the object.
     *  - `bvg.fill(rgb)`: Set `fill` with a greyscale colour with equal
     *    values `(rgb, rgb, rgb)`.
     *  - `bvg.fill(r, g, b, [a])`: Set `fill` with `(r, g, b, a)`. If `a`
@@ -625,7 +625,7 @@ define([], function () {
     if (arguments.length === 0) {
       var f = this.attr('fill');
       if (f) return BVG.extractNumberArray(f);
-      return null;
+      return '';
     } else if (arguments.length === 1) {
       if (typeof arguments[0] === 'string') return this.attr('fill', arguments[0]);
       else return this.attr('fill', BVG.rgba(arguments[0]));
@@ -644,7 +644,8 @@ define([], function () {
   /** ### `bvg.stroke()`
     * Get/set the outline colour.
     *
-    *  - `bvg.stroke()`: Return `stroke` colour as [r, g, b, a].
+    *  - `bvg.stroke()`: Return `stroke` colour as [r, g, b, a]. If `stroke` is
+    *    not specified, return `''` (empty string).
     *  - `bvg.stroke(rgb)`: Set `stroke` with a greyscale colour with equal
     *    values `(rgb, rgb, rgb)`.
     *  - `bvg.stroke(r, g, b, [a])`: Set `stroke` with `(r, g, b, a)`. If `a`
@@ -656,7 +657,7 @@ define([], function () {
     if (arguments.length === 0) {
       var s = this.attr('stroke');
       if (s) return BVG.extractNumberArray(s);
-      return null;
+      return '';
     } else if (arguments.length === 1) {
       if (typeof arguments[0] === 'string') return this.attr('stroke', arguments[0]);
       else return this.attr('stroke', BVG.rgba(arguments[0]));
@@ -734,6 +735,27 @@ define([], function () {
   BVG.prototype.toggleClass = function (c) {
     this._tag.classList.toggle(c);
     return this;
+  };
+
+  /** ## Affine Transformations */
+  BVG.prototype.transform = function () {
+    if (arguments.length === 0) {
+      return this._tag.getAttribute('transform') ?
+                BVG.extractNumberArray(this._tag.getAttribute('transform')) :
+                '';
+    } else if (arguments.length === 1) {
+      this._tag.setAttribute(arguments[0]);
+    } else {
+      throw new Error('transform() received more than 1 argument');
+    }
+  };
+
+  BVG.prototype.translate = function (x, y) {
+    if (typeof x !== 'number' || typeof y !== 'number')
+      throw new Error('translate() only take numbers as arguments');
+    y = y || 0;
+    var transform = this.transform();
+    this.setAttribute('transform', [transform, ' translate(', x, ' ', y, ')'].join())
   };
 
   /** ## Utility Methods */

@@ -306,8 +306,8 @@ Get/set attributes on a BVG.
 ### `bvg.fill()`
 Get/set the filling colour.
 
- - `bvg.fill()`: Return `fill` colour as [r, g, b, a], or `null` if fill
-                 is not specified on the object.
+ - `bvg.fill()`: Return `fill` colour as [r, g, b, a], or `''` (empty
+                 strig) if fill is not specified on the object.
  - `bvg.fill(rgb)`: Set `fill` with a greyscale colour with equal
    values `(rgb, rgb, rgb)`.
  - `bvg.fill(r, g, b, [a])`: Set `fill` with `(r, g, b, a)`. If `a`
@@ -323,7 +323,8 @@ Remove BVG object's colour filling completely.
 ### `bvg.stroke()`
 Get/set the outline colour.
 
- - `bvg.stroke()`: Return `stroke` colour as [r, g, b, a].
+ - `bvg.stroke()`: Return `stroke` colour as [r, g, b, a]. If `stroke` is
+   not specified, return `''` (empty string).
  - `bvg.stroke(rgb)`: Set `stroke` with a greyscale colour with equal
    values `(rgb, rgb, rgb)`.
  - `bvg.stroke(r, g, b, [a])`: Set `stroke` with `(r, g, b, a)`. If `a`
@@ -361,6 +362,8 @@ Return true if the element has class `c`.
 ### `bvg.removeClass(c)`
 Add or remove the class `c` to the element.
     
+
+## Affine Transformations 
 
 ## Utility Methods 
 
