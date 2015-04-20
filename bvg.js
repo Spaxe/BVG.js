@@ -163,8 +163,6 @@ define([], function () {
     this._tag = tag;
     this._data = data;
     this._binding = binding;
-    this._parent = null;
-    this._children = [];
 
     // Functional circular reference
     this._tag._getBVG = function () {
@@ -523,8 +521,6 @@ define([], function () {
     */
   BVG.prototype.append = function (child_bvg) {
     this._tag.appendChild(child_bvg._tag);
-    this._children.push(child_bvg);
-    child_bvg._parent = this;
     return this;
   };
 
@@ -535,9 +531,6 @@ define([], function () {
     var parent = this.parent();
     if (parent) {
       parent._tag.removeChild(this._tag);
-      var i = parent._children.indexOf(this);
-      if (i > -1) parent._children.splice(i, 1);
-      this._parent = null;
     }
     return this;
   };
@@ -547,14 +540,20 @@ define([], function () {
     * container itself), return null.
     */
   BVG.prototype.parent = function () {
-    return this._parent || null;
+    if (this._tag.parentNode && typeof this._tag.parentNode._getBVG === 'function')
+     return this._tag.parentNode._getBVG();
+    return null;
   };
 
   /** ### `bvg.children()`
     * Return a list of BVG elements inside `bvg`.
     */
   BVG.prototype.children = function () {
-    return this._children.slice();
+    var output = [];
+    for (var i = 0; i < this._tag.childNodes.length; i++)
+      if (typeof this._tag.childNodes[i]._getBVG === 'function')
+        output.push(this._tag.childNodes[i]._getBVG());
+    return output;
   };
 
   /** ### `bvg.tag()`

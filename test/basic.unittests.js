@@ -26,7 +26,7 @@ define(['../bvg'], function (BVG) {
       BVG.create.bind(BVG, '#not-container').should.Throw(TypeError);
     });
 
-    it('should be able to be removed', function () {
+    it('should be able to remove itself from parent', function () {
       dummy = BVG.create(container);
       var rect = dummy.rect(10, 20, 30, 40);
       rect.parent().should.equal(dummy);
