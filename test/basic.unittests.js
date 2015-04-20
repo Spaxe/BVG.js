@@ -66,7 +66,7 @@ define(['../bvg'], function (BVG) {
       shape.data('y').should.equal(50);
 
       var c = [255, 30, 50, 1];
-      shape.stroke(c);
+      shape.stroke.apply(shape, c);
       shape.stroke().should.eql(c);
       shape.stroke(255, 20, 50);
       shape.stroke().should.not.eql(c);
@@ -77,7 +77,7 @@ define(['../bvg'], function (BVG) {
       shape.noStroke();
       shape.stroke().should.eql([0, 0, 0, 0]);
 
-      shape.fill(c);
+      shape.fill.apply(shape, c);
       shape.fill().should.eql(c);
       shape.fill(255, 20, 50);
       shape.fill().should.not.eql(c);
@@ -120,13 +120,31 @@ define(['../bvg'], function (BVG) {
       children[0].parent().should.equal(bvg);
       children[0].data('x').should.eql(10);
       children[0].data('height').should.eql(40);
+      children[0].remove();
+      children[1].remove();
+    });
+
+    it('should provide selection functions for nodes inside', function () {
+      [
+        [10, 20, 30, 40],
+        [30, 20, 40, 30]
+      ].forEach(function (args) {
+        var b = bvg.rect.apply(bvg, args);
+        b.tag().setAttribute('class', 'test');
+      });
+      var children = bvg.find('.test');
+      children.length.should.eql(2);
+      children[0].parent().should.equal(bvg);
+      children[0].data('x').should.eql(10);
+      children[0].data('height').should.eql(40);
+      children[0].remove();
+      children[1].remove();
     });
 
     it('should support RGBA and HSLA colour functions', function () {
-      BVG.rgba(255).should.eql([255, 255, 255, 1]);
-      BVG.rgba(255, true).should.eql('rgba(255,255,255,1)');
-      BVG.rgba(255, 200, 244).should.eql([255, 200, 244, 1]);
-      BVG.rgba(255, 200, 244, 0.5).should.eql([255, 200, 244, 0.5]);
+      BVG.rgba(255).should.eql('rgba(255,255,255,1)');
+      BVG.rgba(255, 200, 244).should.eql('rgba(255,200,244,1)');
+      BVG.rgba(255, 200, 244, 0.5).should.eql('rgba(255,200,244,0.5)');
       BVG.hsla(230, 100, 75, 0.3).should.eql('hsla(230,100%,75%,0.3)');
       BVG.hsla(230, 100, 75).should.eql('hsla(230,100%,75%,1)');
     });

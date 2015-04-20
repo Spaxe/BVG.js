@@ -257,6 +257,11 @@ var text = bvg.text('Mrraa!', 20, 10);
 BVGs are SVGs with extra superpowers.
     
 
+### `bvg.find(selector)`
+Return an array of BVGs matching `selector` inside BVG. `selector` is
+defined as [CSS Selectors](https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Getting_started/Selectors).
+    
+
 ### `bvg.append(bvg)`
 Insert `child_bvg` inside `bvg`. This is useful to add elements inside a
 `BVG.group()`.
@@ -299,10 +304,10 @@ Get/set attributes on a BVG.
     
 
 ### `bvg.fill()`
-Get/set the filling colour. There are four ways to use this function.
+Get/set the filling colour.
 
- - `bvg.fill()`: Return `fill` colour as [r, g, b, a].
- - `bvg.fill(hex)`: Set `fill` colour with a CSS hex string.
+ - `bvg.fill()`: Return `fill` colour as [r, g, b, a], or `null` if fill
+                 is not specified on the object.
  - `bvg.fill(rgb)`: Set `fill` with a greyscale colour with equal
    values `(rgb, rgb, rgb)`.
  - `bvg.fill(r, g, b, [a])`: Set `fill` with `(r, g, b, a)`. If `a`
@@ -316,10 +321,9 @@ Remove BVG object's colour filling completely.
     
 
 ### `bvg.stroke()`
-Get/set the outline colour. There are four ways to use this function.
+Get/set the outline colour.
 
  - `bvg.stroke()`: Return `stroke` colour as [r, g, b, a].
- - `bvg.stroke(hex)`: Set `stroke` colour with a CSS hex string.
  - `bvg.stroke(rgb)`: Set `stroke` with a greyscale colour with equal
    values `(rgb, rgb, rgb)`.
  - `bvg.stroke(r, g, b, [a])`: Set `stroke` with `(r, g, b, a)`. If `a`
@@ -360,24 +364,27 @@ Add or remove the class `c` to the element.
 
 ## Utility Methods 
 
-### `BVG.rgba()`
-Converts a hex string or colour value to rgba(r, g, b, a).
+### `BVG.rgba(r, g, b, [a])`
+Return a string in the form of `rgba(r, g, b, a)`.
 
-Returns `[r, g, b, a]`.
+If only `r` is given, the value is copied to `g` and `b` to produce a
+greyscale value.
+    
 
-Possible ways to use this function are:
+### `BVG.hsla(hue, saturation, lightness, [alpha])`
+Return the CSS representation in `hsla()` as a string.
 
- - `BVG.rgba(hex, [css])`
- - `BVG.rgba(rgb, [css])`
- - `BVG.rgba(r, g, b, [css])`
- - `BVG.rgba(r, g, b, a, [css])`
+ - `hue`: A value between `0` and `360`, where `0` is red, `120` is green,
+          and `240` is blue.
+ - `saturation` : A value between `0` and `100`, where `0` is grey and
+                `100` is fully saturate.
+ - `lightness`: A value between `0` and `100`, where `0` is black and
+                `100` is full intensity of the colour.
+    
 
-`hex` is a CSS colour string between `#000000` and `#FFFFFF`.
-
-`r`, `g`, `b` are in the range of 0-255 inclusive. `a` is the opacity and
-is in the range of 0.0-1.0. If not specified, `a` will be `1`.
-
-if `css` is `true`, it returns a string `'rgba(r, g, b, a)'` instead.
+### `BVG.extractNumberArray(str)`
+Return an array `[x, y, z, ...]` from a string containing common-separated
+numbers.
     
 
 ## Contribute to this library

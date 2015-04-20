@@ -141,6 +141,7 @@ define([], function () {
     *  - `binding`: (optional) Binding function that sets the tag attributes
     */
   var BVG = function (tag, data, binding) {
+    var bvg = this;
     tag = tag instanceof SVGElement ? tag : document.createElementNS('http://www.w3.org/2000/svg', tag);
     data = data || {};
     binding = binding || function (tag, data) {
@@ -157,12 +158,16 @@ define([], function () {
 
     // ID function from https://gist.github.com/gordonbrander/2230317
     data.id = data.id || 'BVG_' + tag.tagName + '_' + Math.random().toString(36).substr(2, 7);
-
     this._tag = tag;
     this._data = data;
     this._binding = binding;
     this._parent = null;
     this._children = [];
+
+    // Functional circular reference
+    this._tag._getBVG = function () {
+      return bvg;
+    };
 
     if (['svg', 'g', 'a'].indexOf(tag.tagName) < 0) {
       if (!data.stroke) this.stroke(175);
@@ -494,6 +499,22 @@ define([], function () {
     * BVGs are SVGs with extra superpowers.
     */
 
+  /** ### `bvg.find(selector)`
+    * Return an array of BVGs matching `selector` inside BVG. `selector` is
+    * defined as [CSS Selectors](https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Getting_started/Selectors).
+    */
+  BVG.prototype.find = function (selector) {
+    var result = this._tag.querySelectorAll(selector);
+    if (result) {
+      var bvgs = [];
+      [].slice.call(result).forEach(function (r) {
+        bvgs.push(r._getBVG());
+      });
+      return bvgs;
+    }
+    return [];
+  };
+
   /** ### `bvg.append(bvg)`
     * Insert `child_bvg` inside `bvg`. This is useful to add elements inside a
     * `BVG.group()`.
@@ -588,10 +609,10 @@ define([], function () {
   };
 
   /** ### `bvg.fill()`
-    * Get/set the filling colour. There are four ways to use this function.
+    * Get/set the filling colour.
     *
-    *  - `bvg.fill()`: Return `fill` colour as [r, g, b, a].
-    *  - `bvg.fill(hex)`: Set `fill` colour with a CSS hex string.
+    *  - `bvg.fill()`: Return `fill` colour as [r, g, b, a], or `null` if fill
+    *                  is not specified on the object.
     *  - `bvg.fill(rgb)`: Set `fill` with a greyscale colour with equal
     *    values `(rgb, rgb, rgb)`.
     *  - `bvg.fill(r, g, b, [a])`: Set `fill` with `(r, g, b, a)`. If `a`
@@ -601,12 +622,14 @@ define([], function () {
     */
   BVG.prototype.fill = function () {
     if (arguments.length === 0) {
-      return BVG.rgba(this.attr('fill'));
+      var f = this.attr('fill');
+      if (f) return BVG.extractNumberArray(f);
+      return null;
     } else if (arguments.length === 1) {
       if (typeof arguments[0] === 'string') return this.attr('fill', arguments[0]);
-      else return this.attr('fill', BVG.rgba(arguments[0], true));
+      else return this.attr('fill', BVG.rgba(arguments[0]));
     } else if (arguments.length === 3 || arguments.length === 4) {
-      return this.attr('fill', BVG.rgba([].slice.call(arguments), true));
+      return this.attr('fill', BVG.rgba.apply(BVG, arguments));
     } else {
       throw new RangeError(this, 'fill() received more than 1 argument.');
     }
@@ -618,10 +641,9 @@ define([], function () {
   BVG.prototype.noFill = function () { return this.fill('rgba(0, 0, 0, 0)'); };
 
   /** ### `bvg.stroke()`
-    * Get/set the outline colour. There are four ways to use this function.
+    * Get/set the outline colour.
     *
     *  - `bvg.stroke()`: Return `stroke` colour as [r, g, b, a].
-    *  - `bvg.stroke(hex)`: Set `stroke` colour with a CSS hex string.
     *  - `bvg.stroke(rgb)`: Set `stroke` with a greyscale colour with equal
     *    values `(rgb, rgb, rgb)`.
     *  - `bvg.stroke(r, g, b, [a])`: Set `stroke` with `(r, g, b, a)`. If `a`
@@ -631,12 +653,14 @@ define([], function () {
     */
   BVG.prototype.stroke = function () {
     if (arguments.length === 0) {
-      return BVG.rgba(this.attr('stroke'));
+      var s = this.attr('stroke');
+      if (s) return BVG.extractNumberArray(s);
+      return null;
     } else if (arguments.length === 1) {
       if (typeof arguments[0] === 'string') return this.attr('stroke', arguments[0]);
-      else return this.attr('stroke', BVG.rgba(arguments[0], true));
+      else return this.attr('stroke', BVG.rgba(arguments[0]));
     } else if (arguments.length === 3 || arguments.length === 4) {
-      return this.attr('stroke', BVG.rgba([].slice.call(arguments), true));
+      return this.attr('stroke', BVG.rgba.apply(BVG, arguments));
     } else {
       throw new RangeError(this, 'stroke() received more than 1 argument.');
     }
@@ -725,90 +749,21 @@ define([], function () {
 
   /** ## Utility Methods */
 
-  /** ### `BVG.rgba()`
-    * Converts a hex string or colour value to rgba(r, g, b, a).
+  /** ### `BVG.rgba(r, g, b, [a])`
+    * Return a string in the form of `rgba(r, g, b, a)`.
     *
-    * Returns `[r, g, b, a]`.
-    *
-    * Possible ways to use this function are:
-    *
-    *  - `BVG.rgba(hex, [css])`
-    *  - `BVG.rgba(rgb, [css])`
-    *  - `BVG.rgba(r, g, b, [css])`
-    *  - `BVG.rgba(r, g, b, a, [css])`
-    *
-    * `hex` is a CSS colour string between `#000000` and `#FFFFFF`.
-    *
-    * `r`, `g`, `b` are in the range of 0-255 inclusive. `a` is the opacity and
-    * is in the range of 0.0-1.0. If not specified, `a` will be `1`.
-    *
-    * if `css` is `true`, it returns a string `'rgba(r, g, b, a)'` instead.
+    * If only `r` is given, the value is copied to `g` and `b` to produce a
+    * greyscale value.
     */
-  BVG.rgba = function () {
-    var h = '';
-    var colour = [];
-    var css = false;
-    if (arguments.length === 1 || arguments.length === 2) {
-      var c = arguments[0];
-      if (typeof c === 'string') {
-        var rgba = c.match(/rgba?\((.*)\)/);
-        if (rgba) {
-          colour = rgba[1].split(',').map(Number);
-        } else {
-          c = c.replace('#', '');
-          var i;
-          if (c.length === 3) {
-            for (i = 0; i < c.length; i++) {
-              h += c[i] + c[i];
-            }
-          } else {
-            h = c;
-          }
-          for (i = 0; i < h.length; i+=2) {
-            var hex = h.substring(i, i+2);
-            if (hex.length !== 2)
-              break;
-            colour.push(parseInt(hex, 16));
-          }
-        }
-      } else if (typeof c === 'number') {
-        c = c;
-        colour = [c, c, c];
-      } else if (c instanceof Array && (c.length === 3 || c.length === 4)) {
-        colour = c.map(Number);
-      }
-      if (arguments[1])
-        css = true;
-    } else if (arguments.length === 3) {
-      colour = [].slice.call(arguments);
-    } else if (arguments.length === 4) {
-      if (typeof arguments[3] === 'number') {
-        colour = [].slice.call(arguments);
-      } else {
-        colour = [].slice.call(arguments).slice(0, 3);
-        if (arguments[3])
-          css = true;
-      }
-    } else if (arguments.length === 5) {
-      colour = [].slice.call(arguments).slice(0, 4);
-      if (arguments[4])
-        css = true;
-    }
-
-    if (colour.length !== 3 && colour.length !== 4) {
-      throw new TypeError('BVG.rgba() can\'t work with ' + [].slice.call(arguments));
-    }
-
-    if (colour.length === 3) {
-      colour.push(1);
-    }
-    if (css)
-      return 'rgba(' + colour.join() + ')';
-    return colour;
+  BVG.rgba = function (r, g, b, a) {
+    if (typeof r !== 'number') throw new TypeError ('rgba() must take numerical values as input');
+    g = g || r;
+    b = b || r;
+    a = a || 1.0;
+    return 'rgba(' + [r, g, b, a].join(',') + ')';
   };
 
-  /*- ### `BVG.hsla(hue, saturation, lightness, [alpha])`
-    * when SVG 2.0 comes out:
+  /** ### `BVG.hsla(hue, saturation, lightness, [alpha])`
     * Return the CSS representation in `hsla()` as a string.
     *
     *  - `hue`: A value between `0` and `360`, where `0` is red, `120` is green,
@@ -821,31 +776,14 @@ define([], function () {
   BVG.hsla = function (hue, saturation, lightness, alpha) {
     alpha = alpha || 1.0;
     return 'hsla(' + [hue, saturation + '%', lightness + '%', alpha].join(',') + ')';
+  };
 
-    // function hslToRgb(h, s, l){
-    //   var r, g, b;
-
-    //   if(s == 0){
-    //       r = g = b = l; // achromatic
-    //   }else{
-    //       function hue2rgb(p, q, t){
-    //           if(t < 0) t += 1;
-    //           if(t > 1) t -= 1;
-    //           if(t < 1/6) return p + (q - p) * 6 * t;
-    //           if(t < 1/2) return q;
-    //           if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-    //           return p;
-    //       }
-
-    //       var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-    //       var p = 2 * l - q;
-    //       r = hue2rgb(p, q, h + 1/3);
-    //       g = hue2rgb(p, q, h);
-    //       b = hue2rgb(p, q, h - 1/3);
-    //   }
-
-    //   return [r * 255, g * 255, b * 255];
-    // }
+  /** ### `BVG.extractNumberArray(str)`
+    * Return an array `[x, y, z, ...]` from a string containing common-separated
+    * numbers.
+    */
+  BVG.extractNumberArray = function (str) {
+    return str.match(/\d*\.?\d+/g).map(Number);
   };
 
   return BVG;
