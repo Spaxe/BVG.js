@@ -152,9 +152,11 @@ define([], function () {
       }
     };
 
+    // Observe data object and apply binding right away
     observe(data, function (changes) {
       binding(tag, data);
     });
+    binding(tag, data);
 
     // ID function from https://gist.github.com/gordonbrander/2230317
     data.id = data.id || 'BVG_' + tag.tagName + '_' + Math.random().toString(36).substr(2, 7);
@@ -733,18 +735,6 @@ define([], function () {
   BVG.prototype.toggleClass = function (c) {
     this._tag.classList.toggle(c);
     return this;
-  };
-
-  // TODO: temporary
-  BVG.prototype.transform = function () {
-    if (arguments.length === 0) {
-      return this.attr('transform');
-    } else if (arguments.length === 1) {
-      this.attr('transform', arguments[0]);
-      return this;
-    } else {
-      throw new RangeError(this, 'transform() received more than 1 argument.');
-    }
   };
 
   /** ## Utility Methods */
