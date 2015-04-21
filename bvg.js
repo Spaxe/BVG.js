@@ -123,11 +123,9 @@ define([], function () {
 
     // Immediately fire observe to initiate deep observing
     Object.keys(obj).forEach(function (key) {
-      Object.getNotifier(obj).notify({
-        type: 'add',
-        name: key,
-        object: obj
-      });
+      if (obj[key] instanceof Object) {
+        observe(obj[key], callback);
+      }
     });
   }
 
