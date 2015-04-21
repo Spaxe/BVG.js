@@ -741,6 +741,7 @@ define([], function () {
       return this._tag.getAttribute('transform') || '';
     } else if (arguments.length === 1) {
       this._tag.setAttribute('transform', arguments[0]);
+      return this;
     } else {
       throw new Error('transform() received more than 1 argument');
     }
