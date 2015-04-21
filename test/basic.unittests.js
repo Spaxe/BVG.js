@@ -148,6 +148,20 @@ define(['../bvg'], function (BVG) {
       BVG.hsla(230, 100, 75, 0.3).should.eql('hsla(230,100%,75%,0.3)');
       BVG.hsla(230, 100, 75).should.eql('hsla(230,100%,75%,1)');
     });
+
+    it('should have affine transformations', function () {
+      var b = bvg.rect(0, 0, 10, 10);
+      b.transform().should.eql('');
+      b.transform('matrix(0 0 0 1 1 1)');
+      b.transform().should.eql('matrix(0 0 0 1 1 1)');
+      b.transform('');
+
+      b.translate(10, 10);
+      b.transform().should.eql('translate(10 10)');
+      b.transform('');
+      b.translate(-90);
+      b.transform().should.eql('translate(-90 0)');
+    });
   });
 
 });

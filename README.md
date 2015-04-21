@@ -365,6 +365,11 @@ Add or remove the class `c` to the element.
 
 ## Affine Transformations 
 
+### `BVG.translate(x, [y])`
+Apply a moving translation by `x` and `y` units. If `y` is not given, it
+is assumed to be 0.
+    
+
 ## Utility Methods 
 
 ### `BVG.rgba(r, g, b, [a])`

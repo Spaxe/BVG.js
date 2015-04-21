@@ -159,7 +159,7 @@ define([], function () {
     binding(tag, data);
 
     // ID function from https://gist.github.com/gordonbrander/2230317
-    data.id = data.id || 'BVG_' + tag.tagName + '_' + Math.random().toString(36).substr(2, 7);
+    tag.setAttribute('id', 'BVG_' + tag.tagName + '_' + Math.random().toString(36).substr(2, 7));
     this._tag = tag;
     this._data = data;
     this._binding = binding;
@@ -740,22 +740,25 @@ define([], function () {
   /** ## Affine Transformations */
   BVG.prototype.transform = function () {
     if (arguments.length === 0) {
-      return this._tag.getAttribute('transform') ?
-                BVG.extractNumberArray(this._tag.getAttribute('transform')) :
-                '';
+      return this._tag.getAttribute('transform') || '';
     } else if (arguments.length === 1) {
-      this._tag.setAttribute(arguments[0]);
+      this._tag.setAttribute('transform', arguments[0]);
     } else {
       throw new Error('transform() received more than 1 argument');
     }
   };
 
+  /** ### `BVG.translate(x, [y])`
+    * Apply a moving translation by `x` and `y` units. If `y` is not given, it
+    * is assumed to be 0.
+    */
   BVG.prototype.translate = function (x, y) {
-    if (typeof x !== 'number' || typeof y !== 'number')
+    if (typeof x !== 'number' && typeof y !== 'number')
       throw new Error('translate() only take numbers as arguments');
     y = y || 0;
     var transform = this.transform();
-    this.setAttribute('transform', [transform, ' translate(', x, ' ', y, ')'].join())
+    this._tag.setAttribute('transform', [transform, ' translate(', x, ' ', y, ')'].join('').trim());
+    return this;
   };
 
   /** ## Utility Methods */
