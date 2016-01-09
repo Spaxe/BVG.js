@@ -12,6 +12,10 @@
     mocha.ui('bdd');
     var should = chai.should();
     </script>
-    <script src="../lib/require.js" data-main="testrunner.js"></script>
+    <script src="test.js"></script>
+    <script>
+    if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
+    else { mocha.run(); }
+    </script>
   </body>
 </html>

@@ -1,0 +1,1 @@
+watchify -v --debug -t [ babelify --presets [ es2015 ] ] index.js -o index.bundle.js
