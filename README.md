@@ -49,7 +49,7 @@ If you wish to use this for older browsers, you can polyfill with
 
  2. Copy `bvg.js` into your working directory.
 
- 3. Include `bvg.js` in your webpage**:
+ 3. Include `bvg.js` in your webpage:
 
     ```HTML
     <script src="path/to/bvg.js"></script>
