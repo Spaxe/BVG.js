@@ -1,4 +1,4 @@
 .DS_Store
 *.sublime*
-lib/live.js
 node_modules
+test/test.js
