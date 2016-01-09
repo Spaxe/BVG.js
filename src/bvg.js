@@ -1,4 +1,3 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.BVG = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 //
 /** # BVG - Bindable Vector Graphics
   * **Real-time data-driven visualisation for the web.**
@@ -99,12 +98,7 @@
   */
 
 /*- Deep Object.observe() */
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = BVG;
-function observe(obj, callback) {
+function observe (obj, callback) {
 
   // Include https://github.com/MaxArt2501/object-observe if you wish to work
   // with polyfill on browsers that don't support Object.observe()
@@ -138,7 +132,7 @@ function observe(obj, callback) {
   *  - `data`   : Object with arbitrary data to your desire
   *  - `binding`: (optional) Binding function that sets the tag attributes
   */
-function BVG(tag, data, binding) {
+export default function BVG (tag, data, binding) {
   var bvg = this;
   tag = tag instanceof SVGElement ? tag : document.createElementNS('http://www.w3.org/2000/svg', tag);
   data = data || {};
@@ -194,9 +188,11 @@ function BVG(tag, data, binding) {
   * var bvg = BVG.create('#bvg-container');
   * ```
   */
-var create = exports.create = BVG.create = function (htmlElement, xDimension, yDimension) {
-  if (typeof htmlElement === 'string') htmlElement = document.querySelector(htmlElement);
-  if (!(htmlElement instanceof HTMLElement)) throw new TypeError('htmlElement (' + htmlElement + ') was not found.');
+export var create = BVG.create = function (htmlElement, xDimension, yDimension) {
+  if (typeof htmlElement === 'string')
+    htmlElement = document.querySelector(htmlElement);
+  if (!(htmlElement instanceof HTMLElement))
+    throw new TypeError('htmlElement (' + htmlElement + ') was not found.');
 
   var data = {
     'xmlns:xlink': 'http://www.w3.org/1999/xlink',
@@ -247,7 +243,7 @@ var create = exports.create = BVG.create = function (htmlElement, xDimension, yD
   * ```
   */
 var creationFunctions = {
-  svg: function svg(xlink, version, width, height) {
+  svg: function (xlink, version, width, height) {
     return new BVG('svg', xlink.constructor.name === 'Object' ? xlink : {
       'xmlns:xlink': xlink,
       version: version,
@@ -263,7 +259,7 @@ var creationFunctions = {
     * var rect = bvg.rect(100, 100, 300, 150);
     * ```
     */
-  rect: function rect(x, y, width, height) {
+  rect: function (x, y, width, height) {
     return new BVG('rect', x.constructor.name === 'Object' ? x : {
       x: x,
       y: y,
@@ -279,7 +275,7 @@ var creationFunctions = {
     * var circle = bvg.ellipse(100, 100, 50);
     * ```
     */
-  circle: function circle(x, y, r) {
+  circle: function (x, y, r) {
     return new BVG('circle', x.constructor.name === 'Object' ? x : {
       x: x,
       y: y,
@@ -298,7 +294,7 @@ var creationFunctions = {
     * var ellipse = bvg.ellipse(100, 100, 200, 180);
     * ```
     */
-  ellipse: function ellipse(x, y, rx, ry) {
+  ellipse: function (x, y, rx, ry) {
     return new BVG('ellipse', x.constructor.name === 'Object' ? x : {
       x: x,
       y: y,
@@ -319,7 +315,7 @@ var creationFunctions = {
     * var line = bvg.line(100, 100, 200, 300);
     * ```
     */
-  line: function line(x1, y1, x2, y2) {
+  line: function (x1, y1, x2, y2) {
     return new BVG('line', x1.constructor.name === 'Object' ? x1 : {
       x1: x1,
       y1: y1,
@@ -334,7 +330,7 @@ var creationFunctions = {
     * var polyline = bvg.polyline([[100, 200], [200, 300], [400, 800]]);
     * ```
     */
-  polyline: function polyline(points) {
+  polyline: function (points) {
     return new BVG('polyline', points.constructor.name === 'Object' ? points : {
       points: points
     }, function (tag, data) {
@@ -349,7 +345,7 @@ var creationFunctions = {
     * var polygon = bvg.polygon([[100, 200], [200, 300], [400, 800]]);
     * ```
     */
-  polygon: function polygon(points) {
+  polygon: function (points) {
     return new BVG('polygon', points.constructor.name === 'Object' ? points : {
       points: points
     }, function (tag, data) {
@@ -371,7 +367,7 @@ var creationFunctions = {
     * }
     * ```
     */
-  group: function group(transform) {
+  group: function (transform) {
     return new BVG('g', transform.constructor.name === 'Object' ? transform : {
       transform: transform
     });
@@ -390,7 +386,7 @@ var creationFunctions = {
     * githubLink.ellipse(200, 200, 50, 50);
     * ```
     */
-  hyperlink: function hyperlink(url) {
+  hyperlink: function (url) {
     return new BVG('a', url.constructor.name === 'Object' ? url : {
       'xmlns:href': url
     });
@@ -405,13 +401,17 @@ var creationFunctions = {
     * var triangle = bvg.triangle(50, 50, 10);
     * ```
     */
-  triangle: function triangle(x, y, r) {
+  triangle: function (x, y, r) {
     return new BVG('polygon', x.constructor.name === 'Object' ? x : {
       x: x,
       y: y,
       r: r
     }, function (tag, data) {
-      var points = [[data.x, data.y - data.r], [data.x - data.r / 2 * Math.sqrt(3), data.y + data.r / 2], [data.x + data.r / 2 * Math.sqrt(3), data.y + data.r / 2]];
+      var points = [
+        [data.x, data.y-data.r],
+        [data.x-data.r/2*Math.sqrt(3), data.y+data.r/2],
+        [data.x+data.r/2*Math.sqrt(3), data.y+data.r/2]
+      ];
       tag.setAttribute('points', points.join(' '));
     });
   },
@@ -425,7 +425,7 @@ var creationFunctions = {
     * var arc = bvg.arc(50, 50, 50, 100, 0, Math.PI);
     * ```
     */
-  arc: function arc(x, y, rx, ry, startAngle, endAngle) {
+  arc: function (x, y, rx, ry, startAngle, endAngle) {
     return new BVG('path', x.constructor.name === 'Object' ? x : {
       x: x,
       y: y,
@@ -436,9 +436,12 @@ var creationFunctions = {
     }, function (tag, data) {
       var p1 = getPointOnEllipse(data.x, data.y, data.rx, data.ry, data.startAngle);
       var p2 = getPointOnEllipse(data.x, data.y, data.rx, data.ry, data.endAngle);
-      var largeArc = data.endAngle - data.startAngle > Math.PI ? 1 : 0;
+      var largeArc = (data.endAngle - data.startAngle) > Math.PI ? 1 : 0;
       var sweepArc = data.endAngle > data.startAngle ? 1 : 0;
-      var d = [['M', p1.x, p1.y], ['A', data.rx, data.ry, 0, largeArc, sweepArc, p2.x, p2.y]];
+      var d = [
+        ['M', p1.x, p1.y],
+        ['A', data.rx, data.ry, 0, largeArc, sweepArc, p2.x, p2.y]
+      ];
       tag.setAttribute('d', d.map(function (x) {
         return x.join(' ');
       }).join(' '));
@@ -459,16 +462,17 @@ var creationFunctions = {
     * var text = bvg.text('Mrraa!', 20, 10);
     * ```
     */
-  text: function text(_text, x, y) {
-    return new BVG('text', _text.constructor.name === 'Object' ? _text : {
-      text: _text,
+  text: function (text, x, y) {
+    return new BVG('text', text.constructor.name === 'Object' ? text : {
+      text: text,
       x: x,
       y: y
     }, function (tag, data) {
       tag.innerHTML = data.text;
       tag.setAttribute('x', data.x);
       tag.setAttribute('y', data.y);
-    }).fill('rgba(175, 175, 175, 1)').stroke('rgba(0, 0, 0, 0)');
+    }).fill('rgba(175, 175, 175, 1)')
+      .stroke('rgba(0, 0, 0, 0)');
   }
 };
 
@@ -528,7 +532,8 @@ BVG.prototype.remove = function () {
   * container itself), return null.
   */
 BVG.prototype.parent = function () {
-  if (this._tag.parentNode && typeof this._tag.parentNode._getBVG === 'function') return this._tag.parentNode._getBVG();
+  if (this._tag.parentNode && typeof this._tag.parentNode._getBVG === 'function')
+   return this._tag.parentNode._getBVG();
   return null;
 };
 
@@ -537,9 +542,10 @@ BVG.prototype.parent = function () {
   */
 BVG.prototype.children = function () {
   var output = [];
-  for (var i = 0; i < this._tag.childNodes.length; i++) {
-    if (typeof this._tag.childNodes[i]._getBVG === 'function') output.push(this._tag.childNodes[i]._getBVG());
-  }return output;
+  for (var i = 0; i < this._tag.childNodes.length; i++)
+    if (typeof this._tag.childNodes[i]._getBVG === 'function')
+      output.push(this._tag.childNodes[i]._getBVG());
+  return output;
 };
 
 /** ### `bvg.tag()`
@@ -549,17 +555,17 @@ BVG.prototype.tag = function () {
   return this._tag;
 };
 
-/** ### `bvg.data()`
- * Get/set the `data` object in a BVG. There are four ways to use this
- * function.
- *
- *  - `bvg.data()`: Return `data` bound to the BVG.
- *  - `bvg.data(newData)`: Update `data` with `newData` object.
- *  - `bvg.data(property)`: Return `data[property]` from the BVG.
- *  - `bvg.data(property, newValue)`: Update `property` with `newValue`.
- *
- * Return `bvg` object reference.
- */
+ /** ### `bvg.data()`
+  * Get/set the `data` object in a BVG. There are four ways to use this
+  * function.
+  *
+  *  - `bvg.data()`: Return `data` bound to the BVG.
+  *  - `bvg.data(newData)`: Update `data` with `newData` object.
+  *  - `bvg.data(property)`: Return `data[property]` from the BVG.
+  *  - `bvg.data(property, newValue)`: Update `property` with `newValue`.
+  *
+  * Return `bvg` object reference.
+  */
 BVG.prototype.data = function () {
   if (arguments.length === 0) {
     return this._data;
@@ -590,7 +596,8 @@ BVG.prototype.data = function () {
   */
 BVG.prototype.attr = function (attr, value) {
   if (!attr) throw new Error('attr must be defined');
-  if (!value) return this._tag.getAttribute(attr);else this._tag.setAttribute(attr, value);
+  if (!value) return this._tag.getAttribute(attr);
+  else this._tag.setAttribute(attr, value);
   return this;
 };
 
@@ -612,7 +619,8 @@ BVG.prototype.fill = function () {
     if (f) return BVG.extractNumberArray(f);
     return '';
   } else if (arguments.length === 1) {
-    if (typeof arguments[0] === 'string') return this.attr('fill', arguments[0]);else return this.attr('fill', BVG.rgba(arguments[0]));
+    if (typeof arguments[0] === 'string') return this.attr('fill', arguments[0]);
+    else return this.attr('fill', BVG.rgba(arguments[0]));
   } else if (arguments.length === 3 || arguments.length === 4) {
     return this.attr('fill', BVG.rgba.apply(BVG, arguments));
   } else {
@@ -623,9 +631,7 @@ BVG.prototype.fill = function () {
 /** ### `bvg.noFill()`
   * Remove BVG object's colour filling completely.
   */
-BVG.prototype.noFill = function () {
-  return this.fill('rgba(0, 0, 0, 0)');
-};
+BVG.prototype.noFill = function () { return this.fill('rgba(0, 0, 0, 0)'); };
 
 /** ### `bvg.stroke()`
   * Get/set the outline colour.
@@ -645,7 +651,8 @@ BVG.prototype.stroke = function () {
     if (s) return BVG.extractNumberArray(s);
     return '';
   } else if (arguments.length === 1) {
-    if (typeof arguments[0] === 'string') return this.attr('stroke', arguments[0]);else return this.attr('stroke', BVG.rgba(arguments[0]));
+    if (typeof arguments[0] === 'string') return this.attr('stroke', arguments[0]);
+    else return this.attr('stroke', BVG.rgba(arguments[0]));
   } else if (arguments.length === 3 || arguments.length === 4) {
     return this.attr('stroke', BVG.rgba.apply(BVG, arguments));
   } else {
@@ -739,7 +746,8 @@ BVG.prototype.transform = function () {
   * is assumed to be 0.
   */
 BVG.prototype.translate = function (x, y) {
-  if (typeof x !== 'number' && typeof y !== 'number') throw new Error('translate() only take numbers as arguments');
+  if (typeof x !== 'number' && typeof y !== 'number')
+    throw new Error('translate() only take numbers as arguments');
   y = y || 0;
   var transform = this.transform();
   this._tag.setAttribute('transform', [transform, ' translate(', x, ' ', y, ')'].join('').trim());
@@ -754,10 +762,8 @@ BVG.prototype.translate = function (x, y) {
   * If only `r` is given, the value is copied to `g` and `b` to produce a
   * greyscale value.
   */
-BVG.rgba = function (r, g, b) {
-  var a = arguments.length <= 3 || arguments[3] === undefined ? 1.0 : arguments[3];
-
-  if (typeof r !== 'number') throw new TypeError('rgba() must take numerical values as input');
+BVG.rgba = function (r, g, b, a=1.0) {
+  if (typeof r !== 'number') throw new TypeError ('rgba() must take numerical values as input');
   g = g || r;
   b = b || r;
   return 'rgba(' + [r, g, b, a].join(',') + ')';
@@ -786,11 +792,9 @@ BVG.extractNumberArray = function (str) {
   return str.match(/\d*\.?\d+/g).map(Number);
 };
 
+
 /** ## Contribute to this library
 * [Make a pull request](https://github.com/Spaxe/BVG.js/pulls) or
 * [post an issue](https://github.com/Spaxe/BVG.js/issues). Say hello to
 * contact@xaiverho.com.
 */
-
-},{}]},{},[1])(1)
-});

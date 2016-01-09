@@ -294,7 +294,7 @@ function.
  - `bvg.data(property, newValue)`: Update `property` with `newValue`.
 
 Return `bvg` object reference.
-  
+ 
 
 ### `bvg.attr()`
 Get/set attributes on a BVG.
