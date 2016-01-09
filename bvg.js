@@ -132,7 +132,7 @@ function observe (obj, callback) {
   *  - `data`   : Object with arbitrary data to your desire
   *  - `binding`: (optional) Binding function that sets the tag attributes
   */
-export default function BVG (tag, data, binding) {
+export var BVG = function (tag, data, binding) {
   var bvg = this;
   tag = tag instanceof SVGElement ? tag : document.createElementNS('http://www.w3.org/2000/svg', tag);
   data = data || {};
@@ -188,7 +188,7 @@ export default function BVG (tag, data, binding) {
   * var bvg = BVG.create('#bvg-container');
   * ```
   */
-BVG.create = function (htmlElement, xDimension, yDimension) {
+export var BVGCanvas = function (htmlElement, xDimension, yDimension) {
   if (typeof htmlElement === 'string')
     htmlElement = document.querySelector(htmlElement);
   if (!(htmlElement instanceof HTMLElement))

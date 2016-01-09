@@ -1,6 +1,6 @@
-import BVG from './bvg';
+import { BVG, BVGCanvas } from './bvg';
 
-var bvg = BVG.create('#universe');
+var bvg = BVGCanvas('#universe');
 
 var size = 128;
 var pos = 400;
