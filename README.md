@@ -31,6 +31,13 @@ If you wish to use this for older browsers, you can polyfill with
     ```
     npm install bvg
     ```
+ 3. Use [`browserify`](http://browserify.org/) to bundle your scripts. In your code:
+
+    ```Javascript
+    var BVG = require("bvg");
+    ```
+
+    You can also include `bvg.js` as a standalone script as below.
 
 **Install via GitHub**:
 
@@ -40,22 +47,12 @@ If you wish to use this for older browsers, you can polyfill with
     git clone https://github.com/Spaxe/BVG.js.git
     ```
 
- 2. Copy `require.js` and `bvg.js` into your working directory.
+ 2. Copy `bvg.js` into your working directory.
 
-**To include `BVG.js` in your webpage**:
-
- 1. In your HTML `<head>`, include this script using `require.js`:
+ 3. Include `bvg.js` in your webpage**:
 
     ```HTML
-    <script src="path/to/require.js" data-main="your-script.js"></script>
-    ```
-
- 2. In `your-script.js`, define your own code with
-
-    ```Javascript
-    require(['path/to/bvg.js'], function (BVG) {
-      // your code goes here ...
-    });
+    <script src="path/to/bvg.js"></script>
     ```
 
 ## Quickstart
@@ -294,7 +291,7 @@ function.
  - `bvg.data(property, newValue)`: Update `property` with `newValue`.
 
 Return `bvg` object reference.
- 
+  
 
 ### `bvg.attr()`
 Get/set attributes on a BVG.
